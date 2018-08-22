@@ -16,12 +16,17 @@ public class DataAccessService {
 
     public User register( String fbUser, String fbEmail, String profilePic){
 
-        User user = new User();
-        user.setFbUser(fbUser);
-        user.setFbEmail(fbEmail);
-        user.setProfilePic(profilePic);
-        userRepository.save(user);
+        if( userRepository.findByFbUser( fbUser ) == null ) {
+            User user = new User();
+            user.setFbUser(fbUser);
+            user.setFbEmail(fbEmail);
+            user.setProfilePic(profilePic);
+            userRepository.save(user);
+        }
         return userRepository.findByFbUser(fbUser);
     }
 
+    public User findUser(String fbUser ){
+        return userRepository.findByFbUser( fbUser );
+    }
 }

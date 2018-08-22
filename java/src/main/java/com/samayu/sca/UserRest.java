@@ -4,10 +4,7 @@ import com.samayu.sca.businessobjects.User;
 import com.samayu.sca.service.DataAccessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Named;
 import javax.ws.rs.*;
@@ -28,6 +25,17 @@ public class UserRest {
         return ResponseEntity.ok(user);
     }
 
+    @GetMapping(path="/checkUser/{fbUser}" )
+    public ResponseEntity<User> checkUser(@PathVariable("fbUser") String fbUser ){
+        try {
+            User user = dataAccessService.findUser(fbUser);
+            return ResponseEntity.ok( user );
+        }
+        catch(Exception er_){
+            er_.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 
 }

@@ -16,8 +16,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import javax.xml.ws.Response;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.mockito.Mockito.when;
 
@@ -41,8 +43,25 @@ public class UserRestTest {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
         ResponseEntity<User> userResponseEntity = template.postForEntity("/user/register",request,User.class);
         Assert.assertEquals(200,userResponseEntity.getStatusCodeValue());
+        assert( userResponseEntity.getBody()!=null );
     }
 
+    @Test
+    public void testIfNotFound(){
+
+        ResponseEntity<User> userResponse = template.getForEntity("/user/checkUser/"+ UUID.randomUUID().toString() , User.class );
+        assert( userResponse.getStatusCodeValue() == 200 );
+        assert( userResponse.getBody() == null );
+    }
+
+    @Test
+    public void testIfFound(){
+
+        ResponseEntity<User> userResponse = template.getForEntity("/user/checkUser/samayu", User.class );
+        assert( userResponse.getStatusCodeValue() == 200 );
+        assert( userResponse.getBody() != null );
+        assert( userResponse.getBody().getFbUser().equals("samayu"));
+    }
 
 
 
