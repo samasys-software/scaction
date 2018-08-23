@@ -46,11 +46,11 @@ public class SCAClient {
             }
         });
 
-        String baseUrl = "http://ec2-52-91-5-22.compute-1.amazonaws.com:8080/";
+        String baseUrl = "http://192.168.1.2:8082/";
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                .excludeFieldsWithoutExposeAnnotation()
-                .excludeFieldsWithModifiers(Modifier.FINAL,Modifier.STATIC,Modifier.TRANSIENT)
+//                .excludeFieldsWithoutExposeAnnotation()
+//                .excludeFieldsWithModifiers(Modifier.FINAL,Modifier.STATIC,Modifier.TRANSIENT)
                 .serializeNulls()
                 .create();
         Retrofit.Builder builder = new Retrofit.Builder().baseUrl( baseUrl )

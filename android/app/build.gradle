@@ -17,6 +17,9 @@ android {
         }
     }
 }
+repositories {
+    mavenCentral()
+}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -46,5 +49,6 @@ dependencies {
 
     // Paging
     implementation 'android.arch.paging:runtime:1.0.0-alpha5'
+    compile 'com.facebook.android:facebook-android-sdk:4.14.0'
 
 }
