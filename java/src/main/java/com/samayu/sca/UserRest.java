@@ -25,6 +25,7 @@ public class UserRest {
         return ResponseEntity.ok(user);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(path="/checkUser/{fbUser}" )
     public ResponseEntity<User> checkUser(@PathVariable("fbUser") String fbUser ){
         try {
