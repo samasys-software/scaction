@@ -1,0 +1,16 @@
+<div  *ngIf="!showLogin">
+  <img src= "{{ imageUrl }}"  class="img-circle" width="20" height="20">
+  <input type = "text" value = "{{ fbUser }}" />
+  <div >
+      <app-popup></app-popup>
+  </div>
+
+  <input type="button" (click)="onBackClick()" value="Back"/>
+</div>
+
+
+<div style="text-align:right" *ngIf="showLogin">
+<input type="button" (click)="onLoginClick()" value="Login"/>
+
+</div>
+
