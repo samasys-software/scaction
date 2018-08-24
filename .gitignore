@@ -1,3 +1,4 @@
 ./java/target
+./java/.idea
 ./web/scaction/node_modules
 *.class
