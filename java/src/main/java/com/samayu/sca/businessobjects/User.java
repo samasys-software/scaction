@@ -4,12 +4,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="sa_users")
+@Table(name="scaction_users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sa_user_id")
+    @Column(name = "user_id")
     private long userId;
     @Column(name ="role")
     private int role;
