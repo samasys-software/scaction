@@ -81,7 +81,10 @@ export class ProfileComponent {
         this.handleUserDoesNotExist();
       }
     console.log('inside' + res);
-    });
+    },
+  (error) => {
+    this.handleUserDoesNotExist();
+  });
   }
 
   handleUserExists = (res: any ) =>{
