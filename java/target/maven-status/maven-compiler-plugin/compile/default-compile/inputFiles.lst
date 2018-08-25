@@ -1,5 +1,6 @@
-/Users/NandhiniGovindasamy/Documents/GitHub/scaction/java/src/main/java/com/samayu/sca/service/DataAccessService.java
-/Users/NandhiniGovindasamy/Documents/GitHub/scaction/java/src/main/java/com/samayu/sca/UserRest.java
-/Users/NandhiniGovindasamy/Documents/GitHub/scaction/java/src/main/java/com/samayu/sca/businessobjects/User.java
-/Users/NandhiniGovindasamy/Documents/GitHub/scaction/java/src/main/java/com/samayu/sca/dao/UserRepository.java
-/Users/NandhiniGovindasamy/Documents/GitHub/scaction/java/src/main/java/com/samayu/sca/Application.java
+/home/samayuadmin/Projects/stcamaction/scaction/java/src/main/java/com/samayu/sca/Application.java
+/home/samayuadmin/Projects/stcamaction/scaction/java/src/main/java/com/samayu/sca/dao/UserRepository.java
+/home/samayuadmin/Projects/stcamaction/scaction/java/src/main/java/com/samayu/sca/dto/UserDTO.java
+/home/samayuadmin/Projects/stcamaction/scaction/java/src/main/java/com/samayu/sca/businessobjects/User.java
+/home/samayuadmin/Projects/stcamaction/scaction/java/src/main/java/com/samayu/sca/UserRest.java
+/home/samayuadmin/Projects/stcamaction/scaction/java/src/main/java/com/samayu/sca/service/DataAccessService.java

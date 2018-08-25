@@ -20,7 +20,7 @@
                             <outputDirectory>${basedir}/target/classes/static/</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/../web/scaction/dist/scaction</directory>
+                                    <directory>${basedir}/../web/dist/scaction</directory>
                                 </resource>
                             </resources>
                         </configuration>
