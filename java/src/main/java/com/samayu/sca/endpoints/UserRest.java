@@ -1,4 +1,4 @@
-package com.samayu.sca;
+package com.samayu.sca.endpoints;
 
 import com.samayu.sca.businessobjects.User;
 import com.samayu.sca.service.DataAccessService;
