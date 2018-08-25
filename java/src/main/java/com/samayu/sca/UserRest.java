@@ -28,14 +28,13 @@ public class UserRest {
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(path="/checkUser/{fbUser}" )
     public ResponseEntity<User> checkUser(@PathVariable("fbUser") String fbUser ){
-        try {
             User user = dataAccessService.findUser(fbUser);
-            return ResponseEntity.ok( user );
-        }
-        catch(Exception er_){
-            er_.printStackTrace();
-            return ResponseEntity.notFound().build();
-        }
+            if( user != null ) {
+                return ResponseEntity.ok(user);
+            }
+            else{
+                return ResponseEntity.notFound().build();
+            }
     }
 
 
