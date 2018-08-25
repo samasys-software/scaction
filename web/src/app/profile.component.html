@@ -6,28 +6,16 @@
 <div *ngIf="!showLogin">
   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
     aria-expanded="false">
-
-    <img src="{{ imageUrl }}" class="img-fluid rounded-circle" width="20" height="20">
-
-
-
-
-
+    <img src="{{ user.profilePic }}" class="img-fluid rounded-circle" width="20" height="20">
   </a>
   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-      <span class="label label-default" class="dropdown-item">Hi! {{ fbUser }}</span>
-    <a class="dropdown-item" href="#">Talent</a>
-    <a class="dropdown-item" href="#"> Actor</a>
-    <a class="dropdown-item" href="#"> Photographer</a>
-    <a class="dropdown-item" href="#"> Director</a>
-    <a class="dropdown-item" href="#"> Designer</a>
-    <a class="dropdown-item" href="#"> Dubbing Artist</a>
-
-
+      <span class="label label-default" class="dropdown-item">Hi! {{ user.fbName }}</span>
+    <a class="dropdown-item" href="#">My Profile</a>
+    <a class="dropdown-item" href="#"> Notifications</a>
+    <a class="dropdown-item" href="#"> Invitations</a>
+    <a class="dropdown-item" href="#"> SignOut</a>
   </div>
 </div>
-
-
 <div>
   <app-popup></app-popup>
 </div>
