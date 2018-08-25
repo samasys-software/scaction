@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Implementation-Title: start_camera_action
+Implementation-Version: 1.0-SNAPSHOT
+Archiver-Version: Plexus Archiver
+Built-By: samayuadmin
+Implementation-Vendor-Id: samayu
+Created-By: Apache Maven 3.3.9
+Build-Jdk: 1.8.0_111
+Implementation-URL: http://projects.spring.io/spring-boot/start_camera
+ _action/
+Implementation-Vendor: Pivotal Software, Inc.
+
