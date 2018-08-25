@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 import { ProfileComponent } from './profile.component';
 import { PopUpComponent } from './popup.component';
@@ -8,7 +7,9 @@ import { PopupContent } from './popup.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule, Routes } from '@angular/router';
-import { MyProfileUpdateComponent } from './my-profile-update';
+import { MyProfileUpdateComponent } from './my-profile-update.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+
 
 const appRoutes: Routes = [
   { path: 'my-profile-update', component: MyProfileUpdateComponent }];
@@ -24,6 +25,8 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     HttpClientModule,
+    ReactiveFormsModule,
+    FormsModule,
     NgbModule.forRoot(),
     RouterModule.forRoot(
       appRoutes,

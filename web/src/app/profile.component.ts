@@ -72,7 +72,6 @@ export class ProfileComponent {
   */
   handleUser = (fbUserId, fbName , fbImageUrl , fbEmail ) => {
 
-    //If the User Exists call handleUserExists ELSE call handleUserDoesNotExist
     this.http.get(environment.apiUrl+'user/checkUser/'+fbUserId ).subscribe((res) => {
       if(res != null){
         this.handleUserExists(res);
@@ -86,6 +85,7 @@ export class ProfileComponent {
     this.handleUserDoesNotExist();
   });
   }
+
 
   handleUserExists = (res: any ) =>{
     this.user = new User(res);
@@ -104,7 +104,7 @@ export class ProfileComponent {
 
 
     if( !this.checkFB() ) return;
-    
+
     this.handleUser( 'samayu1' , 'Saravanan Thangaraju' , 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2365579596850855&height=50&width=50&ext=1537586649&hash=AeTAJmpQe29Pv45v' , 'info@samayusoftcorp.com'  );
 
     console.log(this.user);

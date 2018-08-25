@@ -1,0 +1,80 @@
+
+  <div class="form-group">
+    <label for="screenName">Screen name</label>
+    <input type="text" class="form-control" id="screenName"  placeholder="Enter screen name">
+  </div>
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" placeholder="Name">
+  </div>
+  <div class="form-group">
+    <label for="emailId">Email address</label>
+    <input type="email" class="form-control" id="emailId" aria-describedby="emailHelp" placeholder="Enter email">
+  </div>
+ <div class="form-group">
+      <label for="country">Country</label>
+      <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="modelCountry" [ngbTypeahead]="searchCountry"/>
+    </div>
+    <div class="form-group">
+        <label for="city">City</label>
+        <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search"/>
+      </div>
+
+  <div class="form-group">
+      <label for="phoneNumber">Phone number</label>
+      <input type="text" class="form-control" id="phoneNumber"  placeholder="Enter phone number">
+    </div>
+  <div class="form-group">
+    <label for="whatsappNumber">Whatsapp number</label>
+    <input type="text" class="form-control" id="whatsappNumber"  placeholder="Enter whatsapp number">
+  </div>
+    <div class="form-group">
+        <label for="gender">Gender</label>
+        <div class="btn-group-sm" role="group" aria-label="gender">
+            <button type="button" class="btn btn-secondary">Male</button>
+            <button type="button" class="btn btn-secondary">Female</button>
+            <button type="button" class="btn btn-secondary">Transgender</button>
+          </div>
+      </div>
+      <div class="form-group">
+          <label for="dateOfBirth">Date of birth</label>
+          <input type="text" class="form-control" id="dateOfBirth"  placeholder="Enter date of birth">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputGender1">Searchable</label>
+            <div class="btn-group-sm" role="group" aria-label="serachable">
+                <button type="button" class="btn btn-secondary">Yes</button>
+                <button type="button" class="btn btn-secondary">No</button>
+                </div>
+          </div>
+          <div class="form-group">
+              <label for="exampleInputGender1">Roles</label>
+          <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <input type="checkbox" aria-label="Checkbox for following text input">
+                </div>
+              </div>
+              <label>Actor</label>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <input type="checkbox" aria-label="Checkbox for following text input">
+                  </div>
+                </div>
+                <label>Director</label>
+              </div>
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <input type="checkbox" aria-label="Checkbox for following text input">
+                    </div>
+                  </div>
+                  <label>Technician</label>
+                </div>
+          </div>
+
+
+  <button type="submit" class="btn btn-primary">Register</button>
+
