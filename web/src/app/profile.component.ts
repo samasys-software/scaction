@@ -84,8 +84,6 @@ export class ProfileComponent {
   (error) => {
     this.handleUserDoesNotExist();
   });
-
-
   }
 
 

@@ -2,6 +2,7 @@ package com.samayu.sca.endpoints;
 
 import com.samayu.sca.businessobjects.City;
 import com.samayu.sca.businessobjects.Country;
+import com.samayu.sca.businessobjects.ProfileType;
 import com.samayu.sca.businessobjects.User;
 import com.samayu.sca.service.DataAccessService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class GlobalRest {
     @GetMapping(path="/cities/{countryId}")
     public ResponseEntity<Iterable<City>> getCities(@PathVariable(name="countryId" ) String countryId ) {
             return ResponseEntity.ok( dataAccessService.findCitiesByCountry( countryId ));
+    }
+
+    @GetMapping(path="/profileTypes")
+    public ResponseEntity<Iterable<ProfileType>> getProfileTypes() {
+        return ResponseEntity.ok( dataAccessService.findAllProfileTypes());
     }
 
 }
