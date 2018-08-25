@@ -580,8 +580,8 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\kdsdh\scaction\node_modules\bootstrap\dist\css\bootstrap.css */"./node_modules/bootstrap/dist/css/bootstrap.css");
-module.exports = __webpack_require__(/*! C:\Users\kdsdh\scaction\src\styles.css */"./src/styles.css");
+__webpack_require__(/*! /home/samayuadmin/Projects/stcamaction/scaction/web/node_modules/bootstrap/dist/css/bootstrap.css */"./node_modules/bootstrap/dist/css/bootstrap.css");
+module.exports = __webpack_require__(/*! /home/samayuadmin/Projects/stcamaction/scaction/web/src/styles.css */"./src/styles.css");
 
 
 /***/ })

@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".fb {\r\n  background-color: #3B5998;\r\n  color: white;\r\n}\r\n"
+module.exports = ".fb {\n  background-color: #3B5998;\n  color: white;\n}\n"
 
 /***/ }),
 
@@ -144,7 +144,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ng-template #content let-c=\"close\" let-d=\"dismiss\">\r\n  <div class=\"modal-header\">\r\n       <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\r\n      <span aria-hidden=\"true\">&times;</span>\r\n    </button>\r\n  </div>\r\n  <div class=\"modal-body\">\r\n    <label for=\"registerWithFaceBook\">Do you want to register ?</label>\r\n  </div>\r\n  <div class=\"modal-footer\">\r\n      <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"c('Save click')\">No</button>\r\n      <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"c('Save click')\">Yes</button>\r\n  </div>\r\n</ng-template>\r\n\r\n<button class=\"btn btn-lg btn-outline-primary\" (click)=\"open(content)\">Launch demo modal</button>\r\n\r\n<hr>\r\n\r\n<pre>{{closeResult}}</pre>\r\n"
+module.exports = "<ng-template #content let-c=\"close\" let-d=\"dismiss\">\n  <div class=\"modal-header\">\n       <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div>\n  <div class=\"modal-body\">\n    <label for=\"registerWithFaceBook\">Do you want to register ?</label>\n  </div>\n  <div class=\"modal-footer\">\n      <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"c('Save click')\">No</button>\n      <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"c('Save click')\">Yes</button>\n  </div>\n</ng-template>\n\n<button class=\"btn btn-lg btn-outline-primary\" (click)=\"open(content)\">Launch demo modal</button>\n\n<hr>\n\n<pre>{{closeResult}}</pre>\n"
 
 /***/ }),
 
@@ -215,7 +215,7 @@ var PopUpComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div  *ngIf=\"!showLogin\">\r\n  <img src= \"{{ imageUrl }}\"  class=\"img-circle\" width=\"20\" height=\"20\">\r\n  <input type = \"text\" value = \"{{ fbUser }}\" />\r\n  <div >\r\n      <app-popup></app-popup>\r\n  </div>\r\n\r\n  <input type=\"button\" (click)=\"onBackClick()\" value=\"Back\"/>\r\n</div>\r\n\r\n\r\n<div style=\"text-align:right\" *ngIf=\"showLogin\">\r\n<input type=\"button\" (click)=\"onLoginClick()\" value=\"Login\"/>\r\n\r\n</div>\r\n\r\n"
+module.exports = "<div  *ngIf=\"!showLogin\">\n  <img src= \"{{ imageUrl }}\"  class=\"img-circle\" width=\"20\" height=\"20\">\n  <input type = \"text\" value = \"{{ fbUser }}\" />\n  <div >\n      <app-popup></app-popup>\n  </div>\n\n  <input type=\"button\" (click)=\"onBackClick()\" value=\"Back\"/>\n</div>\n\n\n<div style=\"text-align:right\" *ngIf=\"showLogin\">\n<input type=\"button\" (click)=\"onLoginClick()\" value=\"Login/Register\"/>\n\n</div>\n\n"
 
 /***/ }),
 
@@ -243,16 +243,64 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var ProfileComponent = /** @class */ (function () {
-    function ProfileComponent(http) {
+    function ProfileComponent(http, chRef) {
+        var _this = this;
         this.http = http;
+        this.chRef = chRef;
         this.showLogin = true;
         this.showPopUp = false;
         this.imageUrl = '';
         this.fbUser = '';
+        this.handleFBResponse = function (response) {
+            console.log('handleFBReseponse=' + response);
+            if (response.authResponse) {
+                console.log('Welcome!  Fetching your information.... ');
+                FB.api('/me', { fields: 'id,name,email,picture' }, function (data) { return _this.handleSuccessResponse(data); });
+            }
+            else {
+                console.log('User cancelled login or did not fully authorize.');
+            }
+        };
+        this.handleSuccessResponse = function (meResponse) {
+            console.log('handleSuccessResponse=' + meResponse);
+            _this.fbUser = meResponse.id;
+            _this.imageUrl = meResponse.picture.data.url;
+            _this.showLogin = false;
+            _this.chRef.detectChanges();
+            console.log("FB Logged in " + meResponse.id + "::" + meResponse.picture.data.url);
+        };
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = '//connect.facebook.net/en_US/sdk.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+        window.fbAsyncInit = function () {
+            console.log("fbasyncinit");
+            FB.init({
+                appId: '461531394327909',
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v2.10'
+            });
+        };
     }
+    ProfileComponent.prototype.checkFB = function () {
+        ///home/samayuadmin/Projects/stcamaction/scaction/web/dist
+        var _this = this;
+        if (window.location.href.indexOf('localhost') > -1)
+            return true;
+        FB.login(function (data) { return _this.handleFBResponse(data); }, { scope: 'public_profile,email' });
+    };
     ProfileComponent.prototype.onLoginClick = function () {
         var _this = this;
         console.log('clicked');
+        if (!this.checkFB())
+            return;
         this.showLogin = false;
         this.http.get('http://localhost:8082/user/checkUser/samayu1').subscribe(function (res) {
             console.log('inside' + res);
@@ -273,7 +321,7 @@ var ProfileComponent = /** @class */ (function () {
             selector: 'app-profile',
             template: __webpack_require__(/*! ./profile.component.html */ "./src/app/profile.component.html")
         }),
-        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]])
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"]])
     ], ProfileComponent);
     return ProfileComponent;
 }());
@@ -342,7 +390,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\kdsdh\scaction\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /home/samayuadmin/Projects/stcamaction/scaction/web/src/main.ts */"./src/main.ts");
 
 
 /***/ })

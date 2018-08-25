@@ -35,6 +35,17 @@ public class User {
     @Column(name = "verified")
     private boolean verified;
 
+    public String getFbName() {
+        return fbName;
+    }
+
+    public void setFbName(String fbName) {
+        this.fbName = fbName;
+    }
+
+    @Column(name="fbName")
+    private String fbName;
+
     public long getUserId() {
         return userId;
     }
