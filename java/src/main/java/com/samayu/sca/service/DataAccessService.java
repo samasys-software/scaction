@@ -2,9 +2,11 @@ package com.samayu.sca.service;
 
 import com.samayu.sca.businessobjects.City;
 import com.samayu.sca.businessobjects.Country;
+import com.samayu.sca.businessobjects.ProfileType;
 import com.samayu.sca.businessobjects.User;
 import com.samayu.sca.dao.CityRepository;
 import com.samayu.sca.dao.CountryRepository;
+import com.samayu.sca.dao.ProfileTypeRepository;
 import com.samayu.sca.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,6 +22,9 @@ public class DataAccessService {
 
     @Autowired
     CityRepository cityRepository;
+
+    @Autowired
+    ProfileTypeRepository profileTypeRepository;
 
     public User register( String fbUser, String fbEmail, String profilePic){
 
@@ -43,6 +48,10 @@ public class DataAccessService {
 
     public Iterable<City> findCitiesByCountry( String countryCode){
         return cityRepository.findByCountryCode( countryCode );
+    }
+
+    public Iterable<ProfileType> findAllProfileTypes(){
+        return profileTypeRepository.findAll();
     }
 
 }
