@@ -1,11 +1,8 @@
 package com.samayu.sca.businessobjects;
 
-
-
 import javax.persistence.*;
-import javax.print.attribute.standard.DateTimeAtCompleted;
 import java.time.LocalDateTime;
-import java.util.Date;
+
 @Entity
 @Table(name="sa_users")
 public class User {

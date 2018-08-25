@@ -1,6 +1,7 @@
 import { Component, Inject, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { PopUpComponent } from './popup.component';
+import { environment } from '../environments/environment';
 
 
 declare var window: any;
@@ -71,7 +72,7 @@ export class ProfileComponent {
   handleUser = (fbUserId, fbName , fbImageUrl , fbEmail ) => {
 
     //If the User Exists call handleUserExists ELSE call handleUserDoesNotExist
-    this.http.get('http://localhost:8082/user/checkUser/'+fbUserId ).subscribe((res) => {
+    this.http.get(environment.apiUrl+'user/checkUser/'+fbUserId ).subscribe((res) => {
     this.handleUserExists(res);
     console.log('inside' + res);
     });
@@ -96,7 +97,7 @@ export class ProfileComponent {
 
     if( !this.checkFB() ) return;
     this.showLogin = false;
-    this.handleUser( 'samayu1n' , 'Saravanan Thangaraju' , 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2365579596850855&height=50&width=50&ext=1537586649&hash=AeTAJmpQe29Pv45v' , 'info@samayusoftcorp.com'  );
+    this.handleUser( 'samayu' , 'Saravanan Thangaraju' , 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2365579596850855&height=50&width=50&ext=1537586649&hash=AeTAJmpQe29Pv45v' , 'info@samayusoftcorp.com'  );
 
     console.log(this.user);
     if (this.fbUser == null) {
