@@ -2,6 +2,9 @@ import { Component, Inject, ChangeDetectorRef, ChangeDetectionStrategy } from '@
 import { HttpClient} from '@angular/common/http';
 import { PopUpComponent } from './popup.component';
 import { environment } from '../environments/environment';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { User } from './types/user';
+import { Router, Routes } from '@angular/router';
 
 
 declare var window: any;
@@ -16,11 +19,9 @@ declare var FB: any;
 export class ProfileComponent {
   showLogin = true;
   showPopUp = false;
-  imageUrl = '';
-  user;
-  fbUser = '';
+  user: User;
 
-  constructor(private http: HttpClient, private chRef: ChangeDetectorRef) {
+  constructor(private http: HttpClient, private chRef: ChangeDetectorRef, private modalService: NgbModal, private router: Router ) {
 
     (function(d, s, id){
       var js, fjs = d.getElementsByTagName(s)[0];
@@ -73,22 +74,26 @@ export class ProfileComponent {
 
     //If the User Exists call handleUserExists ELSE call handleUserDoesNotExist
     this.http.get(environment.apiUrl+'user/checkUser/'+fbUserId ).subscribe((res) => {
-    this.handleUserExists(res);
+      if(res != null){
+        this.handleUserExists(res);
+      }
+      else{
+        this.handleUserDoesNotExist();
+      }
     console.log('inside' + res);
     });
   }
 
   handleUserExists = (res: any ) =>{
-    this.user = res;
-    this.imageUrl = res['profilePic'];
-    this.fbUser = res['name'];
-
+    this.user = new User(res);
     this.showLogin = false;
     this.chRef.detectChanges();
   }
 
   handleUserDoesNotExist = () => {
-
+    //var popUpComponent = new PopUpComponent(this.modalService);
+    //this.modalService.open(PopUpComponent, {ariaLabelledBy: 'modal-basic-title'});
+    this.router.navigate(['/my-profile-update']);
   }
 
   onLoginClick() {
@@ -96,19 +101,12 @@ export class ProfileComponent {
 
 
     if( !this.checkFB() ) return;
-    this.showLogin = false;
-    this.handleUser( 'samayu' , 'Saravanan Thangaraju' , 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2365579596850855&height=50&width=50&ext=1537586649&hash=AeTAJmpQe29Pv45v' , 'info@samayusoftcorp.com'  );
+    
+    this.handleUser( 'samayu1' , 'Saravanan Thangaraju' , 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2365579596850855&height=50&width=50&ext=1537586649&hash=AeTAJmpQe29Pv45v' , 'info@samayusoftcorp.com'  );
 
     console.log(this.user);
-    if (this.fbUser == null) {
-
-    }
     }
 
-    onBackClick() {
-      this.showLogin = true;
-      this.imageUrl = '';
-      }
 }
 
 
