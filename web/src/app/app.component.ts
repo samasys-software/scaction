@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { UserHolderService } from './user-holder.service';
+
 
 @Component({
   selector: 'app-root',
@@ -8,5 +10,9 @@ import { RouterModule, Routes } from '@angular/router';
 })
 export class AppComponent {
   title = 'sca-action';
+  constructor (private userHolder: UserHolderService) {
+
+  }
+
 }
 
