@@ -19,8 +19,14 @@ public class UserRest {
 
 
     @RequestMapping(path="/register",method = RequestMethod.POST)
-    public ResponseEntity<User> create(@RequestParam("fb_user") String fbUser, @RequestParam("fb_Email") String fbEmail,
-                                 @RequestParam("profile_pic") String profile_pic){
+    public ResponseEntity<User> create(@RequestParam("fbUser") String fbUser,
+                                       @RequestParam("fbEmail") String fbEmail,
+                                       @RequestParam("fbProfilePic") String profile_pic,
+                                       @RequestParam("fbName") String name,
+                                       @RequestParam("phoneNumber") String phoneNumber,
+                                       @RequestParam("countryCode") String countryCode,
+                                       @RequestParam("whatsappNumber") String whatsappNumber,
+                                       @RequestParam("screenName") String screen){
          User user = dataAccessService.register(fbUser,fbEmail,profile_pic);
         return ResponseEntity.ok(user);
     }
