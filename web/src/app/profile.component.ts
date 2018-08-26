@@ -1,10 +1,13 @@
-import { Component, Inject, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Inject, ChangeDetectorRef, ChangeDetectionStrategy, Injectable } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { PopUpComponent } from './popup.component';
 import { environment } from '../environments/environment';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { User } from './types/user';
 import { Router, Routes } from '@angular/router';
+import { UserHolderService } from './user-holder.service';
+
+
 
 
 declare var window: any;
@@ -13,15 +16,18 @@ declare var FB: any;
 
 @Component({
   selector: 'app-profile',
-  templateUrl: './profile.component.html'
-
+  templateUrl: './profile.component.html',
+  providers: [UserHolderService]
 })
+
+@Injectable()
 export class ProfileComponent {
   showLogin = true;
   showPopUp = false;
   user: User;
 
-  constructor(private http: HttpClient, private chRef: ChangeDetectorRef, private modalService: NgbModal, private router: Router ) {
+  constructor(private http: HttpClient, private chRef: ChangeDetectorRef, private modalService: NgbModal,
+    private router: Router, private userHolder: UserHolderService ) {
 
     (function(d, s, id){
       var js, fjs = d.getElementsByTagName(s)[0];
@@ -77,12 +83,12 @@ export class ProfileComponent {
         this.handleUserExists(res);
       }
       else{
-        this.handleUserDoesNotExist();
+        this.handleUserDoesNotExist(fbUserId, fbName,  fbEmail, fbImageUrl);
       }
     console.log('inside' + res);
     },
   (error) => {
-    this.handleUserDoesNotExist();
+    this.handleUserDoesNotExist(fbUserId, fbName,  fbEmail, fbImageUrl);
   });
   }
 
@@ -93,10 +99,16 @@ export class ProfileComponent {
     this.chRef.detectChanges();
   }
 
-  handleUserDoesNotExist = () => {
+  handleUserDoesNotExist = (fbUserId, fbName, fbEmail, fbProfilePic) => {
     //var popUpComponent = new PopUpComponent(this.modalService);
     //this.modalService.open(PopUpComponent, {ariaLabelledBy: 'modal-basic-title'});
+    this.userHolder.fbUserId = fbUserId;
+    this.userHolder.fbName = fbName;
+    this.userHolder.fbEmail = fbEmail;
+    this.userHolder.fbProfilePic = fbProfilePic;
+
     this.router.navigate(['/my-profile-update']);
+
   }
 
   onLoginClick() {

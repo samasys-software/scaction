@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule,  CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { AppComponent } from './app.component';
 import { ProfileComponent } from './profile.component';
 import { PopUpComponent } from './popup.component';
@@ -11,8 +11,10 @@ import { MyProfileUpdateComponent } from './my-profile-update.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 
+
 const appRoutes: Routes = [
   { path: 'my-profile-update', component: MyProfileUpdateComponent }];
+
 
 @NgModule({
   declarations: [
@@ -20,8 +22,8 @@ const appRoutes: Routes = [
     ProfileComponent,
     PopUpComponent,
     PopupContent,
-    MyProfileUpdateComponent
-   ],
+    MyProfileUpdateComponent,
+    ],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -30,10 +32,11 @@ const appRoutes: Routes = [
     NgbModule.forRoot(),
     RouterModule.forRoot(
       appRoutes,
-      {enableTracing: true}
+      {enableTracing: false}
     )
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppModule { }
