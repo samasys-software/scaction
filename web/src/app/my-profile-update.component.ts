@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
-import { SelectModule } from 'ng2-select';
+
 import { Country } from './types/country';
 import { Router, Routes, ActivatedRoute } from '@angular/router';
 import { UserHolderService } from './user-holder.service';
@@ -12,11 +12,10 @@ import { UserHolderService } from './user-holder.service';
 
 @Component({
   selector: 'app-my-profile-update',
-  templateUrl: './my-profile-update.component.html',
-  providers: [UserHolderService]
+  templateUrl: './my-profile-update.component.html'
 })
 
-@Injectable()
+
 export class MyProfileUpdateComponent implements OnInit {
   public model: any;
   public modelCountry: any;
@@ -44,14 +43,19 @@ export class MyProfileUpdateComponent implements OnInit {
     )
 
     ngOnInit() {
-      this.fbUserId = this.userHolder.fbUserId;
+      console.log('Initializing Profile Update Component ');
+      this.userHolder.currentMessage.subscribe( message => { 
+        this.fbEmail = message['fbEmail'];
+        this.fbName = message['fbName'];
+        this.fbProfilePic = message['fbProfilePic'];
+        this.fbUserId = message['fbUserId'];
+
+        console.log( "Message From My Profile Update Component "+ message ); 
+      } );
 
       if (this.fbUserId == null) {
         this.router.navigate(['/']);
       }
-      this.fbName = this.userHolder.fbName;
-      this.fbEmail = this.userHolder.fbEmail;
-      this.fbProfilePic = this.userHolder.fbProfilePic;
 
     this.httpClient.get(environment.apiUrl + 'global/countries' ).subscribe((res) => {
       if (res != null) {

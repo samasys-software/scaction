@@ -16,11 +16,10 @@ declare var FB: any;
 
 @Component({
   selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  providers: [UserHolderService]
+  templateUrl: './profile.component.html'
 })
 
-@Injectable()
+
 export class ProfileComponent {
   showLogin = true;
   showPopUp = false;
@@ -99,14 +98,13 @@ export class ProfileComponent {
     this.chRef.detectChanges();
   }
 
+  message: string;
+
   handleUserDoesNotExist = (fbUserId, fbName, fbEmail, fbProfilePic) => {
     //var popUpComponent = new PopUpComponent(this.modalService);
     //this.modalService.open(PopUpComponent, {ariaLabelledBy: 'modal-basic-title'});
-    this.userHolder.fbUserId = fbUserId;
-    this.userHolder.fbName = fbName;
-    this.userHolder.fbEmail = fbEmail;
-    this.userHolder.fbProfilePic = fbProfilePic;
 
+    this.userHolder.changeMessage({ fbUserId : fbUserId , fbName : fbName , fbEmail : fbEmail , fbProfilePic : fbProfilePic });
     this.router.navigate(['/my-profile-update']);
 
   }
