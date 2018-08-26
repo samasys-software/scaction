@@ -2,8 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule,  CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { AppComponent } from './app.component';
 import { ProfileComponent } from './profile.component';
-import { PopUpComponent } from './popup.component';
-import { PopupContent } from './popup.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule, Routes } from '@angular/router';
@@ -20,9 +18,7 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     ProfileComponent,
-    PopUpComponent,
-    PopupContent,
-    MyProfileUpdateComponent,
+    MyProfileUpdateComponent
     ],
   imports: [
     BrowserModule,
