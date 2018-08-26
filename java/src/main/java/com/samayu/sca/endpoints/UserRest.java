@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Named;
 import javax.ws.rs.*;
+import java.time.LocalDate;
 
 
 @RestController
@@ -19,15 +20,48 @@ public class UserRest {
 
 
     @RequestMapping(path="/register",method = RequestMethod.POST)
-    public ResponseEntity<User> create(@RequestParam("fbUser") String fbUser,
-                                       @RequestParam("fbEmail") String fbEmail,
-                                       @RequestParam("fbProfilePic") String profile_pic,
-                                       @RequestParam("fbName") String name,
-                                       @RequestParam("phoneNumber") String phoneNumber,
-                                       @RequestParam("countryCode") String countryCode,
-                                       @RequestParam("whatsappNumber") String whatsappNumber,
-                                       @RequestParam("screenName") String screen){
-         User user = dataAccessService.register(fbUser,fbEmail,profile_pic);
+    public ResponseEntity<User> create(
+            @RequestParam("fbUser") String fbUser,
+            @RequestParam("screenName") String screenName,
+            @RequestParam("fbName") String name,
+            @RequestParam("fbEmail") String fbEmail,
+            @RequestParam("countryCode") String countryCode,
+            @RequestParam("city") String city,
+            @RequestParam("phoneNumber") String phoneNumber,
+            @RequestParam("whatsappNumber") String whatsappNumber,
+            @RequestParam("gender") String gender,
+            @RequestParam("dateOfBirth") String dateOfBirth,
+            @RequestParam("searchable") String searchable,
+            @RequestParam("profilePic") String profilePic,
+            @RequestParam("roles") String[] roles
+                                       ){
+
+         User user = dataAccessService.register( fbUser, screenName , name , fbEmail ,
+                 countryCode , city , phoneNumber , whatsappNumber, Integer.parseInt(gender) ,
+                 LocalDate.parse(dateOfBirth) , Boolean.parseBoolean(searchable) , roles );
+        return ResponseEntity.ok(user);
+    }
+
+    @RequestMapping(path="/update",method = RequestMethod.POST)
+    public ResponseEntity<User> update(
+            @RequestParam("fbUser") String fbUser,
+            @RequestParam("screenName") String screenName,
+            @RequestParam("fbName") String name,
+            @RequestParam("fbEmail") String fbEmail,
+            @RequestParam("countryCode") String countryCode,
+            @RequestParam("city") String city,
+            @RequestParam("phoneNumber") String phoneNumber,
+            @RequestParam("whatsappNumber") String whatsappNumber,
+            @RequestParam("gender") String gender,
+            @RequestParam("dateOfBirth") String dateOfBirth,
+            @RequestParam("searchable") String searchable,
+            @RequestParam("profilePic") String profilePic,
+            @RequestParam("roles") String[] roles
+    ){
+
+        User user = dataAccessService.update( fbUser, screenName , name , fbEmail ,
+                countryCode , city , phoneNumber , whatsappNumber, Integer.parseInt(gender) ,
+                LocalDate.parse(dateOfBirth) , Boolean.parseBoolean(searchable) , roles );
         return ResponseEntity.ok(user);
     }
 

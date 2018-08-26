@@ -11,6 +11,8 @@ import com.samayu.sca.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 @Component
 public class DataAccessService {
 
@@ -26,16 +28,50 @@ public class DataAccessService {
     @Autowired
     ProfileTypeRepository profileTypeRepository;
 
-    public User register( String fbUser, String fbEmail, String profilePic){
+    public User register( String fbUser, String screenName, String name, String email ,
+                          String countryCode,  String city, String phoneNumber,
+                          String whatsappNumber, int gender, LocalDate dateOfBirth,
+                          boolean searchable, String[] roles ){
 
         if( userRepository.findByFbUser( fbUser ) == null ) {
             User user = new User();
-            user.setFbUser(fbUser);
-            user.setFbEmail(fbEmail);
-            user.setProfilePic(profilePic);
+            user.setFbUser( fbUser );
+            user.setScreenName( screenName );
+            user.setFbName( name );
+            user.setFbEmail( email );
+            user.setCountryCode( countryCode );
+            user.setCity( city );
+            user.setPhoneNumber( phoneNumber );
+            user.setWhatsappNumber( whatsappNumber );
+            user.setGender( gender );
+            user.setDateOfBirth( dateOfBirth );
+            user.setSearchable( searchable );
             userRepository.save(user);
         }
         return userRepository.findByFbUser(fbUser);
+    }
+
+    public User update( String fbUser, String screenName, String name, String email ,
+                          String countryCode,  String city, String phoneNumber,
+                          String whatsappNumber, int gender, LocalDate dateOfBirth,
+                          boolean searchable, String[] roles ){
+
+        User user = userRepository.findByFbUser( fbUser );
+        if(  user != null ) {
+            user.setScreenName( screenName );
+            user.setFbName( name );
+            user.setFbEmail( email );
+            user.setCountryCode( countryCode );
+            user.setCity( city );
+            user.setPhoneNumber( phoneNumber );
+            user.setWhatsappNumber( whatsappNumber );
+            user.setGender( gender );
+            user.setDateOfBirth( dateOfBirth );
+            user.setSearchable( searchable );
+            userRepository.save(user);
+            return user;
+        }
+        return null;
     }
 
     public User findUser(String fbUser ){
