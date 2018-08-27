@@ -24,6 +24,8 @@ export class MyProfileUpdateComponent implements OnInit {
   public fbName: any;
   public fbEmail: any;
   public fbProfilePic: any;
+  public phoneNumber: any;
+  public dateOfBirth: any;
 
   search = (text$: Observable<string>) =>
     text$.pipe(
@@ -60,19 +62,26 @@ export class MyProfileUpdateComponent implements OnInit {
       if (res != null) {
         this.countries = Object.values(res).map(v => new Country(v));
         /*this.chRef.detectChanges();*/
-      } else {
+      }  else {
         this.countries = null;
          // this.chRef.detectChanges();
       }
     console.log('inside' + res);
     },
-  (error) => {
-    this.cities = null;
+    (error) => {
+    this.countries = null;
     // this.chRef.detectChanges();
   });
 
 
     }
+
+    /*validate() {
+      var city = ((document.getElementById('city') as HTMLInputElement).value);
+      if (city == null) {
+
+      }
+    }*/
 
     constructor(private httpClient: HttpClient, private userHolder: UserHolderService, private route: ActivatedRoute ,
       private chRef: ChangeDetectorRef, private router: Router) {

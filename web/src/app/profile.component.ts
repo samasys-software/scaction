@@ -85,6 +85,7 @@ export class ProfileComponent {
         this.handleUserExists(res);
       }
       else{
+        this.showLogin = true;
         this.handleUserDoesNotExist(fbUserId, fbName,  fbEmail, fbImageUrl);
       }
     console.log('inside' + res);
@@ -108,7 +109,7 @@ export class ProfileComponent {
     this.modalService.open(this.content, {ariaLabelledBy: 'modal-basic-title'});
 
     this.userHolder.changeMessage({ fbUserId : fbUserId , fbName : fbName , fbEmail : fbEmail , fbProfilePic : fbProfilePic });
-    this.router.navigate(['/my-profile-update']);
+    //this.router.navigate(['/my-profile-update']);
 
   }
 
@@ -121,6 +122,11 @@ export class ProfileComponent {
     this.handleUser( 'samayu1' , 'Saravanan Thangaraju' , 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2365579596850855&height=50&width=50&ext=1537586649&hash=AeTAJmpQe29Pv45v' , 'info@samayusoftcorp.com'  );
 
     console.log(this.user);
+    }
+
+    yesClick() {
+      console.log('yesclicked');
+      this.router.navigate(['/my-profile-update']);
     }
 
 }
