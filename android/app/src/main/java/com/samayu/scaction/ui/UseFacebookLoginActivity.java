@@ -16,6 +16,7 @@ import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.samayu.scaction.R;
+import com.samayu.scaction.service.SessionInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +35,7 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
         loginButton = (LoginButton) findViewById(R.id.fb_login_id);
 
         callbackManager = CallbackManager.Factory.create();
+        loginButton.setReadPermissions("email");
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -73,18 +75,23 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
                             Log.i("Response", response.toString());
 
                             //String email = response.getJSONObject().getString("email");
+                            SessionInfo.getInstance().setFBUserDetails(object);
+
+
                             String firstName = response.getJSONObject().getString("first_name");
                             String lastName = response.getJSONObject().getString("last_name");
                             String middleName = response.getJSONObject().getString("middle_name");
                             String name = response.getJSONObject().getString("name");
+                            String id = response.getJSONObject().getString("id");
 
 
                             Profile profile = Profile.getCurrentProfile();
-                            String id = profile.getId();
-                            String link = profile.getLinkUri().toString();
-                            Log.i("Link", link);
                             if (Profile.getCurrentProfile() != null) {
                                 Log.i("Login", "ProfilePic" + Profile.getCurrentProfile().getProfilePictureUri(200, 200));
+                                id = profile.getId();
+                                String link = profile.getLinkUri().toString();
+                                Log.i("Link", link);
+
                             }
 
                             //Log.i("Login" + "Email", email);
@@ -96,6 +103,9 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
 
                             // Log.i("Login" + "Gender", gender);
 
+                            Intent intent=new Intent(UseFacebookLoginActivity.this,HomeActivity.class);
+                            startActivity(intent);
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -103,7 +113,7 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
                     }
                 });
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,first_name,middle_name,last_name,name");
+        parameters.putString("fields", "id,first_name,middle_name,last_name,name,email,picture.width(40).height(40)");
         request.setParameters(parameters);
         request.executeAsync();
 
