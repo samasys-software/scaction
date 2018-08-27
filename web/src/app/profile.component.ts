@@ -1,14 +1,10 @@
-import { Component, Inject, ChangeDetectorRef, ChangeDetectionStrategy, Injectable } from '@angular/core';
+import { Component, Inject, ChangeDetectorRef, ChangeDetectionStrategy, Injectable, ViewChild } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
-import { PopUpComponent } from './popup.component';
 import { environment } from '../environments/environment';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { User } from './types/user';
 import { Router, Routes } from '@angular/router';
 import { UserHolderService } from './user-holder.service';
-
-
-
 
 declare var window: any;
 declare var location: any;
@@ -24,6 +20,13 @@ export class ProfileComponent {
   showLogin = true;
   showPopUp = false;
   user: User;
+  @ViewChild('content') private content;
+
+
+  open() {
+
+    const modalRef = this.modalService.open(this.content);
+  }
 
   constructor(private http: HttpClient, private chRef: ChangeDetectorRef, private modalService: NgbModal,
     private router: Router, private userHolder: UserHolderService ) {
@@ -102,7 +105,7 @@ export class ProfileComponent {
 
   handleUserDoesNotExist = (fbUserId, fbName, fbEmail, fbProfilePic) => {
     //var popUpComponent = new PopUpComponent(this.modalService);
-    //this.modalService.open(PopUpComponent, {ariaLabelledBy: 'modal-basic-title'});
+    this.modalService.open(this.content, {ariaLabelledBy: 'modal-basic-title'});
 
     this.userHolder.changeMessage({ fbUserId : fbUserId , fbName : fbName , fbEmail : fbEmail , fbProfilePic : fbProfilePic });
     this.router.navigate(['/my-profile-update']);
