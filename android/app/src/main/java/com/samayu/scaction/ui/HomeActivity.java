@@ -39,29 +39,24 @@ public class HomeActivity extends SCABaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        try {
-            JSONObject response = SessionInfo.getInstance().getFBUserDetails();
-            user_email=response.get("email").toString();
-            user_name=response.get("name").toString();
-            user_id=response.get("id").toString();
-            JSONObject profile_pic_data = new JSONObject(response.get("picture").toString());
-            JSONObject profile_pic_url = new JSONObject(profile_pic_data.getString("data"));
-           /* Picasso.with(this).load(profile_pic_url.getString("url"))
-                    .into(user_picture);*/
-
-        } catch(Exception e){
-            e.printStackTrace();
-        }
+        String user_id=SessionInfo.getInstance().getFbUserDetails().getId();
 
 
 
-        Call<User> checkUserDTOCall= new SCAClient().getClient().checkUser("samayu");
+
+        Call<User> checkUserDTOCall= new SCAClient().getClient().checkUser(user_id);
         checkUserDTOCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
 
                     User loginDTO = response.body();
-                    isNewUser=false;
+                    if(loginDTO!=null) {
+                        isNewUser = false;
+                    }
+                    else{
+                        isNewUser=false;
+                        registerNewUser();
+                    }
 
 
 

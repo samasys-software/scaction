@@ -18,6 +18,9 @@ import android.widget.TextView;
 
 
 import com.samayu.scaction.R;
+import com.samayu.scaction.domain.FBUserDetails;
+import com.samayu.scaction.service.SessionInfo;
+import com.squareup.picasso.Picasso;
 
 public abstract class SCABaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -36,8 +39,24 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
         FrameLayout activityContainer = (FrameLayout) fullView.findViewById(R.id.activity_content);
         getLayoutInflater().inflate(layoutId, activityContainer, true);
         initializeDrawer(fullView);
-        ImageView distributorName = (ImageView) fullView.findViewById(R.id.userImage);
-        TextView screenName = (TextView)fullView.findViewById(R.id.userName);
+        ImageView userImage = (ImageView) fullView.findViewById(R.id.userImage);
+        TextView userName = (TextView)fullView.findViewById(R.id.userName);
+
+        FBUserDetails fbUserDetails=SessionInfo.getInstance().getFbUserDetails();
+        if(fbUserDetails!=null)
+        {
+            try{
+                Picasso.with(this).load(fbUserDetails.getProfile_pic_url().getString("url"))
+                        .into(userImage);
+                userName.setText(fbUserDetails.getName());
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+
       /*  boolean companyName=getCompanyName();
         if(companyName){
             distributorName.setText("Hello");
@@ -55,7 +74,7 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
 //            nav_Menu.findItem(R.id.nav_orderHistroy).setVisible(false);
 //        }
 
-        screenName.setText("hai");//getProdcastTitle().toUpperCase());
+       //screenName.setText("hai");//getProdcastTitle().toUpperCase());
 
 
 
