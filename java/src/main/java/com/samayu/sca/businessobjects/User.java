@@ -43,8 +43,19 @@ public class User {
     @Column(name = "city")
     private String city;
 
+    @Column(name="city_id")
+    private int cityId;
+
     public String getCity() {
         return city;
+    }
+
+    public int getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
     }
 
     public void setCity(String city) {
