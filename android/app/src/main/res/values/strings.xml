@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Start Camera Action!</string>
+    <string name="error_field_required">This field is Reqiured</string>
     <string name="facebook_app_id">461531394327909</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

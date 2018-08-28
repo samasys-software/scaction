@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.samayu.scaction"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -50,5 +50,7 @@ dependencies {
     // Paging
     implementation 'android.arch.paging:runtime:1.0.0-alpha5'
     compile 'com.facebook.android:facebook-android-sdk:4.14.0'
+
+    compile 'com.squareup.picasso:picasso:2.5.2'
 
 }
