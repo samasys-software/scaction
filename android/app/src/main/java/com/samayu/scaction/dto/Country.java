@@ -41,4 +41,9 @@ public class Country {
         this.isdCode = isdCode;
     }
 
+    @Override
+    public String toString() {
+        return name;            // What to display in the Spinner list.
+    }
+
 }

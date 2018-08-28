@@ -2,6 +2,7 @@
 <android.support.v4.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
@@ -14,34 +15,7 @@
         android:layout_marginRight="5dp"
         android:orientation="vertical">
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:paddingBottom="5dp">-->
-            <!--<Button-->
-                <!--android:id="@+id/reportIssues"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="1"-->
-                <!--android:gravity="center"-->
-                <!--android:layout_gravity="start"-->
-                <!--android:text="Report Issue"-->
-                <!--style="@style/submitButton"/>-->
 
-
-
-            <!--<Button-->
-                <!--android:id="@+id/skipRegisteration"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="1"-->
-                <!--android:gravity="center"-->
-                <!--android:layout_gravity="end"-->
-                <!--android:visibility="visible"-->
-                <!--android:textColor="@color/colorInversePrimary"-->
-                <!--android:text="Skip" style="@style/submitButton"/>-->
-        <!--</LinearLayout>-->
 
         <android.support.design.widget.TextInputLayout
             android:layout_height="wrap_content"
@@ -122,23 +96,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_height="wrap_content"
+            <RelativeLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="0dp" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Country"
+
+                android:id="@+id/countryTextHint"
+                android:gravity="top"
+                android:textColor="@android:color/darker_gray"
+
+                />
+
+            <Spinner
+                android:id="@+id/editCountry"
+                android:layout_width="match_parent"
+                android:layout_marginTop="4dp"
+                android:layout_height="28dp"
+                android:paddingBottom="2dp"
+                android:visibility="visible"
                 android:layout_gravity="center"
-                android:layout_weight="1">
 
-                <EditText
-                    android:id="@+id/location"
-                    android:inputType="text"
-                    android:hint="City"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true" />
-            </android.support.design.widget.TextInputLayout>
+                android:layout_below="@id/countryTextHint"/>
+            </RelativeLayout>
 
 
 
@@ -158,16 +143,16 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Country"
+                    android:text="City"
 
-                    android:id="@+id/countryTextHint"
+                    android:id="@+id/cityTextHint"
                     android:gravity="top"
                     android:textColor="@android:color/darker_gray"
 
                     />
 
                 <Spinner
-                    android:id="@+id/editCountry"
+                    android:id="@+id/city"
                     android:layout_width="match_parent"
                     android:layout_marginTop="4dp"
                     android:layout_height="28dp"
@@ -175,11 +160,57 @@
                     android:visibility="visible"
                     android:layout_gravity="center"
 
-                    android:layout_below="@id/countryTextHint"/>
+                    android:layout_below="@id/cityTextHint"/>
 
             </RelativeLayout>
 
 
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Gender"
+
+                android:gravity="start"/>
+
+            <RadioGroup
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/gender">
+                <RadioButton
+                    android:id="@+id/gender_male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Male"
+                    android:checked="true"
+                 />
+                <RadioButton
+                    android:id="@+id/gender_female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female"
+                    />
+                <RadioButton
+                    android:id="@+id/gender_other"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Others"
+                    />
+            </RadioGroup>
 
         </LinearLayout>
 
@@ -190,23 +221,67 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <CheckBox
-            android:id="@+id/searchable"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:checked="true"
-            android:hint=""
+            <TextView
+                android:id="@+id/startDate"
+                style="@style/datePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date Of Birth"
+                android:layout_gravity="center"
+                />
 
-            android:gravity="end"/>
+            <ImageButton
+                android:id="@+id/startDatePicker"
+                android:background="@drawable/ic_date_picker"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"/>
+
+            <CheckBox
+                android:id="@+id/searchable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:checked="true"
+                android:hint=""
+
+
+                android:gravity="end"/>
 
             <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="Searchable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Searchable"
 
-            android:gravity="start"/>
+                android:gravity="end"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30sp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Roles"
+
+                android:gravity="start"/>
+
+            <ListView
+                android:id="@+id/roleList"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="true"
+
+                />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -235,6 +310,8 @@
                 android:visibility="visible" />
 
         </LinearLayout>
+
+
 
     </LinearLayout>
 

@@ -4,4 +4,19 @@
     <string name="facebook_app_id">461531394327909</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string-array name="roles">
+       <item> Actor</item>
+        <item> Photographer</item>
+        <item>  Director</item>
+        <item>Designer</item>
+        <item> Dubbing Artist</item>
+        <item> Singer</item>
+        <item> Musician</item>
+        <item> Other Technician</item>
+        <item>Studio Owner</item>
+        <item> Location Manager</item>
+        <item>Casting Coordinator</item>
+
+
+    </string-array>
 </resources>
