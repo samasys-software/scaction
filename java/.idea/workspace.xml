@@ -3,8 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3dbdcc12-4bf0-421c-9818-c89d0adff060" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/my-profile-update.component.html" afterPath="$PROJECT_DIR$/../web/src/app/my-profile-update.component.html" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/my-profile-update.component.ts" afterPath="$PROJECT_DIR$/../web/src/app/my-profile-update.component.ts" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/samayu/sca/businessobjects/User.java" afterPath="$PROJECT_DIR$/src/main/java/com/samayu/sca/businessobjects/User.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/samayu/sca/endpoints/UserRest.java" afterPath="$PROJECT_DIR$/src/main/java/com/samayu/sca/endpoints/UserRest.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/samayu/sca/service/DataAccessService.java" afterPath="$PROJECT_DIR$/src/main/java/com/samayu/sca/service/DataAccessService.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -191,8 +192,8 @@
       <file leaf-file-name="DataAccessService.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/samayu/sca/service/DataAccessService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="230">
-              <caret line="58" column="19" lean-forward="false" selection-start-line="58" selection-start-column="19" selection-end-line="58" selection-end-column="19" />
+            <state relative-caret-position="428">
+              <caret line="69" column="27" lean-forward="false" selection-start-line="69" selection-start-column="27" selection-end-line="69" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2787#2788#0" expanded="true" />
@@ -1434,8 +1435,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/samayu/sca/service/DataAccessService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="58" column="19" lean-forward="false" selection-start-line="58" selection-start-column="19" selection-end-line="58" selection-end-column="19" />
+        <state relative-caret-position="428">
+          <caret line="69" column="27" lean-forward="false" selection-start-line="69" selection-start-column="27" selection-end-line="69" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#2787#2788#0" expanded="true" />
