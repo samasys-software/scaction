@@ -1,37 +1,45 @@
-<div *ngIf="countries | async; else loading">
 <div class="form-group">
   <label for="screenName">Screen name</label>
   <input type="text" class="form-control" id="screenName" placeholder="Enter screen name">
 </div>
-<div class="form-group">
-  <label for="name">Name</label>
-  <input type="text" class="form-control" id="name" placeholder="Name">
+<div class="form-group" [class.has-error]="nameControl.invalid">
+  <label for="name" class="control-label">Name</label>
+  <input required type="text" class="form-control" id="name" placeholder="Name" [(ngModel)]="fbName" #nameControl="ngModel">
+  <span class="help-block" *ngIf="nameControl.invalid">Please enter Name</span>
 </div>
-<div class="form-group">
-  <label for="emailId">Email address</label>
-  <input type="email" class="form-control" id="emailId" aria-describedby="emailHelp" placeholder="Enter email">
+<div class="form-group" [class.has-error]="emailControl.invalid">
+  <label for="emailId" class="control-label">Email address</label>
+  <input type="email" class="form-control" id="emailId" aria-describedby="emailHelp" placeholder="Enter email" [(ngModel)]="fbEmail" #emailControl="ngModel">
+  <span class="help-block" *ngIf="emailControl.invalid">Please enter Email-Id</span>
 </div>
 <div class="form-group">
   <label for="country">Country</label>
-  <select #sCountry [(ngModel)]="modelCountry" (change)="setCountry(sCountry.value)">
-    <option value="" selected>Select country</option>
-    <option *ngFor="let c of countries | async" [value]="c.code"  >
-      {{ c.name }}
-    </option>
+  <select [(ngModel)]="modelCountry" ngOptions="item.name for item in countries">
   </select>
 </div>
-<div class="form-group">
-  <label for="city">City</label>
-  <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" />
-</div>
+<div class="form-group" [class.has-error]="cityControl.invalid">
+  <label class="control-label" for="city">City</label>
+  <input id="city" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" #cityControl="ngModel" />
+  <span class="help-block" *ngIf="cityControl.invalid">Please enter city</span>
+  </div>
 
-<div class="form-group">
-  <label for="phoneNumber">Phone number</label>
+<div class="form-group" [class.has-error]="cityControl.invalid">
+  <label for="phoneNumber" class="control-label">Phone number</label>
   <input type="number" class="form-control" id="phoneNumber" placeholder="Enter phone number">
+  <span class="help-block" *ngIf="nameControl.invalid">Please enter Name</span>
 </div>
 <div class="form-group">
-  <label for="whatsappNumber">Whatsapp number</label>
+    <div class="form-check">
+      <input class="form-check-same" type="checkbox" value="" id="form-check-same" required>
+      <label class="form-check-label" for="sameAsPhoneNumber">
+        Same as phone number
+      </label>
+    </div>
+  </div>
+<div class="form-group" [class.has-error]="cityControl.invalid">
+  <label for="whatsappNumber" class="control-label">Whatsapp number</label>
   <input type="text" class="form-control" id="whatsappNumber" placeholder="Enter whatsapp number">
+  <span class="help-block" *ngIf="nameControl.invalid">Please enter Name</span>
 </div>
 <div class="form-group">
   <label for="gender">Gender</label>
@@ -41,9 +49,10 @@
     <button type="button" class="btn btn-secondary">Transgender</button>
   </div>
 </div>
-<div class="form-group">
-  <label for="dateOfBirth">Date of birth</label>
+<div class="form-group" [class.has-error]="cityControl.invalid">
+  <label for="dateOfBirth" class="control-label">Date of birth</label>
   <input type="text" ngbDatepicker #d="ngbDatepicker" class="form-control" id="dateOfBirth" placeholder="Enter date of birth">
+  <span class="help-block" *ngIf="nameControl.invalid">Please enter DOB</span>
 </div>
 <div class="form-group">
   <label for="exampleInputGender1">Searchable</label>
@@ -82,7 +91,3 @@
 
 
 <button type="submit" class="btn btn-primary">Register</button>
-</div>
-<ng-template #loading>
-  Loading User...
-</ng-template>

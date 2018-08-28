@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="AlertTheme" parent="Theme.AppCompat.Dialog.Alert">
@@ -30,6 +32,22 @@
         <item name="android:paddingLeft">10dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:ems">10</item>
+
+    </style>
+
+    <style name="PopupMenuItem">
+        <!-- Change Overflow Menu ListView Item Height & Property -->
+        <item name="android:listPreferredItemHeightSmall">20dp</item>
+    </style>
+
+    <style name="datePicker">
+        <!-- Customize datepicker Textview -->
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+
 
     </style>
 

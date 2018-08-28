@@ -6,8 +6,6 @@ import { environment } from '../environments/environment';
 import { Country } from './types/country';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserHolderService } from './user-holder.service';
-import { Capability } from 'protractor';
-
 
 
 @Component({
@@ -25,6 +23,8 @@ export class MyProfileUpdateComponent implements OnInit {
   public fbName: any;
   public fbEmail: any;
   public fbProfilePic: any;
+  public phoneNumber: any;
+  public dateOfBirth: any;
 
   search = (text$: Observable<string>) =>
     text$.pipe(
@@ -51,34 +51,28 @@ export class MyProfileUpdateComponent implements OnInit {
 
     this.httpClient.get(environment.apiUrl + 'global/countries' ).subscribe((res) => {
       if (res != null) {
-        var tmp: Country[] = [];
-        for(let key in res){
+        let tmp: Country[] = [];
+        for (let key in res) {
           var country = new Country(res[key]);
           tmp.push( country );
         }
         this.countries = of(tmp).pipe();
-        
-      }
-
-      else {
+      } else {
         this.countries = null;
       }
     console.log('inside' + res);
     },
-  (error) => {
-    this.cities = null;
+    (error) => {
+    this.countries = null;
     // this.chRef.detectChanges();
   });
 
-
- 
     }
-    setCountry(value: string ){
-      this.httpClient.get(environment.apiUrl + 'global/cities/'+value ).subscribe((res) => {
+    setCountry(value: string ) {
+      this.httpClient.get(environment.apiUrl + 'global/cities/' + value ).subscribe((res) => {
         if (res != null) {
           this.cities = res;
-        }
-        else {
+        } else {
           this.cities = null;
         }
       },
@@ -86,8 +80,15 @@ export class MyProfileUpdateComponent implements OnInit {
       this.cities = null;
       // this.chRef.detectChanges();
     });
-  
+
     }
+
+    /*validate() {
+      var city = ((document.getElementById('city') as HTMLInputElement).value);
+      if (city == null) {
+
+      }
+    }*/
 
     constructor(private httpClient: HttpClient, private userHolder: UserHolderService, private route: ActivatedRoute ,
       private chRef: ChangeDetectorRef, private router: Router) {
