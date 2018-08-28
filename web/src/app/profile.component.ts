@@ -80,11 +80,11 @@ export class ProfileComponent {
   */
   handleUser = (fbUserId, fbName , fbImageUrl , fbEmail ) => {
 
-    this.http.get(environment.apiUrl+'user/checkUser/'+fbUserId ).subscribe((res) => {
-      if(res != null){
+    this.http.get(environment.apiUrl + 'user/checkUser/'+ fbUserId ).subscribe((res) => {
+      if (res != null) {
         this.handleUserExists(res);
       }
-      else{
+      else {
         this.showLogin = true;
         this.handleUserDoesNotExist(fbUserId, fbName,  fbEmail, fbImageUrl);
       }
