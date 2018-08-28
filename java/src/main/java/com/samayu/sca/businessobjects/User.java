@@ -3,6 +3,7 @@ package com.samayu.sca.businessobjects;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="scaction_users")
@@ -46,11 +47,22 @@ public class User {
     @Column(name="city_id")
     private int cityId;
 
+    private List<UserRole> userRoles;
+
     public String getCity() {
         return city;
     }
 
+    public List<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(List<UserRole> userRoles) {
+        this.userRoles = userRoles;
+    }
+
     public int getCityId() {
+
         return cityId;
     }
 
