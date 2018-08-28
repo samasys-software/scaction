@@ -16,6 +16,8 @@ import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.samayu.scaction.R;
+import com.samayu.scaction.domain.FBUserDetails;
+import com.samayu.scaction.service.SessionInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +36,7 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
         loginButton = (LoginButton) findViewById(R.id.fb_login_id);
 
         callbackManager = CallbackManager.Factory.create();
+        loginButton.setReadPermissions("email","gender");
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -73,28 +76,42 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
                             Log.i("Response", response.toString());
 
                             //String email = response.getJSONObject().getString("email");
-                            String firstName = response.getJSONObject().getString("first_name");
-                            String lastName = response.getJSONObject().getString("last_name");
-                            String middleName = response.getJSONObject().getString("middle_name");
+
+                            FBUserDetails fbUserDetails=new FBUserDetails();
+                            fbUserDetails.setId(object.get("id").toString());
+                            fbUserDetails.setName(object.get("name").toString());
+                            fbUserDetails.setEmailAddress(object.get("email").toString());
+                            JSONObject profile_pic_data= new JSONObject(object.get("picture").toString());
+                            fbUserDetails.setProfile_pic_data(profile_pic_data);
+                            fbUserDetails.setProfile_pic_url(new JSONObject(profile_pic_data.getString("data")));
+                            SessionInfo.getInstance().setFbUserDetails(fbUserDetails);
+
+
+//                            String firstName = response.getJSONObject().getString("first_name");
+//                            String lastName = response.getJSONObject().getString("last_name");
+//                            String middleName = response.getJSONObject().getString("middle_name");
                             String name = response.getJSONObject().getString("name");
+                            String id = response.getJSONObject().getString("id");
 
 
                             Profile profile = Profile.getCurrentProfile();
-                            String id = profile.getId();
-                            String link = profile.getLinkUri().toString();
-                            Log.i("Link", link);
                             if (Profile.getCurrentProfile() != null) {
                                 Log.i("Login", "ProfilePic" + Profile.getCurrentProfile().getProfilePictureUri(200, 200));
+                                id = profile.getId();
+                                String link = profile.getLinkUri().toString();
+                                Log.i("Link", link);
+
                             }
 
                             //Log.i("Login" + "Email", email);
-                            Log.i("Login" + "FirstName", firstName);
-                            Log.i("Login" + "LastName", lastName);
-                            Log.i("Login" + "middle name", middleName);
+
                             Log.i("Login" + "name", name);
                             Log.i("Login" + "id", id);
 
                             // Log.i("Login" + "Gender", gender);
+
+                            Intent intent=new Intent(UseFacebookLoginActivity.this,HomeActivity.class);
+                            startActivity(intent);
 
 
                         } catch (JSONException e) {
@@ -103,7 +120,7 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
                     }
                 });
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,first_name,middle_name,last_name,name");
+        parameters.putString("fields", "id,name,email,gender,picture.width(40).height(40)");
         request.setParameters(parameters);
         request.executeAsync();
 
