@@ -36,7 +36,7 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
         loginButton = (LoginButton) findViewById(R.id.fb_login_id);
 
         callbackManager = CallbackManager.Factory.create();
-        loginButton.setReadPermissions("email","gender");
+        loginButton.setReadPermissions("email");
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -94,6 +94,7 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
                             String id = response.getJSONObject().getString("id");
 
 
+
                             Profile profile = Profile.getCurrentProfile();
                             if (Profile.getCurrentProfile() != null) {
                                 Log.i("Login", "ProfilePic" + Profile.getCurrentProfile().getProfilePictureUri(200, 200));
@@ -107,6 +108,7 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
 
                             Log.i("Login" + "name", name);
                             Log.i("Login" + "id", id);
+                            //Log.i("Login" + "gender", gender);
 
                             // Log.i("Login" + "Gender", gender);
 
