@@ -1,45 +1,54 @@
-<div class="form-group">
-  <label for="screenName">Screen name</label>
-  <input type="text" class="form-control" id="screenName" placeholder="Enter screen name">
+<form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
+<div class="form-group" [class.has-error]="screenNameControl.touched && screenNameControl.invalid">
+  <label class="control-label" for="screenName">Screen name</label>
+ <input type="text" class="form-control" name="screenName"  placeholder="Enter screen name" [(ngModel)]="screenName"
+ #screenNameControl="ngModel" required>
+  <span class="help-block" *ngIf="screenNameControl.invalid && screenNameControl.touched">Please enter screen name</span>
 </div>
-<div class="form-group" [class.has-error]="nameControl.invalid">
+<div class="form-group" [class.has-error]="nameControl.invalid && nameControl.touched">
   <label for="name" class="control-label">Name</label>
-  <input required type="text" class="form-control" id="name" placeholder="Name" [(ngModel)]="fbName" #nameControl="ngModel">
-  <span class="help-block" *ngIf="nameControl.invalid">Please enter Name</span>
+  <input required type="text" class="form-control" name="name" placeholder="Name" [(ngModel)]="fbName" #nameControl="ngModel"
+  [ngModelOptions]="{standalone: true}" required>
+  <span class="help-block" *ngIf="nameControl.invalid && nameControl.touched">Please enter Name</span>
 </div>
-<div class="form-group" [class.has-error]="emailControl.invalid">
+<div class="form-group" [class.has-error]="emailControl.invalid && emailControl.touched">
   <label for="emailId" class="control-label">Email address</label>
-  <input type="email" class="form-control" id="emailId" aria-describedby="emailHelp" placeholder="Enter email" [(ngModel)]="fbEmail" #emailControl="ngModel">
-  <span class="help-block" *ngIf="emailControl.invalid">Please enter Email-Id</span>
+  <input type="email" class="form-control" name="emailId" placeholder="Enter email" [(ngModel)]="fbEmail" #emailControl="ngModel"
+  [ngModelOptions]="{standalone: true}"required>
+  <span class="help-block" *ngIf="emailControl.invalid && emailControl.touched">Please enter Email-name</span>
 </div>
-<div class="form-group">
-  <label for="country">Country</label>
-  <select [(ngModel)]="modelCountry" ngOptions="item.name for item in countries">
+<div class="form-group" [class.has-error]= "countryControl.touched && countryControl.invalid">
+  <label class="control-label" for="country">Country</label>
+  <select [(ngModel)]="modelCountry" ngOptions="item.name for item in countries" #countryControl="ngModel" [ngModelOptions]="{standalone: true}" required>
   </select>
 </div>
-<div class="form-group" [class.has-error]="cityControl.invalid">
+<div class="form-group" [class.has-error]="cityControl.invalid && cityControl.touched">
   <label class="control-label" for="city">City</label>
-  <input id="city" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" #cityControl="ngModel" />
-  <span class="help-block" *ngIf="cityControl.invalid">Please enter city</span>
+  <input name="city" type="text" class="form-control" [(ngModel)]="modelCities" [ngbTypeahead]="search" #cityControl="ngModel"
+  [ngModelOptions]="{standalone: true}" required/>
+  <span class="help-block" *ngIf="cityControl.invalid && cityControl.touched">Please enter city</span>
   </div>
 
-<div class="form-group" [class.has-error]="cityControl.invalid">
+<div class="form-group"  [class.has-error]="phoneNumberControl.invalid && phoneNumberControl.touched">
   <label for="phoneNumber" class="control-label">Phone number</label>
-  <input type="number" class="form-control" id="phoneNumber" placeholder="Enter phone number">
-  <span class="help-block" *ngIf="nameControl.invalid">Please enter Name</span>
+  <input type="number" class="form-control" name="phoneNumber" placeholder="Enter phone number" [(ngModel)]="phoneNumber" #phoneNumberControl="ngModel"
+  [ngModelOptions]="{standalone: true}" required>
+  <span class="help-block" *ngIf="phoneNumberControl.invalid &&  phoneNumberControl.touched">Please enter phone number</span>
 </div>
-<div class="form-group">
-    <div class="form-check">
-      <input class="form-check-same" type="checkbox" value="" id="form-check-same" required>
-      <label class="form-check-label" for="sameAsPhoneNumber">
+<div class="form-group" >
+    <div class="form-check"  [class.has-error]="isSameAsPhone.invalid" >
+      <input class="form-check-same" type="checkbox" value="" name="form-check-same" [(ngModel)]="isSameASPhone" #isSameAsPhone="ngModel"
+      [ngModelOptions]="{standalone: true}" required>
+      <label class="control-label" class="form-check-label" for="sameAsPhoneNumber">
         Same as phone number
       </label>
     </div>
   </div>
-<div class="form-group" [class.has-error]="cityControl.invalid">
+<div class="form-group" [class.has-error]="whatsappNumberControl.invalid && whatsappNumberControl.touched">
   <label for="whatsappNumber" class="control-label">Whatsapp number</label>
-  <input type="text" class="form-control" id="whatsappNumber" placeholder="Enter whatsapp number">
-  <span class="help-block" *ngIf="nameControl.invalid">Please enter Name</span>
+  <input type="number" class="form-control" name="whatsappNumber" placeholder="Enter whatsapp number" [(ngModel)]="whatsappNumber"
+  #whatsappNumberControl="ngModel" [ngModelOptions]="{standalone: true}" required>
+  <span class="help-block" *ngIf="whatsappNumberControl.invalid && whatsappNumberControl.touched">Please enter whatsapp number</span>
 </div>
 <div class="form-group">
   <label for="gender">Gender</label>
@@ -49,10 +58,11 @@
     <button type="button" class="btn btn-secondary">Transgender</button>
   </div>
 </div>
-<div class="form-group" [class.has-error]="cityControl.invalid">
+<div class="form-group" [class.has-error]="dateOfBirtControl.invalid && dateOfBirtControl.touched">
   <label for="dateOfBirth" class="control-label">Date of birth</label>
-  <input type="text" ngbDatepicker #d="ngbDatepicker" class="form-control" id="dateOfBirth" placeholder="Enter date of birth">
-  <span class="help-block" *ngIf="nameControl.invalid">Please enter DOB</span>
+  <input type="text" ngbDatepicker #d="ngbDatepicker" class="form-control" name="dateOfBirth" placeholder="Enter date of birth"
+  [(ngModel)]="dateOfBirth" #dateOfBirtControl="ngModel" [ngModelOptions]="{standalone: true}" required>
+  <span class="help-block" *ngIf="dateOfBirtControl.invalid && dateOfBirtControl.touched">Please enter Date Of Birth</span>
 </div>
 <div class="form-group">
   <label for="exampleInputGender1">Searchable</label>
@@ -89,5 +99,5 @@
   </div>
 </div>
 
-
-<button type="submit" class="btn btn-primary">Register</button>
+ <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">Register</button>
+</form>

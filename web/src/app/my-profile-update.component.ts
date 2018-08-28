@@ -6,6 +6,7 @@ import { environment } from '../environments/environment';
 import { Country } from './types/country';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserHolderService } from './user-holder.service';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -15,15 +16,18 @@ import { UserHolderService } from './user-holder.service';
 
 
 export class MyProfileUpdateComponent implements OnInit {
-  public model: any;
+  public modelCities: any;
   public modelCountry: any;
   public cities: any;
   public countries: Observable<Country[]>;
+  public screenName: any;
   public fbUserId: any;
   public fbName: any;
   public fbEmail: any;
   public fbProfilePic: any;
   public phoneNumber: any;
+  public whatsappNumber: any;
+  public isSameASPhone: boolean;
   public dateOfBirth: any;
 
   search = (text$: Observable<string>) =>
@@ -81,6 +85,11 @@ export class MyProfileUpdateComponent implements OnInit {
       // this.chRef.detectChanges();
     });
 
+    }
+
+    register(form: any) {
+
+      console.log(form);
     }
 
     /*validate() {
