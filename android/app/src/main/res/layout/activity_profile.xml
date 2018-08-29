@@ -204,12 +204,7 @@
                     android:layout_height="wrap_content"
                     android:text="Female"
                     />
-                <RadioButton
-                    android:id="@+id/gender_other"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Others"
-                    />
+
             </RadioGroup>
 
         </LinearLayout>
