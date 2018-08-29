@@ -7,8 +7,8 @@ import { Country } from './types/country';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserHolderService } from './user-holder.service';
 import { FormsModule } from '@angular/forms';
-
-
+import {MatChipsModule} from "@angular/material/chips"
+import {ProfileType} from './types/profiletype';
 @Component({
   selector: 'app-my-profile-update',
   templateUrl: './my-profile-update.component.html'
@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 export class MyProfileUpdateComponent implements OnInit {
   public modelCities: any;
   public modelCountry: any;
+  public profileTypes: Observable<ProfileType[]>;
   public cities: any;
   public countries: Observable<Country[]>;
   public screenName: any;
@@ -53,14 +54,27 @@ export class MyProfileUpdateComponent implements OnInit {
         this.router.navigate(['/']);
       }
 
-    this.httpClient.get(environment.apiUrl + 'global/countries' ).subscribe((res) => {
+    this.httpClient.get(environment.apiUrl + 'global/profileDefaults' ).subscribe((res) => {
       if (res != null) {
+        let countryResp = res['countries'];
+        let profileResp = res['profileTypes'];
+
         let tmp: Country[] = [];
-        for (let key in res) {
-          var country = new Country(res[key]);
+        for (let key in countryResp) {
+          var country = new Country(countryResp[key]);
           tmp.push( country );
         }
+        let pTmp: ProfileType[]=[];
+        for( let key in profileResp ){
+          var profile = new ProfileType( profileResp[key]);
+          pTmp.push( profile );
+        }
+        
+        this.profileTypes = of(pTmp).pipe();
         this.countries = of(tmp).pipe();
+
+        
+
       } else {
         this.countries = null;
       }

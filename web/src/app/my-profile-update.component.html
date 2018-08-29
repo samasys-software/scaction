@@ -1,3 +1,4 @@
+<div *ngIf="countries | async; else loading">
 <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
 <div class="form-group" [class.has-error]="screenNameControl.touched && screenNameControl.invalid">
   <label class="control-label" for="screenName">Screen name</label>
@@ -19,8 +20,12 @@
 </div>
 <div class="form-group" [class.has-error]= "countryControl.touched && countryControl.invalid">
   <label class="control-label" for="country">Country</label>
-  <select [(ngModel)]="modelCountry" ngOptions="item.name for item in countries" #countryControl="ngModel" [ngModelOptions]="{standalone: true}" required>
-  </select>
+  <select #countryControl="ngModel" #sCountry [(ngModel)]="modelCountry" (change)="setCountry(sCountry.value)">
+      <option value="" selected>Select country</option>
+      <option *ngFor="let c of countries | async" [value]="c.code"  >
+        {{ c.name }}
+      </option>
+    </select>
 </div>
 <div class="form-group" [class.has-error]="cityControl.invalid && cityControl.touched">
   <label class="control-label" for="city">City</label>
@@ -43,7 +48,7 @@
         Same as phone number
       </label>
     </div>
-  </div>
+</div>
 <div class="form-group" [class.has-error]="whatsappNumberControl.invalid && whatsappNumberControl.touched">
   <label for="whatsappNumber" class="control-label">Whatsapp number</label>
   <input type="number" class="form-control" name="whatsappNumber" placeholder="Enter whatsapp number" [(ngModel)]="whatsappNumber"
@@ -71,33 +76,29 @@
     <button type="button" class="btn btn-secondary">No</button>
   </div>
 </div>
-<div class="form-group">
-  <label for="exampleInputGender1">Roles</label>
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <div class="input-group-text">
-        <input type="checkbox" aria-label="Checkbox for following text input">
-      </div>
+
+
+
+  <div class="row">
+    <div class="col">
+      <label>Roles</label>
     </div>
-    <label>Actor</label>
-  </div>
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <div class="input-group-text">
-        <input type="checkbox" aria-label="Checkbox for following text input">
-      </div>
+    <div class="col">
+      <span *ngFor="let order of profileTypes | async">
+        <label >
+          <input type="checkbox" value="{{ order.id }}">
+            {{ order.name }}
+        </label>
+      </span>
     </div>
-    <label>Director</label>
-  </div>
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <div class="input-group-text">
-        <input type="checkbox" aria-label="Checkbox for following text input">
-      </div>
-    </div>
-    <label>Technician</label>
-  </div>
-</div>
+   </div> 
+  
+
+  
 
  <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">Register</button>
 </form>
+</div>
+<ng-template #loading>
+    Loading User...
+  </ng-template>

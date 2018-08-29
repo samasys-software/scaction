@@ -9,5 +9,8 @@
         <module name="start_camera_action" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="start_camera_action" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
