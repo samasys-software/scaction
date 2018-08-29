@@ -4,17 +4,51 @@
     android:layout_height="match_parent">
 
     <item
-        android:id="@+id/nav_bar"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="home"
-        app:showAsAction="always">
-    <menu>
-        <item android:id="@+id/create_new"
-            android:title="Actor" />
-        <item android:id="@+id/open"
-            android:title="Cinematographer" />
-    </menu>
+    android:id="@+id/talent"
+    android:icon="@drawable/ic_launcher_foreground"
+    android:title="Talent"
+    app:showAsAction="always">
+
+
+
+
+
     </item>
+    <item
+        android:id="@+id/castingCalls"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Casting Calls"
+        app:showAsAction="always">
+
+    </item>
+    <item
+        android:id="@+id/locations"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Locations"
+        app:showAsAction="always">
+
+    </item>
+    <item
+        android:id="@+id/studios"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Studios"
+        app:showAsAction="always">
+
+    </item>
+    <item
+        android:id="@+id/movieConsulting"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Movie Consulting"
+        app:showAsAction="always">
+
+    </item>
+
+    <group
+        android:id="@+id/groupi">
+
+    </group>
+
+
 
 
 </menu>

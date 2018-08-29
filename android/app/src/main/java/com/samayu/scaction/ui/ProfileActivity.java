@@ -1,14 +1,25 @@
 package com.samayu.scaction.ui;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.AsyncTask;
+import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,9 +46,12 @@ import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.StringTokenizer;
+import java.util.concurrent.ExecutionException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,6 +69,7 @@ public class ProfileActivity extends SCABaseActivity {
     ListView listView;
     View focusView=null;
     boolean valid=false;
+    ArrayAdapter<String> adapter;
 
     private ImageButton dateOfBirthPicker;
 
@@ -95,7 +110,7 @@ public class ProfileActivity extends SCABaseActivity {
         dateOfBirthPicker=(ImageButton)findViewById(R.id.startDatePicker);
 
         String[] roles = getResources().getStringArray(R.array.roles);
-        ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,
+        adapter= new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_multiple_choice, roles);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setAdapter(adapter);
@@ -132,8 +147,8 @@ public class ProfileActivity extends SCABaseActivity {
 
                     SessionInfo.getInstance().setCountries(countryDTO);
                     List<Country> countryList=SessionInfo.getInstance().getCountries();
-                final ArrayAdapter<Country> adapter = new ArrayAdapter<Country>(ProfileActivity.this, R.layout.drop_down_list, countryList);
-                country.setAdapter(adapter);
+                final ArrayAdapter<Country> countryAdapter = new ArrayAdapter<Country>(ProfileActivity.this, R.layout.drop_down_list, countryList);
+                country.setAdapter(countryAdapter);
 
 
 
@@ -167,7 +182,6 @@ public class ProfileActivity extends SCABaseActivity {
         country.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 int ctry = country.getSelectedItemPosition();
                 Country selectedCountry = (Country) country.getSelectedItem();
                 String selectedCountryId = selectedCountry.getCode();
@@ -189,8 +203,8 @@ public class ProfileActivity extends SCABaseActivity {
 
                         SessionInfo.getInstance().setCities(cityList);
 
-                        final ArrayAdapter<City> adapter = new ArrayAdapter<City>(ProfileActivity.this, R.layout.drop_down_list, cityList);
-                        city.setAdapter(adapter);
+                        final ArrayAdapter<City> cityAdapter = new ArrayAdapter<City>(ProfileActivity.this, R.layout.drop_down_list, cityList);
+                        city.setAdapter(cityAdapter);
 
 
 
@@ -203,6 +217,140 @@ public class ProfileActivity extends SCABaseActivity {
 
 
                 });
+
+                    AsyncTask task = new AsyncTask() {
+                        @Override
+                        protected Object doInBackground(Object[] objects) {
+                            LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                            String locationProvider = LocationManager.GPS_PROVIDER;
+                            String fullAddress = "";
+                            if (ActivityCompat.checkSelfPermission(ProfileActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                                    && ActivityCompat.checkSelfPermission(ProfileActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                fullAddress = "No Permission available";
+                                ActivityCompat.requestPermissions(ProfileActivity.this, new String[] {
+                                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                                Manifest.permission.ACCESS_COARSE_LOCATION },
+                                        1);
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                //                                          int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                            }
+                            {
+
+                                try {
+                                    Looper.prepare();
+                                    manager.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
+                                        @Override
+                                        public void onLocationChanged(Location location) {
+                                            System.out.println("Location Changed ");
+                                        }
+
+                                        @Override
+                                        public void onStatusChanged(String s, int i, Bundle bundle) {
+                                            System.out.println("Location Status Changed ");
+                                        }
+
+                                        @Override
+                                        public void onProviderEnabled(String s) {
+                                            System.out.println("Provider Enabled ");
+                                        }
+
+                                        @Override
+                                        public void onProviderDisabled(String s) {
+                                            System.out.println("Provider Disabled");
+                                        }
+                                    }, null);
+                                }
+                                catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                                Location currentLocation = manager.getLastKnownLocation(locationProvider);
+                                if(currentLocation==null){
+                                    return "No Permission Available";
+                                }
+                                Geocoder coder = new Geocoder(ProfileActivity.this);
+                                try {
+                                    List<Address> addresses = coder.getFromLocation(currentLocation.getLatitude() , currentLocation.getLongitude() , 20 );
+                                    //List<Address> addresses = coder.getFromLocation(10.828547,78.666821,20);
+                                    if(addresses.size()>3){
+                                        Address address = addresses.get(0);
+
+                                        return address;
+                                    }
+
+
+
+                                } catch (IOException e) {
+                                    fullAddress+="Error "+e;
+                                    e.printStackTrace();
+                                }
+
+                            }
+                            return fullAddress;
+                        }
+                    };
+
+                    task.execute((Object[])null);
+                    Address address = null;
+                    try {
+                        Object result = task.get();
+                        if( result instanceof  Address ){
+                            address = (Address) result;
+
+                            String  address1 = address.getAddressLine(0);
+                            String address2 = address.getAddressLine(1);
+                            String address3 = address.getAddressLine(2);
+                            String[] address1Array = address1.split(" ");
+
+                            StringTokenizer st = new StringTokenizer(address2,", ");
+                            String[] address2Array = address2.split(", ");
+
+
+
+                            ArrayAdapter<Country> ctryadapter =(ArrayAdapter<Country>) country.getAdapter();
+                            int ctryCount =  ctryadapter.getCount();
+                            for(int i = 0; i<ctryCount; i++){
+                                Country aCountry= ctryadapter.getItem(i);
+                                if(aCountry.getName().equalsIgnoreCase(address3)){
+                                    country.setSelection(i);
+                                    break;
+                                }
+                            }
+
+                            ArrayAdapter<City> cityadapter =(ArrayAdapter<City>) city.getAdapter();
+                            int count =  cityadapter.getCount();
+                            for(int i = 0; i<count; i++){
+                                City aCity= cityadapter.getItem(i);
+                                if(aCity.getName().equalsIgnoreCase(st.nextToken())){
+                                    city.setSelection(i);
+                                    break;
+                                }
+                            }
+                        }
+                        else if( result instanceof  String ) {
+                            String errorText = (String) task.get();
+                            //TODO UnitNumber setError.
+                        }
+                    } catch (InterruptedException e) {
+
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+
+                        e.printStackTrace();
+                    }
+
+
+
+
+
+
+
+
+
 
             }
 
@@ -267,7 +415,7 @@ public class ProfileActivity extends SCABaseActivity {
                     formattedDayOfMonth1 = "0" + sday;
                 }
 
-                String date1 = formattedDayOfMonth1 + "/" + formattedMonth1 + "/" + syear;
+                String date1 = syear +"-" + formattedMonth1  + "-" +formattedDayOfMonth1;
                 dob.setText(date1);
             }
         };
@@ -280,6 +428,23 @@ public class ProfileActivity extends SCABaseActivity {
 
 
     public void attemptRegister(){
+
+//        Call<String> registerDTOCall = new SCAClient().getClient().sample(9);
+//        registerDTOCall.enqueue(new Callback<String>() {
+//            @Override
+//            public void onResponse(Call<String> call, Response<String> response) {
+//                if (response.isSuccessful()) {
+//
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<String> call, Throwable t) {
+//                t.printStackTrace();
+//
+//            }
+//        });
         //String customerId=null;
         String screenName1=screenName.getText().toString();
         String name1=name.getText().toString();
@@ -291,19 +456,48 @@ public class ProfileActivity extends SCABaseActivity {
         City selectedCity = (City) city.getSelectedItem();
         String selectedCityName = selectedCity.getName();
 
-        Boolean isSearchable;
+        String isSearchable;
         int ctry = country.getSelectedItemPosition();
         Country selectedCountry = (Country) country.getSelectedItem();
         String selectedCountryCode = selectedCountry.getCode();
-        int selectedId = gender.getCheckedRadioButtonId();
+
+        String gender1;
+
+        int whichIndex = gender.getCheckedRadioButtonId();
+        if(whichIndex==R.id.gender_male)
+        {
+            gender1="0";
+        }
+        else{
+            gender1="1";
+        }
 
 
         if(searchable.isChecked()){
-            isSearchable=true;
+            isSearchable="true";
         }
         else{
-            isSearchable=false;
+            isSearchable="false";
         }
+
+        SparseBooleanArray checked = listView.getCheckedItemPositions();
+        ArrayList<String> selectedItems = new ArrayList<String>();
+        for (int i = 0; i < checked.size(); i++) {
+            // Item position in adapter
+            int position = checked.keyAt(i);
+            // Add sport if it is checked i.e.) == TRUE!
+            if (checked.valueAt(i))
+                selectedItems.add(adapter.getItem(position));
+        }
+
+        String[] rolesList = new String[selectedItems.size()];
+
+        for (int i = 0; i < selectedItems.size(); i++) {
+            rolesList[i] = selectedItems.get(i);
+        }
+
+
+
         boolean validation=  validation(screenName1,name1,email,phone,whatsapp,selectedCityPosition,ctry);
         if (validation) {
             // There was an error; don't attempt login and focus the first
@@ -313,36 +507,30 @@ public class ProfileActivity extends SCABaseActivity {
         }
        else {
 
-            CreateUser createUser=new CreateUser();
-            createUser.setFbUser(SessionInfo.getInstance().getFbUserDetails().getId());
-            createUser.setFbEmail(email);
-            createUser.setCity(selectedCityName);
-            createUser.setFbName(name1);
-            createUser.setScreenName(screenName1);
-            createUser.setPhoneNumber(phone);
-            createUser.setWhatsappNumber(whatsapp);
-            createUser.setSearchable(String.valueOf(isSearchable));
-            createUser.setCountryCode(selectedCountryCode);
-            createUser.setGender("");
-            createUser.setDateOfBirth("");
-            createUser.setRoles(new String[]{""});
+            try {
+                String fbUser="dwde"; //SessionInfo.getInstance().getFbUserDetails().getId();
+                String url="cfe";//SessionInfo.getInstance().getFbUserDetails().getId()
 
-            Call<User> registerDTOCall = new SCAClient().getClient().registerNewUser(createUser);
-            registerDTOCall.enqueue(new Callback<User>() {
-                @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-                    if (response.isSuccessful()) {
+                Call<User> registerDTOCall = new SCAClient().getClient().registerNewUser(fbUser, screenName1, name1, email, selectedCountryCode, selectedCityName, phone, whatsapp, gender1, dob.getText().toString(), isSearchable,url, rolesList);
+                registerDTOCall.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.isSuccessful()) {
 
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        t.printStackTrace();
 
                     }
-                }
-
-                @Override
-                public void onFailure(Call<User> call, Throwable t) {
-                    t.printStackTrace();
-
-                }
-            });
+                });
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
     public boolean validation(String screenName1,String name1,String email,String phone,String whatsapp,int city1,int ctry){
