@@ -30,6 +30,7 @@ export class MyProfileUpdateComponent implements OnInit {
   public whatsappNumber: any;
   public isSameASPhone: boolean;
   public dateOfBirth: any;
+  public roles: any;
 
   search = (text$: Observable<string>) =>
     text$.pipe(
@@ -69,11 +70,11 @@ export class MyProfileUpdateComponent implements OnInit {
           var profile = new ProfileType( profileResp[key]);
           pTmp.push( profile );
         }
-        
+
         this.profileTypes = of(pTmp).pipe();
         this.countries = of(tmp).pipe();
 
-        
+
 
       } else {
         this.countries = null;
