@@ -24,7 +24,7 @@ import com.squareup.picasso.Picasso;
 
 public abstract class SCABaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +94,9 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) layout.findViewById(R.id.nav_view);
+    navigationView = (NavigationView) layout.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
 
     }
@@ -133,9 +134,12 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
         int id = item.getItemId();
         final Intent intent;
         final Bundle b;
-        if (id == R.id.nav_bar) {
+        if (id == R.id.talent) {
 
-        } else if (id == R.id.create_new) {
+
+
+
+        } else if (id == R.id.castingCalls) {
 
         }
 
