@@ -4,6 +4,7 @@ import com.samayu.sca.businessobjects.City;
 import com.samayu.sca.businessobjects.Country;
 import com.samayu.sca.businessobjects.ProfileType;
 import com.samayu.sca.businessobjects.User;
+import com.samayu.sca.dto.ProfileDefaultsDTO;
 import com.samayu.sca.service.DataAccessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,15 @@ public class GlobalRest {
     @GetMapping(path="/profileTypes")
     public ResponseEntity<Iterable<ProfileType>> getProfileTypes() {
         return ResponseEntity.ok( dataAccessService.findAllProfileTypes());
+    }
+
+    @GetMapping(path="/profileDefaults")
+    public ResponseEntity<ProfileDefaultsDTO> getCountryAndProfiles(){
+
+        ProfileDefaultsDTO dto = new ProfileDefaultsDTO();
+        dto.setCountries( dataAccessService.findAllCountries());
+        dto.setProfileTypes( dataAccessService.findAllProfileTypes() );
+        return ResponseEntity.ok( dto );
     }
 
 }

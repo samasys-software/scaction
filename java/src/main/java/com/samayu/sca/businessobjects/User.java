@@ -47,6 +47,7 @@ public class User {
     @Column(name="city_id")
     private int cityId;
 
+    @Transient
     private List<UserRole> userRoles;
 
     public String getCity() {

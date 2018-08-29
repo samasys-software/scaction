@@ -33,7 +33,7 @@ public class UserRest {
             @RequestParam("dateOfBirth") String dateOfBirth,
             @RequestParam("searchable") String searchable,
             @RequestParam("profilePic") String profilePic,
-            @RequestParam("roles") String[] roles
+            @RequestParam("roles") int[] roles
                                        ){
 
          User user = dataAccessService.register( fbUser, screenName , name , fbEmail ,
@@ -56,7 +56,7 @@ public class UserRest {
             @RequestParam("dateOfBirth") String dateOfBirth,
             @RequestParam("searchable") String searchable,
             @RequestParam("profilePic") String profilePic,
-            @RequestParam("roles") String[] roles
+            @RequestParam("roles") int[] roles
     ){
 
         User user = dataAccessService.update( fbUser, screenName , name , fbEmail ,
