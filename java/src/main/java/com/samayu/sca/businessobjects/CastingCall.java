@@ -11,7 +11,7 @@ public class CastingCall {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="casting_call_id")
-    private int id;
+    private long id;
 
     @Column(name="project_name")
     private String projectName;
@@ -44,7 +44,7 @@ public class CastingCall {
     private int countryId;
 
     @Column(name="country_name")
-    private int countryName;
+    private String countryName;
 
     @Column(name="venue")
     private String address;
@@ -56,13 +56,13 @@ public class CastingCall {
     private LocalDate endDate;
 
     @Column(name="start_time")
-    private LocalTime startTime;
+    private String startTime;
 
     @Column(name="end_time")
-    private LocalTime endTime;
+    private String endTime;
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -162,19 +162,19 @@ public class CastingCall {
         this.endDate = endDate;
     }
 
-    public LocalTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public LocalTime getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalTime endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -186,11 +186,11 @@ public class CastingCall {
         this.countryId = countryId;
     }
 
-    public int getCountryName() {
+    public String  getCountryName() {
         return countryName;
     }
 
-    public void setCountryName(int countryName) {
+    public void setCountryName(String countryName) {
         this.countryName = countryName;
     }
 }

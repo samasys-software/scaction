@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalField;
 import java.time.temporal.TemporalUnit;
@@ -32,6 +33,9 @@ public class DataAccessService {
 
     @Autowired
     private UserRoleRepository userRoleRepository;
+
+    @Autowired
+    private CastingCallRepository castingCallRepository;
 
     public User register( String fbUser, String screenName, String name, String email ,
                           String countryCode,  String city, String phoneNumber,
@@ -164,6 +168,32 @@ public class DataAccessService {
 
     public Iterable<ProfileType> findAllProfileTypes(){
         return profileTypeRepository.findAll();
+    }
+
+    public CastingCall createOrUpdateCastingCall(String projectName, String projectDetails,
+                                      String productionCompany, String roleDetails,
+                                      int startAge, int endAge, int gender, String cityName,
+                                      String countryName, String address, LocalDate startDate, LocalDate endDate,
+                                                 String startTime, String endTime){
+        CastingCall castingCall = new CastingCall();
+        castingCall.setProjectName(projectName);
+        castingCall.setProjectDetails(projectDetails);
+        castingCall.setProductionCompany(productionCompany);
+        castingCall.setRoleDetails(roleDetails);
+        castingCall.setStartAge(startAge);
+        castingCall.setEndAge(endAge);
+        castingCall.setGender(gender);
+        castingCall.setCity(cityName);
+        castingCall.setCountryName(countryName);
+        castingCall.setAddress(address);
+        castingCall.setStartDate(startDate);
+        castingCall.setEndDate(endDate);
+        castingCall.setStartTime(startTime);
+        castingCall.setEndTime(endTime);
+        castingCall.setCityId(10);
+        castingCall.setCountryId(20);
+        castingCallRepository.save(castingCall);
+        return castingCall;
     }
 
 }
