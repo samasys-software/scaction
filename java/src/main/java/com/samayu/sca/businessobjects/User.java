@@ -1,8 +1,11 @@
 package com.samayu.sca.businessobjects;
 
 import javax.persistence.*;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 import java.util.List;
 
 @Entity
@@ -28,7 +31,7 @@ public class User {
     @Column(name = "gender")
     private int gender;
     @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
+    private Date dateOfBirth;
     @Column(name = "searchable")
     private boolean searchable;
     @Column(name = "profile_pic")
@@ -36,23 +39,17 @@ public class User {
     @Column(name ="role")
     private int role;
     @Column(name = "create_dt")
-    private LocalDateTime createDt;
+    private Timestamp createDt;
     @Column(name ="update_dt" )
-    private LocalDateTime updateDt;
+    private Timestamp updateDt;
     @Column(name = "verified")
     private boolean verified;
-    @Column(name = "city")
-    private String city;
 
     @Column(name="city_id")
     private int cityId;
 
     @Transient
     private List<UserRole> userRoles;
-
-    public String getCity() {
-        return city;
-    }
 
     public List<UserRole> getUserRoles() {
         return userRoles;
@@ -69,10 +66,6 @@ public class User {
 
     public void setCityId(int cityId) {
         this.cityId = cityId;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public String getFbName() {
@@ -150,23 +143,25 @@ public class User {
         this.whatsappNumber = whatsappNumber;
     }
 
-    public LocalDateTime getCreateDt() {
+
+    public Timestamp getCreateDt() {
         return createDt;
     }
 
-    public void setCreateDt(LocalDateTime createDt) {
+    public void setCreateDt(Timestamp createDt) {
         this.createDt = createDt;
     }
 
-    public LocalDateTime getUpdateDt() {
+    public Timestamp getUpdateDt() {
         return updateDt;
     }
 
-    public void setUpdateDt(LocalDateTime updateDt) {
+    public void setUpdateDt(Timestamp updateDt) {
         this.updateDt = updateDt;
     }
 
     public boolean isVerified() {
+
         return verified;
     }
 
@@ -191,11 +186,11 @@ public class User {
         this.gender = gender;
     }
 
-    public LocalDate getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

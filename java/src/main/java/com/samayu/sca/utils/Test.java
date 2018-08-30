@@ -2,12 +2,17 @@ package com.samayu.sca.utils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Test {
 
     public static void main(String[] args) throws Exception{
+
+        LocalDate dt = LocalDate.parse("2018-07-21");
+        System.out.println( dt );
+        if( dt != null ) return;
         String filename = "/home/samayuadmin/Downloads/in.csv";
 
         List<String> lines = new ArrayList<>();

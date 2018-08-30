@@ -26,7 +26,7 @@ public class UserRest {
             @RequestParam("fbName") String name,
             @RequestParam("fbEmail") String fbEmail,
             @RequestParam("countryCode") String countryCode,
-            @RequestParam("city") String city,
+            @RequestParam("cityId") String city,
             @RequestParam("phoneNumber") String phoneNumber,
             @RequestParam("whatsappNumber") String whatsappNumber,
             @RequestParam("gender") String gender,
@@ -39,29 +39,6 @@ public class UserRest {
          User user = dataAccessService.register( fbUser, screenName , name , fbEmail ,
                  countryCode , city , phoneNumber , whatsappNumber, Integer.parseInt(gender) ,
                  LocalDate.parse(dateOfBirth) , Boolean.parseBoolean(searchable) , roles );
-        return ResponseEntity.ok(user);
-    }
-
-    @RequestMapping(path="/update",method = RequestMethod.POST)
-    public ResponseEntity<User> update(
-            @RequestParam("fbUser") String fbUser,
-            @RequestParam("screenName") String screenName,
-            @RequestParam("fbName") String name,
-            @RequestParam("fbEmail") String fbEmail,
-            @RequestParam("countryCode") String countryCode,
-            @RequestParam("city") String city,
-            @RequestParam("phoneNumber") String phoneNumber,
-            @RequestParam("whatsappNumber") String whatsappNumber,
-            @RequestParam("gender") String gender,
-            @RequestParam("dateOfBirth") String dateOfBirth,
-            @RequestParam("searchable") String searchable,
-            @RequestParam("profilePic") String profilePic,
-            @RequestParam("roles") int[] roles
-    ){
-
-        User user = dataAccessService.update( fbUser, screenName , name , fbEmail ,
-                countryCode , city , phoneNumber , whatsappNumber, Integer.parseInt(gender) ,
-                LocalDate.parse(dateOfBirth) , Boolean.parseBoolean(searchable) , roles );
         return ResponseEntity.ok(user);
     }
 
