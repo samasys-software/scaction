@@ -1,33 +1,59 @@
 package com.samayu.sca.businessobjects;
 
 import javax.persistence.*;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="scaction_users")
+@Table(name="scaction_user_roles")
 public class UserRole {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idscaction_user_roles")
+    @Column(name = "user_role_id")
     private long id;
 
     @Column(name = "scaction_user_id")
     private long userId;
 
+    public Timestamp getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
+    }
+
+    public Timestamp getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Timestamp updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
     @Column(name = "scaction_user_role_id")
     private int roleId;
 
     @Column(name = "create_dt")
-    private LocalDateTime createDate;
+    private Timestamp createDate;
 
     @Column(name = "update_dt")
-    private LocalDateTime updatedDate;
+    private Timestamp updatedDate;
 
     @Column(name = "expiration_date")
-    private LocalDate expirationDate;
+    private Date expirationDate;
 
     @Column(name = "active")
     private boolean active;
@@ -54,30 +80,6 @@ public class UserRole {
 
     public void setRoleId(int roleId) {
         this.roleId = roleId;
-    }
-
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
-
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(LocalDateTime updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-
-    public LocalDate getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(LocalDate expirationDate) {
-        this.expirationDate = expirationDate;
     }
 
     public boolean isActive() {

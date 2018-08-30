@@ -5,9 +5,12 @@ import com.samayu.sca.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalField;
 import java.time.temporal.TemporalUnit;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,24 +38,31 @@ public class DataAccessService {
                           String whatsappNumber, int gender, LocalDate dateOfBirth,
                           boolean searchable, int[] roles ){
 
-        if( userRepository.findByFbUser( fbUser ) == null ) {
-            User user = new User();
-            user.setFbUser( fbUser );
-            user.setScreenName( screenName );
-            user.setFbName( name );
-            user.setFbEmail( email );
-            user.setCountryCode( countryCode );
-            user.setCity( city );
-            user.setPhoneNumber( phoneNumber );
-            user.setWhatsappNumber( whatsappNumber );
-            user.setGender( gender );
-            user.setDateOfBirth( dateOfBirth );
-            user.setSearchable( searchable );
-            updateRoles( user , roles , true );
-            userRepository.save(user);
+        User user = null;
 
+        user = userRepository.findByFbUser( fbUser );
+        if( user == null ) {
+            user = new User();
         }
-        return userRepository.findByFbUser(fbUser);
+
+        user.setFbUser( fbUser );
+        user.setScreenName( screenName );
+        user.setFbName( name );
+        user.setFbEmail( email );
+        user.setCountryCode( countryCode );
+        user.setCityId( Integer.parseInt(city) );
+        user.setPhoneNumber( phoneNumber );
+        user.setWhatsappNumber( whatsappNumber );
+        user.setGender( gender );
+        user.setDateOfBirth( Date.valueOf( dateOfBirth ) );
+        user.setSearchable( searchable );
+        user.setCreateDt( new Timestamp( System.currentTimeMillis() ));
+        user.setUpdateDt( new Timestamp( System.currentTimeMillis() ));
+        userRepository.save(user);
+        updateRoles( user , roles , true );
+
+
+        return findUser(fbUser);
     }
 
     private void updateRoles(User user, int[] roles, boolean newRegistration ){
@@ -65,10 +75,11 @@ public class DataAccessService {
                             UserRole userRole = new UserRole();
                             userRole.setUserId( user.getUserId() );
                             userRole.setActive(true);
-                            userRole.setCreateDate(LocalDateTime.now());
-                            userRole.setUpdatedDate(LocalDateTime.now());
+                            userRole.setCreateDate(new Timestamp(System.currentTimeMillis()));
+                            userRole.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                             userRole.setRoleId(tmpRole);
-                            userRole.setExpirationDate(LocalDate.now().plus(1, ChronoUnit.YEARS));
+
+                            userRole.setExpirationDate(new Date( System.currentTimeMillis()+365*24*60*60*1000 ));
                             newRoles.add(userRole);
                         }
                     }
@@ -120,10 +131,10 @@ public class DataAccessService {
                             UserRole userRole = new UserRole();
                             userRole.setUserId( user.getUserId() );
                             userRole.setActive(true);
-                            userRole.setCreateDate(LocalDateTime.now());
-                            userRole.setUpdatedDate(LocalDateTime.now());
+                            userRole.setCreateDate( new Timestamp( System.currentTimeMillis() ));
+                            userRole.setUpdatedDate(new Timestamp( System.currentTimeMillis() ));
                             userRole.setRoleId( tmpRole );
-                            userRole.setExpirationDate(LocalDate.now().plus(1, ChronoUnit.YEARS));
+                            userRole.setExpirationDate(new Date( System.currentTimeMillis()+365*24*60*60*1000 ));
                             newRoles.add(userRole);
                         }
 
@@ -137,33 +148,10 @@ public class DataAccessService {
                 }
     }
 
-    public User update( String fbUser, String screenName, String name, String email ,
-                          String countryCode,  String city, String phoneNumber,
-                          String whatsappNumber, int gender, LocalDate dateOfBirth,
-                          boolean searchable, int[] roles ){
-
-        User user = userRepository.findByFbUser( fbUser );
-        if(  user != null ) {
-            user.setScreenName( screenName );
-            user.setFbName( name );
-            user.setFbEmail( email );
-            user.setCountryCode( countryCode );
-            user.setCity( city );
-            user.setPhoneNumber( phoneNumber );
-            user.setWhatsappNumber( whatsappNumber );
-            user.setGender( gender );
-            user.setDateOfBirth( dateOfBirth );
-            user.setSearchable( searchable );
-            userRepository.save(user);
-
-            updateRoles( user , roles , false );
-            return user;
-        }
-        return null;
-    }
-
     public User findUser(String fbUser ){
-        return userRepository.findByFbUser( fbUser );
+        User user = userRepository.findByFbUser( fbUser );
+        user.setUserRoles( userRoleRepository.findByUserId( user.getUserId() ));
+        return user;
     }
 
     public Iterable<Country> findAllCountries(){

@@ -37,9 +37,43 @@ public class UserRestTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
-        map.add("fb_user","samayu");
-        map.add("fb_Email","info@samayusoftcorp.com");
-        map.add("profile_pic","profile");
+
+        /*
+            @RequestMapping(path="/register",method = RequestMethod.POST)
+    public ResponseEntity<User> create(
+            @RequestParam("fbUser") String fbUser,
+            @RequestParam("screenName") String screenName,
+            @RequestParam("fbName") String name,
+            @RequestParam("fbEmail") String fbEmail,
+            @RequestParam("countryCode") String countryCode,
+            @RequestParam("city") String city,
+            @RequestParam("phoneNumber") String phoneNumber,
+            @RequestParam("whatsappNumber") String whatsappNumber,
+            @RequestParam("gender") String gender,
+            @RequestParam("dateOfBirth") String dateOfBirth,
+            @RequestParam("searchable") String searchable,
+            @RequestParam("profilePic") String profilePic,
+            @RequestParam("roles") int[] roles
+
+         */
+        map.add("fbUser","samayu");
+        map.add("screenName","Samayu Screenname");
+        map.add("fbName","Samayu FBName");
+        map.add("fbEmail","info@samayusoftcorp.com");
+        map.add("countryCode","1");
+        map.add("cityId","1");
+        map.add("phoneNumber","9790472014");
+        map.add("whatsappNumber","+16464316250");
+        map.add("gender","0");
+        map.add("dateOfBirth","1978-02-14");
+        map.add("searchable","true");
+        map.add("profilePic","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqMM-Fsol2Q0CN-VAq9GwrIU8q6g7lulqJXYr4CBJBoEwK3n5GYA");
+        int[] arr = { 0 ,1 };
+
+        map.add("roles", "0");
+        map.add("roles", "1");
+
+
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
         ResponseEntity<User> userResponseEntity = template.postForEntity("/user/register",request,User.class);
         Assert.assertEquals(200,userResponseEntity.getStatusCodeValue());
@@ -62,6 +96,7 @@ public class UserRestTest {
         assert( userResponse.getBody() != null );
         assert( userResponse.getBody().getFbUser().equals("samayu"));
     }
+
 
 
 
