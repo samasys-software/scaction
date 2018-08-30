@@ -26,6 +26,8 @@ export class MyProfileUpdateComponent implements OnInit {
   public fbName: any;
   public fbEmail: any;
   public fbProfilePic: any;
+  public gender: any;
+  public searchable: any;
   public phoneNumber: any;
   public whatsappNumber: any;
   public isSameASPhone: boolean;
@@ -103,8 +105,29 @@ export class MyProfileUpdateComponent implements OnInit {
     }
 
     register(form: any) {
-
       console.log(form);
+       let formData = new FormData();
+       formData.append('fbUser' , this.fbUserId);
+       formData.append('screenName' , this.screenName);
+       formData.append('fbName' , this.fbName);
+       formData.append('fbEmail' , this.fbEmail);
+       formData.append('countryCode' , this.modelCountry.code);
+       formData.append('cityId' , this.modelCities);
+       formData.append('phoneNumber' , this.phoneNumber);
+       formData.append('whatsappNumber' , this.whatsappNumber);
+       formData.append('gender' , this.gender);
+       formData.append('dateOfBirth' , this.dateOfBirth);
+       formData.append('searchable' , this.searchable);
+       formData.append('profilePic' , this.fbProfilePic);
+       formData.append('roles' , this.roles);
+
+      this.httpClient.post(environment.apiUrl + '/user/register', form).subscribe((res) => {
+        console.log(res);
+      },
+      (error) => {
+        console.log(error);
+        // this.chRef.detectChanges();
+      });
     }
 
     /*validate() {
