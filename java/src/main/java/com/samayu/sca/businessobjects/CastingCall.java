@@ -1,6 +1,7 @@
 package com.samayu.sca.businessobjects;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -34,36 +35,34 @@ public class CastingCall {
     @Column(name="gender")
     private int gender;
 
-    @Column(name="city_name")
-    private String city;
-
     @Column(name="city_id")
     private int cityId;
 
     @Column(name="country_id")
     private int countryId;
 
-    @Column(name="country_name")
-    private String countryName;
-
     @Column(name="venue")
     private String address;
 
     @Column(name="start_date")
-    private LocalDate startDate;
+    private Date startDate;
 
     @Column(name="end_date")
-    private LocalDate endDate;
+    private Date endDate;
 
-    @Column(name="start_time")
-    private String startTime;
+    @Column(name="hours")
+    private String hours;
 
-    @Column(name="end_time")
-    private String endTime;
+    @Column(name="scaction_user_id")
+    private long userId;
 
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getProjectName() {
@@ -122,14 +121,6 @@ public class CastingCall {
         this.gender = gender;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public int getCityId() {
         return cityId;
     }
@@ -146,36 +137,20 @@ public class CastingCall {
         this.address = address;
     }
 
-    public LocalDate getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
     }
 
     public int getCountryId() {
@@ -186,11 +161,20 @@ public class CastingCall {
         this.countryId = countryId;
     }
 
-    public String  getCountryName() {
-        return countryName;
+    public String getHours() {
+        return hours;
     }
 
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
+    public void setHours(String hours) {
+        this.hours = hours;
     }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
 }

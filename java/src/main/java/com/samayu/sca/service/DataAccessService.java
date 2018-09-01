@@ -170,12 +170,17 @@ public class DataAccessService {
         return profileTypeRepository.findAll();
     }
 
-    public CastingCall createOrUpdateCastingCall(String projectName, String projectDetails,
-                                      String productionCompany, String roleDetails,
-                                      int startAge, int endAge, int gender, String cityName,
-                                      String countryName, String address, LocalDate startDate, LocalDate endDate,
-                                                 String startTime, String endTime){
+    public CastingCall createOrUpdateCastingCall(long castingCallId, String projectName,
+                                                 String projectDetails, String productionCompany,
+                                                 String roleDetails, int startAge,
+                                                 int endAge, int gender, int cityId,
+                                                 int countryId, String address,
+                                                 LocalDate startDate, LocalDate endDate,
+                                                 String hours, long userId){
         CastingCall castingCall = new CastingCall();
+        if (castingCallId != -1){
+            castingCall.setId(castingCallId);
+        }
         castingCall.setProjectName(projectName);
         castingCall.setProjectDetails(projectDetails);
         castingCall.setProductionCompany(productionCompany);
@@ -183,15 +188,13 @@ public class DataAccessService {
         castingCall.setStartAge(startAge);
         castingCall.setEndAge(endAge);
         castingCall.setGender(gender);
-        castingCall.setCity(cityName);
-        castingCall.setCountryName(countryName);
+        castingCall.setCityId(cityId);
+        castingCall.setCountryId(countryId);
         castingCall.setAddress(address);
-        castingCall.setStartDate(startDate);
-        castingCall.setEndDate(endDate);
-        castingCall.setStartTime(startTime);
-        castingCall.setEndTime(endTime);
-        castingCall.setCityId(10);
-        castingCall.setCountryId(20);
+        castingCall.setStartDate(Date.valueOf(startDate));
+        castingCall.setEndDate(Date.valueOf(endDate));
+        castingCall.setHours(hours);
+        castingCall.setUserId(userId);
         castingCallRepository.save(castingCall);
         return castingCall;
     }

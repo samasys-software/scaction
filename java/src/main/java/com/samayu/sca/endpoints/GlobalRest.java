@@ -46,6 +46,7 @@ public class GlobalRest {
 
     @RequestMapping(path="/castingCall",method = RequestMethod.POST)
     public ResponseEntity<CastingCall> createCastingCall(
+            @RequestParam("castingCallId") long castingCallId,
             @RequestParam("projectName") String projectName,
             @RequestParam("projectDetails") String projectDetails,
             @RequestParam("productionCompany") String productionCompany,
@@ -53,17 +54,17 @@ public class GlobalRest {
             @RequestParam("startAge") int startAge,
             @RequestParam("endAge") int endAge,
             @RequestParam("gender") int gender,
-            @RequestParam("cityName") String cityName,
-            @RequestParam("countryName") String countryName,
+            @RequestParam("cityId") int cityId,
+            @RequestParam("countryId") int countryId,
             @RequestParam("address") String address,
             @RequestParam("startDate") String startDate,
             @RequestParam("endDate")  String endDate,
-            @RequestParam("startTime") String startTime,
-            @RequestParam("endTime") String endTime
+            @RequestParam("hours") String hours,
+            @RequestParam("userId") long userId
     ){
-        CastingCall castingCall = dataAccessService.createOrUpdateCastingCall(projectName, projectDetails,
-                productionCompany, roleDetails, startAge, endAge, gender, cityName, countryName, address,
-                null, null, startTime, endTime);
+        CastingCall castingCall = dataAccessService.createOrUpdateCastingCall(castingCallId, projectName, projectDetails,
+                productionCompany, roleDetails, startAge, endAge, gender, cityId, countryId, address,
+                LocalDate.parse(startDate), LocalDate.parse(endDate), hours, userId);
         return ResponseEntity.ok(castingCall);
     }
 
