@@ -36,7 +36,7 @@ public class DataAccessService {
     public User register( String fbUser, String screenName, String name, String email ,
                           String countryCode,  String city, String phoneNumber,
                           String whatsappNumber, int gender, LocalDate dateOfBirth,
-                          boolean searchable, int[] roles ){
+                          boolean searchable, String profilePic, int[] roles ){
 
         User user = null;
 
@@ -48,6 +48,7 @@ public class DataAccessService {
         user.setFbUser( fbUser );
         user.setScreenName( screenName );
         user.setFbName( name );
+        user.setProfilePic( profilePic );
         user.setFbEmail( email );
         user.setCountryCode( countryCode );
         user.setCityId( Integer.parseInt(city) );

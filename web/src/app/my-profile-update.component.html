@@ -27,13 +27,18 @@
         </option>
       </select>
     </div>
+    <div>
+      {{ modelCountry }}
+    </div>
     <div class="form-group" [class.has-error]="cityControl.invalid && cityControl.touched">
       <label class="control-label" for="city">City</label>
-      <input name="city" type="text" class="form-control" [(ngModel)]="modelCities" [ngbTypeahead]="search" #cityControl="ngModel"
+      <input name="city" type="text" class="form-control" [(ngModel)]="modelCities" [ngbTypeahead]="search" [inputFormatter]="cityFormatter" [resultFormatter]="cityFormatter" #cityControl="ngModel"
         [ngModelOptions]="{standalone: true}" required/>
       <span class="help-block" *ngIf="cityControl.invalid && cityControl.touched">Please enter city</span>
     </div>
-
+    <div>
+      {{ modelCities.name }} {{ modelCities.id }}
+    </div>
     <div class="form-group" [class.has-error]="phoneNumberControl.invalid && phoneNumberControl.touched">
       <label for="phoneNumber" class="control-label">Phone number</label>
       <input type="number" class="form-control" name="phoneNumber" placeholder="Enter phone number" [(ngModel)]="phoneNumber" #phoneNumberControl="ngModel"
@@ -56,47 +61,39 @@
       <span class="help-block" *ngIf="whatsappNumberControl.invalid && whatsappNumberControl.touched">Please enter whatsapp
         number</span>
     </div>
-    <div class="form-group">
+     <div class="form-group" [class.has-error] ="genderControl.invalid && genderControl.touched ">
       <label for="gender">Gender</label>
       <div class="btn-group-sm" role="group" aria-label="gender">
-        <button type="button" class="btn btn-secondary">Male</button>
-        <button type="button" class="btn btn-secondary">Female</button>
-        <button type="button" class="btn btn-secondary">Transgender</button>
+        <input type="radio" class="btn btn-secondary" value="0" name="gender" [(ngModel)]="gender" #genderControl="ngModel" required>Male
+        <input type="radio" class="btn btn-secondary" value="1" name="gender" [(ngModel)]="gender" #genderControl="ngModel" required>Female
+        <input type="radio" class="btn btn-secondary" value="2" name="gender" [(ngModel)]="gender" #genderControl="ngModel" required>Transgender
+         <span class="help-block" *ngIf="genderControl.invalid && genderControl.touched">Please enter Date Of Birth</span>
       </div>
     </div>
     <div class="form-group" [class.has-error]="dateOfBirtControl.invalid && dateOfBirtControl.touched">
       <label for="dateOfBirth" class="control-label">Date of birth</label>
-      <input type="text" ngbDatepicker #d="ngbDatepicker" class="form-control" name="dateOfBirth" placeholder="Enter date of birth"
+      <input type="text"  class="form-control" name="dateOfBirth" placeholder="Enter date of birth"
         [(ngModel)]="dateOfBirth" #dateOfBirtControl="ngModel" [ngModelOptions]="{standalone: true}" required>
       <span class="help-block" *ngIf="dateOfBirtControl.invalid && dateOfBirtControl.touched">Please enter Date Of Birth</span>
     </div>
-    <div class="form-group">
-      <label for="exampleInputGender1">Searchable</label>
-      <div class="btn-group-sm" role="group" aria-label="serachable">
-        <button type="button" class="btn btn-secondary">Yes</button>
-        <button type="button" class="btn btn-secondary">No</button>
+    <div class="form-group" [class.has-error]= "searchableControl.invalid && searchableControl.touched">
+      <label for="searchable">Searchable</label>
+      <div class="btn-group-sm" role="group" aria-label="searchable">
+        <input type="radio" class="btn btn-secondary" value="0" name="searchable" [(ngModel)]="searchable" #searchableControl="ngModel" required>Yes
+        <input type="radio" class="btn btn-secondary" value="1" name="searchable" [(ngModel)]="searchable" #searchableControl="ngModel" required>No
+        <span class="help-block" *ngIf="searchableControl.invalid && searchableControl.touched">Please select searchable</span>
       </div>
     </div>
-
-
 
     <div class="row form-group">
       <div class="col">
         <label>Roles</label>
       </div>
       <div class="col" *ngFor="let order of profileTypes | async">
-
           <label>
             <input type="checkbox" value="{{ order.id }}" name="profileTypes" [(ngModel)]="order.checked"  [ngModelOptions]="{standalone: true}">  {{ order.name }}
           </label>
-
       </div>
-    </div>
-    <div class="row">
-
-      <div class="col" *ngFor="let order of profileTypes | async">
-          <label>{{ order.id }}, {{ order.name }}, {{ order.checked }}::</label>
-</div>
     </div>
     <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">Register</button>
   </form>
@@ -104,3 +101,17 @@
 <ng-template #loading>
   Loading User...
 </ng-template>
+
+    <ng-template #content let-c="close" let-d="dismiss">
+        <div class="modal-header">
+             <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label for="registerWithFaceBook">Registration Successful </label>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Ok</button>
+        </div>
+      </ng-template>
