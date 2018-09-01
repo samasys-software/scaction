@@ -1,19 +1,18 @@
 package com.samayu.sca.endpoints;
 
-import com.samayu.sca.businessobjects.City;
-import com.samayu.sca.businessobjects.Country;
-import com.samayu.sca.businessobjects.ProfileType;
-import com.samayu.sca.businessobjects.User;
+import com.samayu.sca.businessobjects.*;
 import com.samayu.sca.dto.ProfileDefaultsDTO;
 import com.samayu.sca.service.DataAccessService;
+import com.sun.istack.internal.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import javax.ws.rs.core.Response;
+
 import java.util.List;
 
 @RestController
@@ -48,6 +47,31 @@ public class GlobalRest {
         return ResponseEntity.ok( dto );
     }
 
+
+    @RequestMapping(path="/castingCall",method = RequestMethod.POST)
+    public ResponseEntity<CastingCall> createCastingCall(
+            @RequestParam("castingCallId") long castingCallId,
+            @RequestParam("projectName") String projectName,
+            @RequestParam("projectDetails") String projectDetails,
+            @RequestParam("productionCompany") String productionCompany,
+            @RequestParam("roleDetails") String roleDetails,
+            @RequestParam("startAge") int startAge,
+            @RequestParam("endAge") int endAge,
+            @RequestParam("gender") int gender,
+            @RequestParam("cityId") int cityId,
+            @RequestParam("countryId") int countryId,
+            @RequestParam("address") String address,
+            @RequestParam("startDate") String startDate,
+            @RequestParam("endDate")  String endDate,
+            @RequestParam("hours") String hours,
+            @RequestParam("userId") long userId
+    ){
+        CastingCall castingCall = dataAccessService.createOrUpdateCastingCall(castingCallId, projectName, projectDetails,
+                productionCompany, roleDetails, startAge, endAge, gender, cityId, countryId, address,
+                LocalDate.parse(startDate), LocalDate.parse(endDate), hours, userId);
+        return ResponseEntity.ok(castingCall);
+    }
+  
     @GetMapping(path="/talentImages")
     public ResponseEntity<Iterable<User>> getTopProfiles(){
         return ResponseEntity.ok(dataAccessService.findUserImages());

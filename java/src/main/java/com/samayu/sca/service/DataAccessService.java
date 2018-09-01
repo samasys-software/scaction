@@ -10,6 +10,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalField;
 import java.time.temporal.TemporalUnit;
@@ -35,6 +36,9 @@ public class DataAccessService {
 
     @Autowired
     private UserRoleRepository userRoleRepository;
+
+    @Autowired
+    private CastingCallRepository castingCallRepository;
 
     public User register( String fbUser, String screenName, String name, String email ,
                           String countryCode,  String city, String phoneNumber,
@@ -176,6 +180,35 @@ public class DataAccessService {
         return profileTypeRepository.findAll();
     }
 
+    public CastingCall createOrUpdateCastingCall(long castingCallId, String projectName,
+                                                 String projectDetails, String productionCompany,
+                                                 String roleDetails, int startAge,
+                                                 int endAge, int gender, int cityId,
+                                                 int countryId, String address,
+                                                 LocalDate startDate, LocalDate endDate,
+                                                 String hours, long userId){
+        CastingCall castingCall = new CastingCall();
+        if (castingCallId != -1){
+            castingCall.setId(castingCallId);
+        }
+        castingCall.setProjectName(projectName);
+        castingCall.setProjectDetails(projectDetails);
+        castingCall.setProductionCompany(productionCompany);
+        castingCall.setRoleDetails(roleDetails);
+        castingCall.setStartAge(startAge);
+        castingCall.setEndAge(endAge);
+        castingCall.setGender(gender);
+        castingCall.setCityId(cityId);
+        castingCall.setCountryId(countryId);
+        castingCall.setAddress(address);
+        castingCall.setStartDate(Date.valueOf(startDate));
+        castingCall.setEndDate(Date.valueOf(endDate));
+        castingCall.setHours(hours);
+        castingCall.setUserId(userId);
+        castingCallRepository.save(castingCall);
+        return castingCall;
+    }
+  
     public Iterable<User> findUserImages(){
         return userRepository.findAll();
     }
