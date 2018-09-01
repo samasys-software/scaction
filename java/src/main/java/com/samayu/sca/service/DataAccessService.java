@@ -167,4 +167,8 @@ public class DataAccessService {
         return profileTypeRepository.findAll();
     }
 
+    public Iterable<User> findUserImages(){
+        return userRepository.findAll();
+    }
+
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @RestController
@@ -45,6 +46,11 @@ public class GlobalRest {
         dto.setCountries( dataAccessService.findAllCountries());
         dto.setProfileTypes( dataAccessService.findAllProfileTypes() );
         return ResponseEntity.ok( dto );
+    }
+
+    @GetMapping(path="/talentImages")
+    public ResponseEntity<Iterable<User>> getTopProfiles(){
+        return ResponseEntity.ok(dataAccessService.findUserImages());
     }
 
 }
