@@ -19,32 +19,17 @@ public class UserRole {
     @Column(name = "scaction_user_id")
     private long userId;
 
-    public Timestamp getCreateDate() {
-        return createDate;
+    @ManyToOne
+    @JoinColumn(name="scaction_user_role_id" , referencedColumnName = "idscaction_profile_types")
+    private ProfileType roleType;
+
+    public ProfileType getRoleType() {
+        return roleType;
     }
 
-    public void setCreateDate(Timestamp createDate) {
-        this.createDate = createDate;
+    public void setRoleType(ProfileType roleType) {
+        this.roleType = roleType;
     }
-
-    public Timestamp getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(Timestamp updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-
-    public Date getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(Date expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    @Column(name = "scaction_user_role_id")
-    private int roleId;
 
     @Column(name = "create_dt")
     private Timestamp createDate;
@@ -74,14 +59,6 @@ public class UserRole {
         this.userId = userId;
     }
 
-    public int getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }
-
     public boolean isActive() {
         return active;
     }
@@ -90,4 +67,27 @@ public class UserRole {
         this.active = active;
     }
 
+    public Timestamp getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
+    }
+
+    public Timestamp getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Timestamp updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
+    }
 }

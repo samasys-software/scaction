@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+import javax.ws.rs.core.Response;
+
 import java.util.List;
 
 @RestController
@@ -44,6 +47,7 @@ public class GlobalRest {
         return ResponseEntity.ok( dto );
     }
 
+
     @RequestMapping(path="/castingCall",method = RequestMethod.POST)
     public ResponseEntity<CastingCall> createCastingCall(
             @RequestParam("castingCallId") long castingCallId,
@@ -66,6 +70,11 @@ public class GlobalRest {
                 productionCompany, roleDetails, startAge, endAge, gender, cityId, countryId, address,
                 LocalDate.parse(startDate), LocalDate.parse(endDate), hours, userId);
         return ResponseEntity.ok(castingCall);
+    }
+  
+    @GetMapping(path="/talentImages")
+    public ResponseEntity<Iterable<User>> getTopProfiles(){
+        return ResponseEntity.ok(dataAccessService.findUserImages());
     }
 
 }

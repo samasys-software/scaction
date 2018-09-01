@@ -1,12 +1,16 @@
 export class User {
   userId: number;
-  role: number;
   fbUser: string;
+  screenName: string;
   fbEmail: string;
-  profilePic: string;
-  phoneNumber: string;
   countryCode: string;
+  phoneNumber: string;
   whatsappNumber: string;
+  gender: string;
+  dateOfBirth: any;
+  searchable: any;
+  profilePic: string;
+  role: number[];
   fbName: string;
   verified: boolean;
   constructor(res: any) {
