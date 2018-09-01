@@ -8,18 +8,22 @@ import { RouterModule, Routes } from '@angular/router';
 import { MyProfileUpdateComponent } from './my-profile-update.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HomepageComponent } from './homepage/homepage.component';
+
 
 
 
 const appRoutes: Routes = [
-  { path: 'my-profile-update', component: MyProfileUpdateComponent }];
+  { path: 'my-profile-update', component: MyProfileUpdateComponent },
+ { path: 'my-home', component: HomepageComponent }];
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ProfileComponent,
-    MyProfileUpdateComponent
+    MyProfileUpdateComponent,
+    HomepageComponent
     ],
   imports: [
     BrowserModule,

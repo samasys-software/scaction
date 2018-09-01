@@ -1,10 +1,11 @@
-import { Component, Inject, ChangeDetectorRef, ChangeDetectionStrategy, Injectable, ViewChild } from '@angular/core';
+import { Component, Inject, ChangeDetectorRef, ChangeDetectionStrategy, Injectable, ViewChild, OnInit } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { environment } from '../environments/environment';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { User } from './types/user';
 import { Router, Routes } from '@angular/router';
 import { UserHolderService } from './user-holder.service';
+import { ProfileUpdateService } from './profile-update.service';
 
 declare var window: any;
 declare var location: any;
@@ -16,20 +17,31 @@ declare var FB: any;
 })
 
 
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
   showLogin = true;
   showPopUp = false;
   user: User;
   @ViewChild('content') private content;
 
 
-  open() {
 
-    const modalRef = this.modalService.open(this.content);
-  }
+    ngOnInit() {
+      let userItem = localStorage.getItem('user');
+      this.profileUpdateService.currentMessage.subscribe(message => {
+        if (message != null) {
+      this.user = message;
+      this.showLogin = false;
+        }
+       } );
+      if (userItem != null) {
+        this.user = JSON.parse(userItem);
+        this.showLogin = false;
+
+      }
+     }
 
   constructor(private http: HttpClient, private chRef: ChangeDetectorRef, private modalService: NgbModal,
-    private router: Router, private userHolder: UserHolderService ) {
+    private router: Router, private userHolder: UserHolderService, private profileUpdateService: ProfileUpdateService) {
 
     (function(d, s, id){
       var js, fjs = d.getElementsByTagName(s)[0];
@@ -96,20 +108,21 @@ export class ProfileComponent {
   }
 
 
-  handleUserExists = (res: any ) =>{
+  handleUserExists = (res: any ) => {
     this.user = new User(res);
     this.showLogin = false;
     this.chRef.detectChanges();
+    localStorage.setItem('user', JSON.stringify(this.user));
   }
 
   message: string;
 
   handleUserDoesNotExist = (fbUserId, fbName, fbEmail, fbProfilePic) => {
-    //var popUpComponent = new PopUpComponent(this.modalService);
+    // var popUpComponent = new PopUpComponent(this.modalService);
     this.modalService.open(this.content, {ariaLabelledBy: 'modal-basic-title'});
 
     this.userHolder.changeMessage({ fbUserId : fbUserId , fbName : fbName , fbEmail : fbEmail , fbProfilePic : fbProfilePic });
-    //this.router.navigate(['/my-profile-update']);
+    // this.router.navigate(['/my-profile-update']);
 
   }
 
@@ -119,13 +132,18 @@ export class ProfileComponent {
 
     if( !this.checkFB() ) return;
 
-    this.handleUser( 'samayu1' , 'Saravanan Thangaraju' , 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2365579596850855&height=50&width=50&ext=1537586649&hash=AeTAJmpQe29Pv45v' , 'info@samayusoftcorp.com'  );
+    this.handleUser( 'samayu4' , 'Arun S ' ,
+'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2365579596850855&height=50&width=50&ext=1537586649&hash=AeTAJmpQe29Pv45v' ,
+ 'info@samayusoftcorp.com'  );
 
     console.log(this.user);
     }
 
     yesClick() {
       console.log('yesclicked');
+      this.router.navigate(['/my-profile-update']);
+    }
+    onMyProfileClick() {
       this.router.navigate(['/my-profile-update']);
     }
 
