@@ -1,0 +1,7 @@
+<div class="row" *ngFor="let role of roleTypes">
+  <div class="col">{{ role['roleType']['name'] }}</div>
+  <div class="col" [routerLink]="'/'+ (role['roleType']['name']).replace(' ', '-').toLowerCase() " routerLinkActive="router-link-active" >Update</div>
+
+  <div class="col">Delete</div>
+  <div class="col">Expiration</div>
+  </div>

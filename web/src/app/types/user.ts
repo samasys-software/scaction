@@ -10,12 +10,14 @@ export class User {
   dateOfBirth: any;
   searchable: any;
   profilePic: string;
-  role: number[];
+  role: number;
+  userRoles: any[];
   fbName: string;
   verified: boolean;
   constructor(res: any) {
     this.userId = res['userId'];
     this.role = res['role'];
+    this.userRoles = res['userRoles'];
     this.fbUser = res['fbUser'];
     this.fbEmail = res['fbEmail'];
     this.profilePic = res['profilePic'];
