@@ -1,0 +1,16 @@
+
+
+<div *ngIf="castingCalls | async; else loading">
+    <div [routerLink]="['/casting-call']" routerLinkActive="router-link-active" >Create New Casting Call</div>
+    <div class="row" *ngFor="let castingCall of castingCalls | async">
+        <div class="col">{{ castingCall.projectName }}</div>
+        <div class="col">{{ castingCall.productionCompany }}</div>
+        <div class="col">{{ castingCall.roleDetails }}</div>
+        <div class="col">{{ castingCall.address }}</div>
+        </div>
+
+</div>
+<ng-template #loading>
+    Loading User...
+  </ng-template>
+
