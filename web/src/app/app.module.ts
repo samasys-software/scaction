@@ -9,13 +9,18 @@ import { MyProfileUpdateComponent } from './my-profile-update.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomepageComponent } from './homepage/homepage.component';
+import { RoleDisplayComponent } from './role-display/role-display.component';
+import { CastingCallComponent } from './casting-call/casting-call.component';
+import { CastingCoordinatorComponent } from './casting-coordinator/casting-coordinator.component';
 
 
 
 
 const appRoutes: Routes = [
   { path: 'my-profile-update', component: MyProfileUpdateComponent },
- { path: 'my-home', component: HomepageComponent }];
+ { path: 'my-home', component: HomepageComponent },
+ { path: 'casting-call', component: CastingCallComponent},
+{ path: 'casting-coordinator', component: CastingCoordinatorComponent }];
 
 
 @NgModule({
@@ -23,7 +28,10 @@ const appRoutes: Routes = [
     AppComponent,
     ProfileComponent,
     MyProfileUpdateComponent,
-    HomepageComponent
+    HomepageComponent,
+    RoleDisplayComponent,
+    CastingCallComponent,
+    CastingCoordinatorComponent
     ],
   imports: [
     BrowserModule,

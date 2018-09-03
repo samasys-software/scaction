@@ -63,7 +63,7 @@ export class MyProfileUpdateComponent implements OnInit {
 
       let localUserItem = localStorage.getItem('user');
 
-      if ( localUserItem != null){
+      if ( localUserItem != null) {
         let user: User = JSON.parse(localUserItem);
         this.fbUserId = user.fbUser;
         this.fbEmail = user.fbEmail;

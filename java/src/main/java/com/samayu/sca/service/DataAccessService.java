@@ -218,4 +218,8 @@ public class DataAccessService {
         return userRepository.findAll();
     }
 
+    public List<CastingCall> findCastingCallsByUser(long userId ){
+        return castingCallRepository.findByUserId( userId );
+    }
+
 }
