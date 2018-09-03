@@ -13,6 +13,7 @@ import { City } from './types/city';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from './types/user';
 import { ProfileUpdateService } from './profile-update.service';
+
 @Component({
   selector: 'app-my-profile-update',
   templateUrl: './my-profile-update.component.html'
@@ -39,7 +40,7 @@ export class MyProfileUpdateComponent implements OnInit {
   public roles: any;
   @ViewChild('content') private content;
 
-  cityFormatter( city: City ){
+  cityFormatter( city: City ) {
     return city.name;
   }
   search = (text$: Observable<string>) =>
@@ -57,17 +58,23 @@ export class MyProfileUpdateComponent implements OnInit {
         this.fbName = message['fbName'];
         this.fbProfilePic = message['fbProfilePic'];
         this.fbUserId = message['fbUserId'];
-
         console.log( 'Message From My Profile Update Component ' + message );
       } );
 
       let localUserItem = localStorage.getItem('user');
-
       if ( localUserItem != null) {
         let user: User = JSON.parse(localUserItem);
         this.fbUserId = user.fbUser;
         this.fbEmail = user.fbEmail;
-        this.screenName = user.fbName;
+        this.screenName = user.screenName;
+        this.fbName = user.fbName;
+        this.modelCountry = user.countryCode;
+        this.cities = user.cityId;
+        this.phoneNumber = user.phoneNumber;
+        this.whatsappNumber = user.whatsappNumber;
+        this.gender = user.gender;
+        this.dateOfBirth = user.dateOfBirth;
+        this.searchable = user.searchable;
       }
 
       if (this.fbUserId == null) {
@@ -93,8 +100,6 @@ export class MyProfileUpdateComponent implements OnInit {
         this.profileTypes = of(pTmp).pipe();
         this.countries = of(tmp).pipe();
 
-
-
       } else {
         this.countries = null;
       }
@@ -104,8 +109,8 @@ export class MyProfileUpdateComponent implements OnInit {
     this.countries = null;
     // this.chRef.detectChanges();
   });
-
     }
+
     setCountry(value: string ) {
       this.httpClient.get(environment.apiUrl + 'global/cities/' + value ).subscribe((res) => {
         if (res != null) {

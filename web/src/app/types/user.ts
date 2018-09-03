@@ -4,6 +4,7 @@ export class User {
   screenName: string;
   fbEmail: string;
   countryCode: string;
+  cityId: any;
   phoneNumber: string;
   whatsappNumber: string;
   gender: string;
@@ -23,6 +24,7 @@ export class User {
     this.profilePic = res['profilePic'];
     this.phoneNumber = res['phoneNumber'];
     this.countryCode = res['countryCode'];
+    this.cityId = res['cityId'];
     this.whatsappNumber = res['whatsappNumber'];
     this.fbName = res['fbName'];
     this.verified = res['verified'];
