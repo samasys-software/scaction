@@ -9,6 +9,8 @@ import { City } from '../types/city';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { ProfileType } from '../types/profiletype';
 import { User } from '../types/user';
+import { CastingCall } from '../types/castingcall';
+import { CastingCallService } from '../casting-call.service';
 
 @Component({
   selector: 'app-casting-call',
@@ -31,15 +33,15 @@ export class CastingCallComponent implements OnInit {
   public modelCountry: any;
   public cities: City[];
   public auditionVenue: any;
+  public address: any;
   public time: any;
   public user: User;
-
 
   @ViewChild('content') private content;
 
   constructor(private httpClient: HttpClient, private modalService: NgbModal) { }
 
-  cityFormatter( city: City ) {
+  cityFormatter(city: City) {
     return city.name;
   }
   search = (text$: Observable<string>) =>
@@ -53,8 +55,20 @@ export class CastingCallComponent implements OnInit {
 
   ngOnInit() {
 
+    let localCastingCallItem = localStorage.getItem('castingcall');
+    if (localCastingCallItem != null) {
+      let castingCall: CastingCall = JSON.parse(localCastingCallItem);
+      this.projectName = castingCall.projectName;
+      this.projectDetails = castingCall.projectDetails;
+      this.productionCompany = castingCall.productionCompany;
+      this.roleDetail = castingCall.roleDetails;
+      this.address = castingCall.address;
 
-    this.httpClient.get(environment.apiUrl + 'global/profileDefaults' ).subscribe((res) => {
+    }
+
+
+
+    this.httpClient.get(environment.apiUrl + 'global/profileDefaults').subscribe((res) => {
       if (res != null) {
         let countryResp = res['countries'];
         let profileResp = res['profileTypes'];
@@ -62,51 +76,51 @@ export class CastingCallComponent implements OnInit {
         let tmp: Country[] = [];
         for (let key in countryResp) {
           var country = new Country(countryResp[key]);
-          tmp.push( country );
+          tmp.push(country);
         }
 
-        let pTmp: ProfileType[]=[];
-        for( let key in profileResp ){
-          var profile = new ProfileType( profileResp[key]);
-          pTmp.push( profile );
+        let pTmp: ProfileType[] = [];
+        for (let key in profileResp) {
+          var profile = new ProfileType(profileResp[key]);
+          pTmp.push(profile);
         }
 
         this.profileTypes = of(pTmp).pipe();
         this.countries = of(tmp).pipe();
 
- } else {
+      } else {
         this.countries = null;
       }
-    console.log('inside' + res);
+      console.log('inside' + res);
     },
-    (error) => {
-    this.countries = null;
-    // this.chRef.detectChanges();
-  });
+      (error) => {
+        this.countries = null;
+        // this.chRef.detectChanges();
+      });
 
-    }
-    setCountry() {
-      let value = this.modelCountry.code;
-      if (this.modelCountry == null ) { value = ''; }
-      if (value.length > 0 )
-      this.httpClient.get(environment.apiUrl + 'global/cities/' + value ).subscribe((res) => {
+  }
+  setCountry() {
+    let value = this.modelCountry.code;
+    if (this.modelCountry == null) { value = ''; }
+    if (value.length > 0)
+      this.httpClient.get(environment.apiUrl + 'global/cities/' + value).subscribe((res) => {
 
         if (res != null) {
           let tmp: City[] = [];
           for (let key in res) {
-             tmp.push( new City(res[key]));
+            tmp.push(new City(res[key]));
           }
           this.cities = tmp;
         } else {
           this.cities = null;
         }
       },
-    (error) => {
-      this.auditionVenue = null;
-      // this.chRef.detectChanges();
-    });
+        (error) => {
+          this.auditionVenue = null;
+          // this.chRef.detectChanges();
+        });
 
-    }
+  }
 
 
 
@@ -127,11 +141,11 @@ export class CastingCallComponent implements OnInit {
     formData.append('endDate', this.endDate);
     formData.append('address', 'chennai 600008');
 
-    this.profileTypes.forEach( (entry) => {
-      entry.forEach( (profileType) => {
-         if ( profileType.checked ) {
-           formData.append('roles' , profileType.id );
-         }
+    this.profileTypes.forEach((entry) => {
+      entry.forEach((profileType) => {
+        if (profileType.checked) {
+          formData.append('roles', profileType.id);
+        }
       });
     });
 
@@ -141,12 +155,12 @@ export class CastingCallComponent implements OnInit {
     formData.append('userId', '' + this.user.userId);
 
     this.httpClient.post(environment.apiUrl + 'global/castingCall', formData).subscribe((res) => {
-     console.log(res);
-      this.modalService.open(this.content, {ariaLabelledBy: 'modal-basic-title'});
+      console.log(res);
+      this.modalService.open(this.content, { ariaLabelledBy: 'modal-basic-title' });
     },
-  (error) => {
+      (error) => {
         console.log(error);
-        });
+      });
 
   }
 

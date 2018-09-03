@@ -27,17 +27,13 @@
         </option>
       </select>
     </div>
-    <div>
-      {{ modelCountry }}
-    </div>
+
     <div class="form-group" [class.has-error]="cityControl.invalid && cityControl.touched">
-      <label class="control-label" for="city">City</label>
-      <input name="city" type="text" class="form-control" [(ngModel)]="modelCities" [ngbTypeahead]="search" [inputFormatter]="cityFormatter" [resultFormatter]="cityFormatter" #cityControl="ngModel"
+      <label class="control-label" for="modelCities">City</label>
+      <input name="modelCities" type="text" class="form-control" [(ngModel)]="modelCities" [ngbTypeahead]="search"
+      [inputFormatter]="cityFormatter" [resultFormatter]="cityFormatter" #cityControl="ngModel"
         [ngModelOptions]="{standalone: true}" required/>
       <span class="help-block" *ngIf="cityControl.invalid && cityControl.touched">Please enter city</span>
-    </div>
-    <div>
-      {{ modelCities.name }} {{ modelCities.id }}
     </div>
     <div class="form-group" [class.has-error]="phoneNumberControl.invalid && phoneNumberControl.touched">
       <label for="phoneNumber" class="control-label">Phone number</label>
