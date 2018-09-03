@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef, OnInit, Injectable, ViewChild } from '@angular/core';
-import {Observable, of} from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
@@ -7,7 +7,6 @@ import { Country } from './types/country';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserHolderService } from './user-holder.service';
 import { FormsModule } from '@angular/forms';
-import {MatChipsModule} from "@angular/material/chips"
 import {ProfileType} from './types/profiletype';
 import { City } from './types/city';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -54,27 +53,31 @@ export class MyProfileUpdateComponent implements OnInit {
   ngOnInit() {
       console.log('Initializing Profile Update Component ');
       this.userHolder.currentMessage.subscribe( message => {
+        if (message != null) {
         this.fbEmail = message['fbEmail'];
         this.fbName = message['fbName'];
         this.fbProfilePic = message['fbProfilePic'];
         this.fbUserId = message['fbUserId'];
+        }
         console.log( 'Message From My Profile Update Component ' + message );
       } );
 
-      let localUserItem = localStorage.getItem('user');
+      const localUserItem = localStorage.getItem('user');
       if ( localUserItem != null) {
-        let user: User = JSON.parse(localUserItem);
+        const user: User = JSON.parse(localUserItem);
+        console.log(user);
         this.fbUserId = user.fbUser;
         this.fbEmail = user.fbEmail;
         this.screenName = user.screenName;
         this.fbName = user.fbName;
         this.modelCountry = user.countryCode;
-        this.cities = user.cityId;
+        this.modelCities = user.cityId;
         this.phoneNumber = user.phoneNumber;
         this.whatsappNumber = user.whatsappNumber;
         this.gender = user.gender;
         this.dateOfBirth = user.dateOfBirth;
         this.searchable = user.searchable;
+
       }
 
       if (this.fbUserId == null) {
@@ -83,15 +86,15 @@ export class MyProfileUpdateComponent implements OnInit {
 
     this.httpClient.get(environment.apiUrl + 'global/profileDefaults' ).subscribe((res) => {
       if (res != null) {
-        let countryResp = res['countries'];
-        let profileResp = res['profileTypes'];
+        const countryResp = res['countries'];
+        const profileResp = res['profileTypes'];
 
-        let tmp: Country[] = [];
+        const tmp: Country[] = [];
         for (let key in countryResp) {
           var country = new Country(countryResp[key]);
           tmp.push( country );
         }
-        let pTmp: ProfileType[]=[];
+        const pTmp: ProfileType[] = [];
         for( let key in profileResp ){
           var profile = new ProfileType( profileResp[key]);
           pTmp.push( profile );
@@ -114,7 +117,7 @@ export class MyProfileUpdateComponent implements OnInit {
     setCountry(value: string ) {
       this.httpClient.get(environment.apiUrl + 'global/cities/' + value ).subscribe((res) => {
         if (res != null) {
-          let tmp: City[] = [];
+          const tmp: City[] = [];
           for (let key in res) {
              tmp.push( new City(res[key]));
           }
@@ -132,7 +135,7 @@ export class MyProfileUpdateComponent implements OnInit {
 
     register(form: any) {
       console.log(form);
-       let formData = new FormData();
+       const formData = new FormData();
        formData.append('fbUser' , this.fbUserId);
        formData.append('screenName' , this.screenName);
        formData.append('fbName' , this.fbName);
@@ -155,7 +158,7 @@ export class MyProfileUpdateComponent implements OnInit {
        });
 
       this.httpClient.post(environment.apiUrl + '/user/register', formData).subscribe((res) => {
-        let user = new User(res);
+        const user = new User(res);
         localStorage.setItem('user', JSON.stringify(user));
         console.log(res);
         this.modalService.open(this.content, {ariaLabelledBy: 'modal-basic-title'});
