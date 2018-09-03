@@ -1,13 +1,20 @@
 package com.samayu.sca.endpoints;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.samayu.sca.Application;
 import com.samayu.sca.businessobjects.*;
 import com.samayu.sca.dto.ProfileDefaultsDTO;
 import com.samayu.sca.service.DataAccessService;
 import com.sun.istack.internal.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -18,6 +25,10 @@ import java.util.List;
 @RestController
 @RequestMapping(path="/global")
 public class GlobalRest {
+
+    @Qualifier("queueJmsTemplate")
+    @Autowired
+    private JmsTemplate jmsTemplate;
 
     @Autowired
     DataAccessService dataAccessService;
@@ -64,11 +75,15 @@ public class GlobalRest {
             @RequestParam("startDate") String startDate,
             @RequestParam("endDate")  String endDate,
             @RequestParam("hours") String hours,
-            @RequestParam("userId") long userId
-    ){
+            @RequestParam("userId") long userId,
+            @RequestParam("roleIds") String[] roleIds
+    ) throws JsonProcessingException {
         CastingCall castingCall = dataAccessService.createOrUpdateCastingCall(castingCallId, projectName, projectDetails,
                 productionCompany, roleDetails, startAge, endAge, gender, cityId, countryId, address,
-                LocalDate.parse(startDate), LocalDate.parse(endDate), hours, userId);
+                LocalDate.parse(startDate), LocalDate.parse(endDate), hours, userId, roleIds);
+        ObjectMapper objectMapper = new ObjectMapper();
+        //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
+        jmsTemplate.convertAndSend(Application.CASTING_CALL_MESSAGE_QUEUE, objectMapper.writeValueAsString(castingCall));
         return ResponseEntity.ok(castingCall);
     }
   
