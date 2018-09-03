@@ -176,7 +176,8 @@ public class DataAccessService {
                                                  int endAge, int gender, int cityId,
                                                  int countryId, String address,
                                                  LocalDate startDate, LocalDate endDate,
-                                                 String hours, long userId){
+                                                 String hours, long userId, String[] roleIds){
+        StringBuilder role = new StringBuilder();
         CastingCall castingCall = new CastingCall();
         if (castingCallId != -1){
             castingCall.setId(castingCallId);
@@ -195,6 +196,10 @@ public class DataAccessService {
         castingCall.setEndDate(Date.valueOf(endDate));
         castingCall.setHours(hours);
         castingCall.setUserId(userId);
+        for (String roleId : roleIds) {
+            role.append(roleId);
+        }
+        castingCall.setRoleIds(role.toString());
         castingCallRepository.save(castingCall);
         return castingCall;
     }

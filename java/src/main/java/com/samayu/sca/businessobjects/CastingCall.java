@@ -56,6 +56,9 @@ public class CastingCall {
     @Column(name="scaction_user_id")
     private long userId;
 
+    @Column(name="role_ids")
+    private String roleIds;
+
 
     public long getId() {
         return id;
@@ -175,6 +178,14 @@ public class CastingCall {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public String getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(String roleIds) {
+        this.roleIds = roleIds;
     }
 
 }
