@@ -4,6 +4,7 @@ import com.samayu.sca.businessobjects.*;
 import com.samayu.sca.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sun.java2d.cmm.Profile;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -13,8 +14,10 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalField;
 import java.time.temporal.TemporalUnit;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class DataAccessService {
@@ -40,7 +43,7 @@ public class DataAccessService {
     public User register( String fbUser, String screenName, String name, String email ,
                           String countryCode,  String city, String phoneNumber,
                           String whatsappNumber, int gender, LocalDate dateOfBirth,
-                          boolean searchable, int[] roles ){
+                          boolean searchable, String profilePic, int[] roles ){
 
         User user = null;
 
@@ -52,6 +55,7 @@ public class DataAccessService {
         user.setFbUser( fbUser );
         user.setScreenName( screenName );
         user.setFbName( name );
+        user.setProfilePic( profilePic );
         user.setFbEmail( email );
         user.setCountryCode( countryCode );
         user.setCityId( Integer.parseInt(city) );
@@ -70,6 +74,11 @@ public class DataAccessService {
     }
 
     private void updateRoles(User user, int[] roles, boolean newRegistration ){
+                Iterable<ProfileType> profileTypes = profileTypeRepository.findAll();
+                Map<Integer,ProfileType> profileMap = new HashMap<>();
+                profileTypes.forEach( (profileType) -> {
+                    profileMap.put( profileType.getId() , profileType );
+                });
                 List<UserRole> userRoles = userRoleRepository.findByUserId( user.getUserId() );
                 List<UserRole> newRoles = new LinkedList<>();
 
@@ -81,7 +90,8 @@ public class DataAccessService {
                             userRole.setActive(true);
                             userRole.setCreateDate(new Timestamp(System.currentTimeMillis()));
                             userRole.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
-                            userRole.setRoleId(tmpRole);
+
+                            userRole.setRoleType( profileMap.get( tmpRole ));
 
                             userRole.setExpirationDate(new Date( System.currentTimeMillis()+365*24*60*60*1000 ));
                             newRoles.add(userRole);
@@ -97,7 +107,7 @@ public class DataAccessService {
                     if it is not found then make it inactive.
                      */
                     for (UserRole role : userRoles) {
-                        int roleId = role.getRoleId();
+                        int roleId = role.getRoleType().getId();
 
                         boolean isFound = false;
 
@@ -125,7 +135,7 @@ public class DataAccessService {
                         boolean isFound = false;
 
                         for (UserRole role : userRoles) {
-                           if( role.getRoleId() == tmpRole ){
+                           if( role.getRoleType().getId() == tmpRole ){
                                isFound = true;
                                break;
                            }
@@ -137,7 +147,7 @@ public class DataAccessService {
                             userRole.setActive(true);
                             userRole.setCreateDate( new Timestamp( System.currentTimeMillis() ));
                             userRole.setUpdatedDate(new Timestamp( System.currentTimeMillis() ));
-                            userRole.setRoleId( tmpRole );
+                            userRole.setRoleType( profileMap.get( tmpRole ) );
                             userRole.setExpirationDate(new Date( System.currentTimeMillis()+365*24*60*60*1000 ));
                             newRoles.add(userRole);
                         }
@@ -202,6 +212,10 @@ public class DataAccessService {
         castingCall.setRoleIds(role.toString());
         castingCallRepository.save(castingCall);
         return castingCall;
+    }
+  
+    public Iterable<User> findUserImages(){
+        return userRepository.findAll();
     }
 
 }

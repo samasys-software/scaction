@@ -1,6 +1,7 @@
 package com.samayu.sca;
 
 import com.samayu.sca.businessobjects.User;
+import com.samayu.sca.businessobjects.UserRole;
 import com.samayu.sca.dao.UserRepository;
 import org.hibernate.sql.Template;
 import org.junit.Assert;
@@ -18,6 +19,7 @@ import org.springframework.util.MultiValueMap;
 
 import javax.xml.ws.Response;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -98,6 +100,18 @@ public class UserRestTest {
     }
 
 
+    @Test
+    public void testRoleMapping(){
+
+        ResponseEntity<User> userResponse = template.getForEntity("/user/checkUser/samayu4", User.class );
+
+        List<UserRole> roles = userResponse.getBody().getUserRoles();
+
+        assert( roles != null );
+
+
+
+    }
 
 
 }

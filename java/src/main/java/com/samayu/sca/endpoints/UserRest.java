@@ -38,7 +38,7 @@ public class UserRest {
 
          User user = dataAccessService.register( fbUser, screenName , name , fbEmail ,
                  countryCode , city , phoneNumber , whatsappNumber, Integer.parseInt(gender) ,
-                 LocalDate.parse(dateOfBirth) , Boolean.parseBoolean(searchable) , roles );
+                 LocalDate.parse(dateOfBirth) , Boolean.parseBoolean(searchable) , profilePic,roles );
         return ResponseEntity.ok(user);
     }
 

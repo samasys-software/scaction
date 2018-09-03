@@ -17,6 +17,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+import javax.ws.rs.core.Response;
+
 import java.util.List;
 
 @RestController
@@ -55,6 +58,7 @@ public class GlobalRest {
         return ResponseEntity.ok( dto );
     }
 
+
     @RequestMapping(path="/castingCall",method = RequestMethod.POST)
     public ResponseEntity<CastingCall> createCastingCall(
             @RequestParam("castingCallId") long castingCallId,
@@ -81,6 +85,11 @@ public class GlobalRest {
         //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
         jmsTemplate.convertAndSend(Application.CASTING_CALL_MESSAGE_QUEUE, objectMapper.writeValueAsString(castingCall));
         return ResponseEntity.ok(castingCall);
+    }
+  
+    @GetMapping(path="/talentImages")
+    public ResponseEntity<Iterable<User>> getTopProfiles(){
+        return ResponseEntity.ok(dataAccessService.findUserImages());
     }
 
 }
