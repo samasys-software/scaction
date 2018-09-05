@@ -39,13 +39,13 @@ localStorage.setItem('castingCall', JSON.stringify( this.tempCastingCall));
 
   ngOnInit() {
 
-    let localUserItem = localStorage.getItem('user');
-    let user: User = JSON.parse(localUserItem);
+    const localUserItem = localStorage.getItem('user');
+    const user: User = JSON.parse(localUserItem);
 
     this.httpClient.get(environment.apiUrl + 'coordinator/castingcalls/' + user.userId ).subscribe((res) => {
       if (res != null) {
 
-        let tmp: CastingCall[] = [];
+        const tmp: CastingCall[] = [];
         for (let key in res) {
           var cCall = new CastingCall(res[key]);
           tmp.push( cCall );

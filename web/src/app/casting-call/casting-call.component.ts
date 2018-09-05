@@ -55,9 +55,9 @@ export class CastingCallComponent implements OnInit {
 
   ngOnInit() {
 
-    let localCastingCallItem = localStorage.getItem('castingcall');
+    const localCastingCallItem = localStorage.getItem('castingcall');
     if (localCastingCallItem != null) {
-      let castingCall: CastingCall = JSON.parse(localCastingCallItem);
+      const castingCall: CastingCall = JSON.parse(localCastingCallItem);
       this.projectName = castingCall.projectName;
       this.projectDetails = castingCall.projectDetails;
       this.productionCompany = castingCall.productionCompany;
@@ -70,16 +70,16 @@ export class CastingCallComponent implements OnInit {
 
     this.httpClient.get(environment.apiUrl + 'global/profileDefaults').subscribe((res) => {
       if (res != null) {
-        let countryResp = res['countries'];
-        let profileResp = res['profileTypes'];
+        const countryResp = res['countries'];
+        const profileResp = res['profileTypes'];
 
-        let tmp: Country[] = [];
+        const tmp: Country[] = [];
         for (let key in countryResp) {
           var country = new Country(countryResp[key]);
           tmp.push(country);
         }
 
-        let pTmp: ProfileType[] = [];
+        const pTmp: ProfileType[] = [];
         for (let key in profileResp) {
           var profile = new ProfileType(profileResp[key]);
           pTmp.push(profile);
@@ -102,11 +102,11 @@ export class CastingCallComponent implements OnInit {
   setCountry() {
     let value = this.modelCountry.code;
     if (this.modelCountry == null) { value = ''; }
-    if (value.length > 0)
+    if (value.length > 0) {}
       this.httpClient.get(environment.apiUrl + 'global/cities/' + value).subscribe((res) => {
 
         if (res != null) {
-          let tmp: City[] = [];
+          const tmp: City[] = [];
           for (let key in res) {
             tmp.push(new City(res[key]));
           }
@@ -125,7 +125,7 @@ export class CastingCallComponent implements OnInit {
 
 
   castingCallregister(form: any) {
-    let formData = new FormData();
+    const formData = new FormData();
 
     formData.append('castingCallId', '-1');
     formData.append('projectName', this.projectName);
@@ -150,7 +150,7 @@ export class CastingCallComponent implements OnInit {
     });
 
     formData.append('hours', this.time);
-    let localUserItem = localStorage.getItem('user');
+    const localUserItem = localStorage.getItem('user');
     this.user = JSON.parse(localUserItem);
     formData.append('userId', '' + this.user.userId);
 

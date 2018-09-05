@@ -8,7 +8,7 @@ export class Country {
 
   this.code = res['code'];
   this.name = res['name'];
-  this.url = "/assets/images/countries/"+this.code+".png";
+  this.url = '/assets/images/countries/' + this.code + '.png';
   this.id = res['id'];
  }
 }
