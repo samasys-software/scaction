@@ -22,7 +22,8 @@ import { ProfileUpdateService } from './profile-update.service';
 export class MyProfileUpdateComponent implements OnInit {
   public modelCities: any;
   public modelCountry: any;
-  public profileTypes: Observable<ProfileType[]>;
+  public profileTypes: Observable<ProfileType[]> = new Observable<ProfileType[]>();
+  public user: User;
   public cities: City[];
   public countries: Observable<Country[]>;
   public screenName: any;
@@ -37,6 +38,7 @@ export class MyProfileUpdateComponent implements OnInit {
   public isSameASPhone: boolean;
   public dateOfBirth: any;
   public roles: any;
+
   @ViewChild('content') private content;
 
   cityFormatter( city: City ) {
@@ -52,6 +54,50 @@ export class MyProfileUpdateComponent implements OnInit {
 
   ngOnInit() {
       console.log('Initializing Profile Update Component ');
+
+      this.httpClient.get(environment.apiUrl + 'global/profileDefaults' ).subscribe((res) => {
+        if (res != null) {
+          const countryResp = res['countries'];
+          const profileResp = res['profileTypes'];
+
+          const tmp: Country[] = [];
+          for (let key in countryResp) {
+            var country = new Country(countryResp[key]);
+            tmp.push( country );
+          }
+          const pTmp: ProfileType[] = [];
+          for( let key in profileResp ){
+            var profile = new ProfileType( profileResp[key]);
+            pTmp.push( profile );
+          }
+
+          this.profileTypes = of(pTmp).pipe();
+          this.countries = of(tmp).pipe();
+
+          if ( this.user != null) {
+
+          this.user.userRoles.forEach((entry) => {
+            this.profileTypes.subscribe((tProfileTypes) => {
+              tProfileTypes.forEach((profileType) => {
+                if ( entry['roleType']['id'] === profileType.id) {
+                  profileType.checked = true;
+                }
+              });
+            });
+          });
+        }
+
+
+        } else {
+          this.countries = null;
+        }
+      console.log('inside' + res);
+      },
+      (error) => {
+      this.countries = null;
+      // this.chRef.detectChanges();
+    });
+
       this.userHolder.currentMessage.subscribe( message => {
         if (message != null) {
         this.fbEmail = message['fbEmail'];
@@ -65,6 +111,7 @@ export class MyProfileUpdateComponent implements OnInit {
       const localUserItem = localStorage.getItem('user');
       if ( localUserItem != null) {
         const user: User = JSON.parse(localUserItem);
+        this.user = user;
         console.log(user);
         this.fbUserId = user.fbUser;
         this.fbEmail = user.fbEmail;
@@ -74,9 +121,9 @@ export class MyProfileUpdateComponent implements OnInit {
         this.modelCities = user.cityId;
         this.phoneNumber = user.phoneNumber;
         this.whatsappNumber = user.whatsappNumber;
-        this.gender = user.gender;
+        this.gender = '' + user.gender;
         this.dateOfBirth = user.dateOfBirth;
-        this.searchable = user.searchable;
+        this.searchable =  user.searchable ? '1' : '0'  ;
 
       }
 
@@ -84,34 +131,7 @@ export class MyProfileUpdateComponent implements OnInit {
         this.router.navigate(['/']);
       }
 
-    this.httpClient.get(environment.apiUrl + 'global/profileDefaults' ).subscribe((res) => {
-      if (res != null) {
-        const countryResp = res['countries'];
-        const profileResp = res['profileTypes'];
 
-        const tmp: Country[] = [];
-        for (let key in countryResp) {
-          var country = new Country(countryResp[key]);
-          tmp.push( country );
-        }
-        const pTmp: ProfileType[] = [];
-        for( let key in profileResp ){
-          var profile = new ProfileType( profileResp[key]);
-          pTmp.push( profile );
-        }
-
-        this.profileTypes = of(pTmp).pipe();
-        this.countries = of(tmp).pipe();
-
-      } else {
-        this.countries = null;
-      }
-    console.log('inside' + res);
-    },
-    (error) => {
-    this.countries = null;
-    // this.chRef.detectChanges();
-  });
     }
 
     setCountry(value: string ) {

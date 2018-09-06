@@ -1,4 +1,4 @@
-
+<div *ngIf="countries | async; else loading">
 <form #castingCallForm="ngForm" (ngSubmit)="castingCallregister(castingCallForm)">
   <div class="form-group" [class.has-error]="projectNameControl.touched && projectNameControl.invalid">
     <label class="control-label" for="projectName"> Project Name</label>
@@ -100,3 +100,7 @@
     </div>
   </ng-template>
 
+</div>
+<ng-template #loading>
+    Loading User...
+  </ng-template>

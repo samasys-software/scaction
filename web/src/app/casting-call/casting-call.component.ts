@@ -29,13 +29,14 @@ export class CastingCallComponent implements OnInit {
   public endDate: any;
   public gender: any;
   public countries: Observable<Country[]>;
-  public profileTypes: Observable<ProfileType[]>;
+  public profileTypes: Observable<ProfileType[]> = new Observable<ProfileType[]>();
   public modelCountry: any;
   public cities: City[];
   public auditionVenue: any;
   public address: any;
   public time: any;
   public user: User;
+  public castingCallId = '-1';
 
   @ViewChild('content') private content;
 
@@ -54,19 +55,6 @@ export class CastingCallComponent implements OnInit {
 
 
   ngOnInit() {
-
-    const localCastingCallItem = localStorage.getItem('castingcall');
-    if (localCastingCallItem != null) {
-      const castingCall: CastingCall = JSON.parse(localCastingCallItem);
-      this.projectName = castingCall.projectName;
-      this.projectDetails = castingCall.projectDetails;
-      this.productionCompany = castingCall.productionCompany;
-      this.roleDetail = castingCall.roleDetails;
-      this.address = castingCall.address;
-
-    }
-
-
 
     this.httpClient.get(environment.apiUrl + 'global/profileDefaults').subscribe((res) => {
       if (res != null) {
@@ -88,6 +76,19 @@ export class CastingCallComponent implements OnInit {
         this.profileTypes = of(pTmp).pipe();
         this.countries = of(tmp).pipe();
 
+        if ( this.user != null) {
+
+          this.user.userRoles.forEach((entry) => {
+            this.profileTypes.subscribe((tProfileTypes) => {
+              tProfileTypes.forEach((profileType) => {
+                if ( entry['roleType']['id'] === profileType.id) {
+                  profileType.checked = true;
+                }
+              });
+            });
+          });
+        }
+
       } else {
         this.countries = null;
       }
@@ -97,6 +98,29 @@ export class CastingCallComponent implements OnInit {
         this.countries = null;
         // this.chRef.detectChanges();
       });
+
+      const localCastingCallItem = localStorage.getItem('castingCall');
+    localStorage.removeItem('castingCall');
+    if (localCastingCallItem != null) {
+      const castingCall: CastingCall = JSON.parse(localCastingCallItem);
+      console.log(castingCall);
+      this.castingCallId = '' + castingCall.id;
+      this.projectName = castingCall.projectName;
+      this.projectDetails = castingCall.projectDetails;
+      this.productionCompany = castingCall.productionCompany;
+      this.roleDetail = castingCall.roleDetails;
+      this.address = castingCall.address;
+      this.startAge = castingCall.startAge;
+      this.endAge = castingCall.endAge;
+      this.gender = '' + castingCall.gender;
+      this.modelCountry = castingCall.countryId;
+      this.auditionVenue = castingCall.auditionVenue;
+      this.startDate = castingCall.startDate;
+      this.endDate = castingCall.endDate;
+      this.time = castingCall.time;
+
+    }
+
 
   }
   setCountry() {
@@ -127,7 +151,7 @@ export class CastingCallComponent implements OnInit {
   castingCallregister(form: any) {
     const formData = new FormData();
 
-    formData.append('castingCallId', '-1');
+    formData.append('castingCallId', this.castingCallId);
     formData.append('projectName', this.projectName);
     formData.append('projectDetails', this.projectDetails);
     formData.append('productionCompany', this.productionCompany);
