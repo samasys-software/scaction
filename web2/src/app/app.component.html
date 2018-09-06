@@ -1,0 +1,122 @@
+<!--Navbar-->
+<mdb-navbar SideClass="navbar navbar-expand-md navbar-dark purple darken-1">
+
+    <links>
+
+
+      <!-- Links -->
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown" dropdown>
+          <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+          Talent<span class="caret"></span></a>
+          <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+              <a class="dropdown-item waves-light" mdbWavesEffect href="#">Actor</a>
+              <a class="dropdown-item waves-light" mdbWavesEffect href="#">Photographer</a>
+              <a class="dropdown-item waves-light" mdbWavesEffect href="#">Director</a>
+              <a class="dropdown-item waves-light" mdbWavesEffect href="#">Designer</a>
+              <a class="dropdown-item waves-light" mdbWavesEffect href="#">Dubbing Artist</a>
+              <a class="dropdown-item waves-light" mdbWavesEffect href="#">Singer</a>
+              <a class="dropdown-item waves-light" mdbWavesEffect href="#">Musician</a>
+              <div class="divider dropdown-divider"></div>
+              <a class="dropdown-item waves-light" mdbWavesEffect href="#">Other Technicians</a>
+              <a class="dropdown-item waves-light" mdbWavesEffect href="#">Designer</a>
+          </div>
+      </li>
+
+          <li class="nav-item">
+              <a class="nav-link waves-light" mdbWavesEffect>Casting Calls</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link waves-light" mdbWavesEffect>Locations</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-light" mdbWavesEffect>Studios</a>
+          </li>
+          <!-- Dropdown -->
+          <li class="nav-item dropdown" dropdown>
+              <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+              Movie Consulting<span class="caret"></span></a>
+              <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+                  <a class="dropdown-item waves-light" mdbWavesEffect href="#">Project Consulting</a>
+                  <a class="dropdown-item waves-light" mdbWavesEffect href="#">Agreements</a>
+                  <a class="dropdown-item waves-light" mdbWavesEffect href="#">Audio Launch</a>
+                  <a class="dropdown-item waves-light" mdbWavesEffect href="#">Promotion</a>
+                  <div class="divider dropdown-divider"></div>
+                  <a class="dropdown-item waves-light" mdbWavesEffect href="#">Overseas Shooting</a>
+              </div>
+          </li>
+
+       
+      </ul>
+      <!-- Links -->
+
+  </links>
+
+    <mdb-navbar-brand>
+        <a class="navbar-brand" href="#">
+        <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="30" alt="">
+      </a>
+    </mdb-navbar-brand>
+
+  <!-- Collapsible content -->
+  
+
+  <mdb-navbar-brand>
+
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item" *ngIf="showLogin">
+            <button type="button" class="btn btn-secondary btn-rounded" (click)="onLoginClick()">Login</button>
+        </li>
+
+        <li class="nav-item dropdown" dropdown *ngIf="!showLogin">
+            <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+              <img class="img-fluid rounded-circle" width="30" height="30" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2365579596850855&height=50&width=50&ext=1537586649&hash=AeTAJmpQe29Pv45v"> Dhaya
+
+            </a>
+            <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+                <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/my-home">My Home</a>
+                <a class="dropdown-item waves-light" mdbWavesEffect href="#">My Profile</a>
+                <a class="dropdown-item waves-light" mdbWavesEffect href="#">Notifications</a>
+                <a class="dropdown-item waves-light" mdbWavesEffect href="#">Invitations</a>
+                <div class="divider dropdown-divider"></div>
+                <a class="dropdown-item waves-light" mdbWavesEffect href="#">Sign out</a>
+            </div>
+        </li>
+      </ul>
+
+    </mdb-navbar-brand>
+    
+
+  <!-- Collapsible content -->
+
+    <!-- Navbar brand -->
+   
+  
+
+</mdb-navbar>
+<!--/.Navbar-->
+<router-outlet></router-outlet>
+<div mdbModal #basicModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="basicModal.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myModalLabel">Start Camera,Action!</h4>
+      </div>
+      <div class="modal-body">
+        Would you like to register in our platform?
+      </div>
+      <div class="modal-footer">
+        <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="basicModal.hide()" mdbWavesEffect>No, please</button>
+        <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="goToProfile()" mdbWavesEffect>Sure, Why not?</button>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="footer-copyright purple darken-1 py-3 text-center text-white">
+    © 2018 Copyright:
+    <a class="text-white" href="https://mdbootstrap.com/material-design-for-bootstrap/"> Start Camera, Action! </a>
+</footer>

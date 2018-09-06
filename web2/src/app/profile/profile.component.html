@@ -1,0 +1,121 @@
+<div *ngIf="countries | async; else loading">
+    <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
+      <div class="form-group" [class.has-error]="screenNameControl.touched && screenNameControl.invalid">
+        <label class="control-label" for="screenName">Screen name</label>
+        <input type="text" class="form-control" name="screenName" placeholder="Enter screen name" [(ngModel)]="screenName" #screenNameControl="ngModel"
+          required>
+        <span class="help-block" *ngIf="screenNameControl.invalid && screenNameControl.touched">Please enter screen name</span>
+      </div>
+      <div class="form-group" [class.has-error]="nameControl.invalid && nameControl.touched">
+        <label for="name" class="control-label">Name</label>
+        <input required type="text" class="form-control" name="name" placeholder="Name" [(ngModel)]="fbName" #nameControl="ngModel"
+          [ngModelOptions]="{standalone: true}" required>
+        <span class="help-block" *ngIf="nameControl.invalid && nameControl.touched">Please enter Name</span>
+      </div>
+      <div class="form-group" [class.has-error]="emailControl.invalid && emailControl.touched">
+        <label for="emailId" class="control-label">Email address</label>
+        <input type="email" class="form-control" name="emailId" placeholder="Enter email" [(ngModel)]="fbEmail" #emailControl="ngModel"
+          [ngModelOptions]="{standalone: true}" required>
+        <span class="help-block" *ngIf="emailControl.invalid && emailControl.touched">Please enter Email-name</span>
+      </div>
+      <div class="form-group" [class.has-error]="countryControl.touched && countryControl.invalid">
+        <label class="control-label" for="country">Country</label>
+        <select #countryControl="ngModel" #sCountry [(ngModel)]="modelCountry" (change)="setCountry(sCountry.value)"  [ngModelOptions]="{standalone: true}">
+          <option value="" selected>Select country</option>
+          <option *ngFor="let c of countries | async" [value]="c.code">
+            {{ c.name }}
+          </option>
+        </select>
+      </div>
+  
+      <div class="form-group" [class.has-error]="cityControl.invalid && cityControl.touched">
+        <label class="control-label" for="modelCities">City</label>
+
+        <select #cityControl="ngModel"  [(ngModel)]="modelCities" [ngModelOptions]="{standalone: true}">
+            <option value="" selected>Select City</option>
+            <option *ngFor="let c of cities | async" [ngValue]="c">
+              {{ c.name }}
+            </option>
+          </select>
+          <!--
+         <input name="modelCities" type="text" class="form-control" [(ngModel)]="modelCities" [(ngbTypeahead)]="search" 
+        [inputFormatter]="cityFormatter" [resultFormatter]="cityFormatter" #cityControl="ngModel" (onkeypress)="search($event.target.value)"
+          [ngModelOptions]="{standalone: true}" required/>-->
+        <span class="help-block" *ngIf="cityControl.invalid && cityControl.touched">Please enter city</span>
+      </div>
+      <div class="form-group" [class.has-error]="phoneNumberControl.invalid && phoneNumberControl.touched">
+        <label for="phoneNumber" class="control-label">Phone number</label>
+        <input type="number" class="form-control" name="phoneNumber" placeholder="Enter phone number" [(ngModel)]="phoneNumber" #phoneNumberControl="ngModel"
+          [ngModelOptions]="{standalone: true}" required>
+        <span class="help-block" *ngIf="phoneNumberControl.invalid &&  phoneNumberControl.touched">Please enter phone number</span>
+      </div>
+      <div class="form-group">
+        <div class="form-check" [class.has-error]="isSameAsPhone.invalid">
+          <input class="form-check-same" type="checkbox" value="" name="form-check-same" [(ngModel)]="isSameASPhone" #isSameAsPhone="ngModel"
+            [ngModelOptions]="{standalone: true}" required>
+          <label class="control-label" class="form-check-label" for="sameAsPhoneNumber">
+            Same as phone number
+          </label>
+        </div>
+      </div>
+      <div class="form-group" [class.has-error]="whatsappNumberControl.invalid && whatsappNumberControl.touched">
+        <label for="whatsappNumber" class="control-label">Whatsapp number</label>
+        <input type="number" class="form-control" name="whatsappNumber" placeholder="Enter whatsapp number" [(ngModel)]="whatsappNumber"
+          #whatsappNumberControl="ngModel" [ngModelOptions]="{standalone: true}" required>
+        <span class="help-block" *ngIf="whatsappNumberControl.invalid && whatsappNumberControl.touched">Please enter whatsapp
+          number</span>
+      </div>
+       <div class="form-group" [class.has-error] ="genderControl.invalid && genderControl.touched ">
+        <label for="gender">Gender</label>
+        <div class="btn-group-sm" role="group" aria-label="gender">
+          <input type="radio" class="btn btn-secondary" value="0" name="gender" [(ngModel)]="gender" #genderControl="ngModel" required>Male
+          <input type="radio" class="btn btn-secondary" value="1" name="gender" [(ngModel)]="gender" #genderControl="ngModel" required>Female
+          <input type="radio" class="btn btn-secondary" value="2" name="gender" [(ngModel)]="gender" #genderControl="ngModel" required>Transgender
+           <span class="help-block" *ngIf="genderControl.invalid && genderControl.touched">Please enter Date Of Birth</span>
+        </div>
+      </div>
+      <div class="form-group" [class.has-error]="dateOfBirtControl.invalid && dateOfBirtControl.touched">
+        <label for="dateOfBirth" class="control-label">Date of birth</label>
+        <input type="text"  class="form-control" name="dateOfBirth" placeholder="Enter date of birth"
+          [(ngModel)]="dateOfBirth" #dateOfBirtControl="ngModel" [ngModelOptions]="{standalone: true}" required>
+        <span class="help-block" *ngIf="dateOfBirtControl.invalid && dateOfBirtControl.touched">Please enter Date Of Birth</span>
+      </div>
+      <div class="form-group" [class.has-error]= "searchableControl.invalid && searchableControl.touched">
+        <label for="searchable">Searchable</label>
+        <div class="btn-group-sm" role="group" aria-label="searchable">
+          <input type="radio" class="btn btn-secondary" value="0" name="searchable" [(ngModel)]="searchable" #searchableControl="ngModel" required>Yes
+          <input type="radio" class="btn btn-secondary" value="1" name="searchable" [(ngModel)]="searchable" #searchableControl="ngModel" required>No
+          <span class="help-block" *ngIf="searchableControl.invalid && searchableControl.touched">Please select searchable</span>
+        </div>
+      </div>
+  
+      <div class="row form-group">
+        <div class="col">
+          <label>Roles</label>
+        </div>
+        <div class="col" *ngFor="let order of profileTypes | async">
+            <label>
+              <input type="checkbox" value="{{ order.id }}" name="profileTypes" [(ngModel)]="order.checked"  [ngModelOptions]="{standalone: true}">  {{ order.name }}
+            </label>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">Register</button>
+    </form>
+  </div>
+  <ng-template #loading>
+    Loading User...
+  </ng-template>
+  
+      <ng-template #content let-c="close" let-d="dismiss">
+          <div class="modal-header">
+               <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <label for="registerWithFaceBook">Registration Successful </label>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Ok</button>
+          </div>
+        </ng-template>
