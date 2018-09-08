@@ -6,6 +6,7 @@ import { UserHolderService } from './service/userholder';
 import { ProfileUpdateService } from './service/profileupdate';
 import { environment } from '../environments/environment.prod';
 import {ModalModule } from "angular-bootstrap-md";
+import { Observable } from 'rxjs';
 declare var window: any;
 declare var location: any;
 declare var FB: any;
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit{
   showLogin = true;
   showPopUp = false;
   user: User;
+  notificationCount: Observable<number>;
   @ViewChild('content') private content;
   @ViewChild('basicModal') private modalContent;
   

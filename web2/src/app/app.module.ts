@@ -10,12 +10,16 @@ import { MyHomeComponent } from './myhome/myhome.component';
 import { RoleDisplayComponent } from './roledisplay/roledisplay.component';
 import { CastingCoordinatorComponent } from './casting-coordinator/casting-coordinator.component';
 import { CastingCallComponent } from './casting-call/casting-call.component';
+import { CastingCallSearchComponent } from './casting-call-search/casting-call-search.component';
+import { CastingCallDetailComponent } from './casting-call-detail/casting-call-detail.component';
 
 const appRoutes: Routes = [
   { path: 'my-app-profile' , component:  ProfileComponent},
   { path: 'my-home' , component: MyHomeComponent },
   { path: 'casting-call', component: CastingCallComponent},
-  { path: 'casting-coordinator', component: CastingCoordinatorComponent }];
+  { path: 'casting-coordinator', component: CastingCoordinatorComponent },
+  { path: 'casting-call-search' , component: CastingCallSearchComponent },
+  { path: 'casting-call-details' , component: CastingCallDetailComponent }]
   
 
 @NgModule({
@@ -25,7 +29,9 @@ const appRoutes: Routes = [
     MyHomeComponent,
     RoleDisplayComponent,
     CastingCoordinatorComponent,
-    CastingCallComponent
+    CastingCallComponent,
+    CastingCallSearchComponent,
+    CastingCallDetailComponent
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

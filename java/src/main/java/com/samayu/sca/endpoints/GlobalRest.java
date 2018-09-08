@@ -92,4 +92,10 @@ public class GlobalRest {
         return ResponseEntity.ok(dataAccessService.findUserImages());
     }
 
+    @GetMapping(path = "/castingcalls")
+    public ResponseEntity<Iterable<CastingCall>> getAllCastingCalls()  {
+        return ResponseEntity.ok(dataAccessService.findAllCastingCalls());
+    }
+
+
 }

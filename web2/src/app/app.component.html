@@ -24,7 +24,7 @@
       </li>
 
           <li class="nav-item">
-              <a class="nav-link waves-light" mdbWavesEffect>Casting Calls</a>
+              <a class="nav-link waves-light" routerLink="/casting-call-search" mdbWavesEffect>Casting Calls</a>
           </li>
           <li class="nav-item">
               <a class="nav-link waves-light" mdbWavesEffect>Locations</a>
@@ -34,7 +34,7 @@
           </li>
           <!-- Dropdown -->
           <li class="nav-item dropdown" dropdown>
-              <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+              <a dropdownToggle type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
               Movie Consulting<span class="caret"></span></a>
               <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
                   <a class="dropdown-item waves-light" mdbWavesEffect href="#">Project Consulting</a>
@@ -69,10 +69,13 @@
         </li>
 
         <li class="nav-item dropdown" dropdown *ngIf="!showLogin">
-            <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+          <span>
+          <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
               <img class="img-fluid rounded-circle" width="30" height="30" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2365579596850855&height=50&width=50&ext=1537586649&hash=AeTAJmpQe29Pv45v"> Dhaya
 
             </a>
+             <i class="fa fa-bell-o" aria-hidden="true"></i><sup>5</sup>
+          </span>
             <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
                 <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/my-home">My Home</a>
                 <a class="dropdown-item waves-light" mdbWavesEffect href="#">My Profile</a>

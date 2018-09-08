@@ -1,7 +1,7 @@
 <form #castingCallForm="ngForm" (ngSubmit)="castingCallregister(castingCallForm)">
     <div class="form-group" [class.has-error]="projectNameControl.touched && projectNameControl.invalid">
       <label class="control-label" for="projectName"> Project Name</label>
-      <input type="text" class="form-control" name="projectName" placeholder="Enter project name" [(ngModel)]="projectName" #projectNameControl="ngModel"
+      <input type="text" ng-readonly="readonly" class="form-control" name="projectName" placeholder="Enter project name" [(ngModel)]="projectName" #projectNameControl="ngModel"
         required>
       <span class="help-block" *ngIf="projectNameControl.invalid && projectNameControl.touched">Please enter screen name</span>
     </div>
@@ -56,6 +56,7 @@
         <label class="control-label" for="auditionVenue">Enter audition venue</label>
         <input name="auditionVenue" type="text" class="form-control" [(ngModel)]="auditionVenue" [ngbTypeahead]="search" [inputFormatter]="cityFormatter" [resultFormatter]="cityFormatter" #auditionVenueControl="ngModel"
           [ngModelOptions]="{standalone: true}" required/>
+          
         <span class="help-block" *ngIf="auditionVenueControl.invalid && auditionVenueControl.touched">Please enter audition venue</span>
       </div>
   

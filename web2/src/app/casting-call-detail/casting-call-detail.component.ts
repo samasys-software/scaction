@@ -1,22 +1,20 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
-import { environment } from '../../environments/environment';
+import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Country } from '../types/country';
-import { City } from '../types/city';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { ProfileType } from '../types/profiletype';
+import { City } from '../types/city';
 import { User } from '../types/user';
+import { HttpClient } from '@angular/common/http';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { CastingCall } from '../types/castingcall';
-import { ReactiveFormsModule } from '@angular/forms';
+import { environment } from '../../environments/environment';
 
 @Component({
-  selector: 'app-casting-call',
-  templateUrl: './casting-call.component.html',
-  styleUrls: ['./casting-call.component.scss']
+  selector: 'app-casting-call-detail',
+  templateUrl: './casting-call-detail.component.html',
+  styleUrls: ['./casting-call-detail.component.scss']
 })
-export class CastingCallComponent implements OnInit {
+export class CastingCallDetailComponent implements OnInit {
 
   public projectName: any;
   public projectDetails: any;
@@ -40,8 +38,6 @@ export class CastingCallComponent implements OnInit {
   private roleIds: string[];
   private readonly = false;
   private castingCallCreatorId: number;
-
-  @ViewChild('content') private content;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -92,10 +88,6 @@ export class CastingCallComponent implements OnInit {
         this.readonly = true;
       }
     }
-
-
-
-
     this.httpClient.get(environment.apiUrl + 'global/profileDefaults').subscribe((res) => {
       if (res != null) {
         const countryResp = res['countries'];
@@ -140,69 +132,5 @@ export class CastingCallComponent implements OnInit {
         this.countries = null;
         // this.chRef.detectChanges();
       });
-
   }
-  setCountry() {
-    let value = this.modelCountry.code;
-    if (this.modelCountry == null) { value = ''; }
-    if (value.length > 0) {}
-      this.httpClient.get(environment.apiUrl + 'global/cities/' + value).subscribe((res) => {
-
-        if (res != null) {
-          const tmp: City[] = [];
-          for (let key in res) {
-            tmp.push(new City(res[key]));
-          }
-          this.cities = tmp;
-        } else {
-          this.cities = null;
-        }
-      },
-        (error) => {
-          this.auditionVenue = null;
-          // this.chRef.detectChanges();
-        });
-
-  }
-
-
-
-  castingCallregister(form: any) {
-    const formData = new FormData();
-
-    formData.append('castingCallId', '-1');
-    formData.append('projectName', this.projectName);
-    formData.append('projectDetails', this.projectDetails);
-    formData.append('productionCompany', this.productionCompany);
-    formData.append('roleDetails', this.roleDetail);
-    formData.append('startAge', this.startAge);
-    formData.append('endAge', this.endAge);
-    formData.append('gender', this.gender);
-    formData.append('countryId', this.modelCountry.id);
-    formData.append('cityId', this.auditionVenue.id);
-    formData.append('startDate', this.startDate);
-    formData.append('endDate', this.endDate);
-    formData.append('address', 'chennai 600008');
-
-    this.profileTypes.forEach((entry) => {
-      entry.forEach((profileType) => {
-        if (profileType.checked) {
-          formData.append('roles', profileType.id);
-        }
-      });
-    });
-
-    formData.append('hours', this.time);
-    formData.append('userId', '' + this.user.userId);
-
-    this.httpClient.post(environment.apiUrl + 'global/castingCall', formData).subscribe((res) => {
-      console.log(res);
-      //this.modalService.open(this.content, { ariaLabelledBy: 'modal-basic-title' });
-    },
-      (error) => {
-        console.log(error);
-      });
-
-  }
-
 }

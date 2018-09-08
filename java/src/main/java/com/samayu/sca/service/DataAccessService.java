@@ -182,6 +182,10 @@ public class DataAccessService {
         return profileTypeRepository.findAll();
     }
 
+    public Iterable<CastingCall> findAllCastingCalls(){
+        return castingCallRepository.findAll();
+    }
+
     public CastingCall createOrUpdateCastingCall(long castingCallId, String projectName,
                                                  String projectDetails, String productionCompany,
                                                  String roleDetails, int startAge,
