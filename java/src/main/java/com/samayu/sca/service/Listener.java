@@ -9,20 +9,17 @@ import com.samayu.sca.businessobjects.CastingCall;
 import com.samayu.sca.businessobjects.Notification;
 import com.samayu.sca.businessobjects.User;
 import com.samayu.sca.businessobjects.UserNotification;
-import com.samayu.sca.dao.CastingCallRepository;
 import com.samayu.sca.dao.UserNotificationRepository;
 import com.samayu.sca.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import sun.plugin2.message.Message;
+
 
 import javax.jms.JMSException;
-import javax.jms.TextMessage;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

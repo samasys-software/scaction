@@ -21,7 +21,7 @@ public class CoordinatorRest {
     DataAccessService dataAccessService;
 
     @GetMapping(path = "/castingcalls/{userId}")
-    public ResponseEntity<List<CastingCall>> getMyCastingCalls(@PathVariable("userId") long userId) {
+    public ResponseEntity<List<CastingCall>> getMyCastingCalls(@PathVariable(value = "userId" ) long userId) {
         return ResponseEntity.ok(dataAccessService.findCastingCallsByUser(userId));
     }
 }

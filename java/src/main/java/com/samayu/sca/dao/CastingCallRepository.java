@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface CastingCallRepository extends CrudRepository<CastingCall, Long> {
     List<CastingCall> findByUserId(long userId);
+    
 }

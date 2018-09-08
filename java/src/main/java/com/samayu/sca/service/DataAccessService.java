@@ -164,7 +164,9 @@ public class DataAccessService {
 
     public User findUser(String fbUser ){
         User user = userRepository.findByFbUser( fbUser );
-        user.setUserRoles( userRoleRepository.findByUserId( user.getUserId() ));
+        if( user != null ) {
+            user.setUserRoles(userRoleRepository.findByUserId(user.getUserId()));
+        }
         return user;
     }
 
@@ -178,6 +180,10 @@ public class DataAccessService {
 
     public Iterable<ProfileType> findAllProfileTypes(){
         return profileTypeRepository.findAll();
+    }
+
+    public Iterable<CastingCall> findAllCastingCalls(){
+        return castingCallRepository.findAll();
     }
 
     public CastingCall createOrUpdateCastingCall(long castingCallId, String projectName,
