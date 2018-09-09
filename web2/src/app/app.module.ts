@@ -12,14 +12,18 @@ import { CastingCoordinatorComponent } from './casting-coordinator/casting-coord
 import { CastingCallComponent } from './casting-call/casting-call.component';
 import { CastingCallSearchComponent } from './casting-call-search/casting-call-search.component';
 import { CastingCallDetailComponent } from './casting-call-detail/casting-call-detail.component';
+import { HomePageComponent } from './home-page/home-page.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 const appRoutes: Routes = [
-  { path: 'my-app-profile' , component:  ProfileComponent},
+  { path: 'app-profile' , component:  ProfileComponent},
   { path: 'my-home' , component: MyHomeComponent },
   { path: 'casting-call', component: CastingCallComponent},
   { path: 'casting-coordinator', component: CastingCoordinatorComponent },
   { path: 'casting-call-search' , component: CastingCallSearchComponent },
-  { path: 'casting-call-details' , component: CastingCallDetailComponent }]
+  { path: 'casting-call-details' , component: CastingCallDetailComponent },
+  { path: 'notifications' , component: NotificationsComponent },
+  { path: '' , component: HomePageComponent}]
   
 
 @NgModule({
@@ -31,7 +35,9 @@ const appRoutes: Routes = [
     CastingCoordinatorComponent,
     CastingCallComponent,
     CastingCallSearchComponent,
-    CastingCallDetailComponent
+    CastingCallDetailComponent,
+    HomePageComponent,
+    NotificationsComponent
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

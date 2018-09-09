@@ -1,11 +1,11 @@
 <!--Navbar-->
-<mdb-navbar SideClass="navbar navbar-expand-md navbar-dark purple darken-1">
+<mdb-navbar SideClass="navbar navbar-expand-md navbar-dark purple darken-1 ">
 
     <links>
 
 
       <!-- Links -->
-      <ul class="navbar-nav mr-auto">
+      <ul class="navbar-nav mr-auto" justify-content-center>
         <li class="nav-item dropdown" dropdown>
           <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
           Talent<span class="caret"></span></a>
@@ -58,7 +58,7 @@
       </a>
     </mdb-navbar-brand>
 
-  <!-- Collapsible content -->
+  
   
 
   <mdb-navbar-brand>
@@ -69,26 +69,35 @@
         </li>
 
         <li class="nav-item dropdown" dropdown *ngIf="!showLogin">
-          <span>
           <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-              <img class="img-fluid rounded-circle" width="30" height="30" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2365579596850855&height=50&width=50&ext=1537586649&hash=AeTAJmpQe29Pv45v"> Dhaya
-
+              <img class="img-fluid rounded-circle" width="30" height="30" src="{{user.profilePic }}"> {{user.screenName}}
             </a>
-             <i class="fa fa-bell-o" aria-hidden="true"></i><sup>5</sup>
-          </span>
+           
             <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
                 <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/my-home">My Home</a>
-                <a class="dropdown-item waves-light" mdbWavesEffect href="#">My Profile</a>
-                <a class="dropdown-item waves-light" mdbWavesEffect href="#">Notifications</a>
-                <a class="dropdown-item waves-light" mdbWavesEffect href="#">Invitations</a>
+                <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/app-profile">My Profile</a>
+                <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/notifications">Notifications</a>
                 <div class="divider dropdown-divider"></div>
                 <a class="dropdown-item waves-light" mdbWavesEffect href="#">Sign out</a>
             </div>
         </li>
+        <li class="nav-item dropdown" dropdown *ngIf="notifications | async">
+            <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+                <i class="fa fa-bell white-text" aria-hidden="true"></i><sup class="white-text rounded-circle" >{{ notificationCount | async }}</sup>                
+              </a>
+             
+              <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+                  <ng-container *ngFor="let notification of notifications | async">
+                      <a class="dropdown-item waves-light" mdbWavesEffect routerLink="{{notification.redirectLink}}" >{{notification.message}} </a>
+                      <div class="divider dropdown-divider"></div>
+                  </ng-container>
+                  <a class="dropdown-item waves-light text-center" mdbWavesEffect routerLink="/notifications" >See All </a>  
+              </div>
+          </li>        
       </ul>
 
     </mdb-navbar-brand>
-    
+
 
   <!-- Collapsible content -->
 
@@ -98,7 +107,9 @@
 
 </mdb-navbar>
 <!--/.Navbar-->
+<div class="d-flex justify-content-center mt-3">
 <router-outlet></router-outlet>
+</div>
 <div mdbModal #basicModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -119,7 +130,7 @@
     </div>
   </div>
 </div>
-<footer class="footer-copyright purple darken-1 py-3 text-center text-white">
+<footer class="footer-copyright purple darken-1 py-3 text-center text-white fixed-bottom">
     © 2018 Copyright:
     <a class="text-white" href="https://mdbootstrap.com/material-design-for-bootstrap/"> Start Camera, Action! </a>
 </footer>
