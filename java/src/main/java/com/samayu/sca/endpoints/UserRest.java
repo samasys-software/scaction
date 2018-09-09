@@ -1,6 +1,7 @@
 package com.samayu.sca.endpoints;
 
 import com.samayu.sca.businessobjects.User;
+import com.samayu.sca.businessobjects.UserNotification;
 import com.samayu.sca.service.DataAccessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,6 @@ public class UserRest {
         return ResponseEntity.ok(user);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(path="/checkUser/{fbUser}" )
     public ResponseEntity<User> checkUser(@PathVariable("fbUser") String fbUser ){
             User user = dataAccessService.findUser(fbUser);
@@ -54,5 +54,10 @@ public class UserRest {
             }
     }
 
+
+    @GetMapping(path="/notifications/{userId}")
+    public ResponseEntity<Iterable<UserNotification>> getNotificationsForUser(@PathVariable("userId") long userId ){
+        return ResponseEntity.ok( dataAccessService.findNotificationsByUser( userId ));
+    }
 
 }

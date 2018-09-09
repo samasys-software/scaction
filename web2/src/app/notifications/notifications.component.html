@@ -1,0 +1,12 @@
+<div *ngIf="notifications | async; else loading">
+  
+    <div class="row" *ngFor="let notification of notifications | async" >
+        <div class="col-12">
+            <a routerLink="/casting-call-details">{{ notification.message }}</a>
+        </div>
+    </div>
+</div>  
+<ng-template #loading>
+  Loading User...
+</ng-template>
+  

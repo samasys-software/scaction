@@ -40,6 +40,9 @@ public class DataAccessService {
     @Autowired
     private CastingCallRepository castingCallRepository;
 
+    @Autowired
+    private UserNotificationRepository userNotificationRepository;
+
     public User register( String fbUser, String screenName, String name, String email ,
                           String countryCode,  String city, String phoneNumber,
                           String whatsappNumber, int gender, LocalDate dateOfBirth,
@@ -226,6 +229,10 @@ public class DataAccessService {
 
     public List<CastingCall> findCastingCallsByUser(long userId ){
         return castingCallRepository.findByUserId( userId );
+    }
+
+    public Iterable<UserNotification> findNotificationsByUser(long userId ){
+        return userNotificationRepository.findByUserId( userId );
     }
 
 }

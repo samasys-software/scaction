@@ -5,8 +5,8 @@ import { Router, Routes } from '@angular/router';
 import { UserHolderService } from './service/userholder';
 import { ProfileUpdateService } from './service/profileupdate';
 import { environment } from '../environments/environment.prod';
-import {ModalModule } from "angular-bootstrap-md";
-import { Observable } from 'rxjs';
+import { ModalModule } from "angular-bootstrap-md";
+import { Observable, of } from 'rxjs';
 declare var window: any;
 declare var location: any;
 declare var FB: any;
@@ -19,6 +19,7 @@ declare var FB: any;
 export class AppComponent implements OnInit{
   title = 'web2';
   showLogin = true;
+  notifications:Observable<Notification[]>;
   showPopUp = false;
   user: User;
   notificationCount: Observable<number>;
@@ -29,19 +30,44 @@ export class AppComponent implements OnInit{
 
 
     ngOnInit() {
-      let userItem = localStorage.getItem('user');
+      
       this.profileUpdateService.currentMessage.subscribe(message => {
         if (message != null) {
       this.user = message;
       this.showLogin = false;
         }
        } );
+       let userItem = localStorage.getItem('user'); 
       if (userItem != null) {
         this.user = JSON.parse(userItem);
         this.showLogin = false;
 
-      }
+        //Fetch Notifications
+
+        this.http.get( environment.apiUrl + 'user/notifications/'+ this.user.userId ).subscribe((res) => {
+          if (res != null) {
+            const pTmp: Notification[] = [];
+            for( let key in res ){
+                let notification:Notification = res[key];
+                pTmp.push(notification);
+            }
+
+            this.notificationCount = of(pTmp.length);
+            this.notifications = of(pTmp);
+          }
+          else {
+            console.log("Notification Response null");
+            this.notifications = null;
+          }
+        
+        },
+      (error) => {
+        console.log( error );
+        this.notifications = null;
+      });
+
      }
+    }
 
   constructor(private http: HttpClient, private chRef: ChangeDetectorRef,
     private router: Router, private userHolder: UserHolderService, private profileUpdateService: ProfileUpdateService, private modal: ModalModule) {
@@ -68,10 +94,7 @@ export class AppComponent implements OnInit{
   }
 
   checkFB(){
-    ///home/samayuadmin/Projects/stcamaction/scaction/web/dist
-
     if(window.location.href.indexOf('localhost')>-1 )          return true;
-
     FB.login( (data)=>this.handleFBResponse(data), {scope: 'public_profile,email'});
   }
   handleFBResponse = (response) => {
@@ -139,7 +162,7 @@ export class AppComponent implements OnInit{
 
     if( !this.checkFB() ) return;
 
-    this.handleUser( 'samayu4' , 'Arun S ' ,
+    this.handleUser( 'samayu1' , 'Arun S ' ,
 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2365579596850855&height=50&width=50&ext=1537586649&hash=AeTAJmpQe29Pv45v' ,
  'info@samayusoftcorp.com'  );
 
