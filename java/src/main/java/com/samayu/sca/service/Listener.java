@@ -19,7 +19,6 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import sun.plugin2.message.Message;
 
 import javax.jms.JMSException;
 import javax.jms.TextMessage;

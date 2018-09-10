@@ -1,6 +1,7 @@
 package com.samayu.sca;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
@@ -23,6 +24,9 @@ public class Application extends SpringBootServletInitializer {
 
     public final static String CASTING_CALL_MESSAGE_QUEUE = "sactioncastingcall";
 
+    @Autowired
+    private ActiveMQConnectionFactory connectionFactory;
+
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(Application.class);
@@ -44,7 +48,7 @@ public class Application extends SpringBootServletInitializer {
     @Bean(name="topicJmsTemplate")
     public JmsTemplate createJmsTemplateForTopic(){
         JmsTemplate template = new JmsTemplate();
-        template.setConnectionFactory( connectionFactory() );
+        template.setConnectionFactory( connectionFactory );
         template.setPubSubDomain( true );
 
         return template;
@@ -53,11 +57,11 @@ public class Application extends SpringBootServletInitializer {
     @Bean(name="queueJmsTemplate")
     public JmsTemplate createJmsTemplateForQueue(){
         JmsTemplate template = new JmsTemplate();
-        template.setConnectionFactory( connectionFactory() );
+        template.setConnectionFactory( connectionFactory );
         return template;
     }
 
-    @Bean
+/*    @Bean
     public ActiveMQConnectionFactory connectionFactory(){
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
         connectionFactory.setBrokerURL(BROKER_URL);
@@ -65,7 +69,7 @@ public class Application extends SpringBootServletInitializer {
         connectionFactory.setUserName(BROKER_PASSWORD);
 
         return connectionFactory;
-    }
+    }*/
 
     @Bean
     public JmsListenerContainerFactory<?> topicListenerFactory(ConnectionFactory connectionFactory,
