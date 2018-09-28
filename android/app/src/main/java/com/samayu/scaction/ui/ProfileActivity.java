@@ -3,6 +3,7 @@ package com.samayu.scaction.ui;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -25,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -40,7 +42,10 @@ import com.samayu.scaction.domain.CreateUser;
 import com.samayu.scaction.domain.FBUserDetails;
 import com.samayu.scaction.dto.City;
 import com.samayu.scaction.dto.Country;
+import com.samayu.scaction.dto.ProfileDefaults;
+import com.samayu.scaction.dto.ProfileType;
 import com.samayu.scaction.dto.User;
+import com.samayu.scaction.dto.UserRole;
 import com.samayu.scaction.service.SCAClient;
 
 import com.samayu.scaction.service.SessionInfo;
@@ -60,18 +65,23 @@ import retrofit2.Response;
 public class ProfileActivity extends SCABaseActivity {
 
     EditText screenName,name,emailAddress,phoneNumber,whatsappNumber;
+    ImageButton myLocation;
     TextView dob;
     Button register,reset;
-    CheckBox searchable;
+    CheckBox searchable,sameAsPhone;
     RadioGroup gender;
     Spinner country,city;
     Context context;
     ListView listView;
     View focusView=null;
     boolean valid=false;
-    ArrayAdapter<String> adapter;
+    ArrayAdapter<ProfileType> profileAdapter;
+    User user;
+
+
 
     private ImageButton dateOfBirthPicker;
+    List<String> roles=new ArrayList<String>();
 
 
     private DatePickerDialog.OnDateSetListener mDateSetListener1;
@@ -97,6 +107,7 @@ public class ProfileActivity extends SCABaseActivity {
         whatsappNumber = (EditText) findViewById(R.id.whatsappNumber);
         city = (Spinner) findViewById(R.id.city);
         country=(Spinner) findViewById(R.id.editCountry);
+        sameAsPhone=(CheckBox) findViewById(R.id.sameAsPhone);
 
         searchable=(CheckBox) findViewById(R.id.searchable);
 
@@ -109,11 +120,90 @@ public class ProfileActivity extends SCABaseActivity {
 
         dateOfBirthPicker=(ImageButton)findViewById(R.id.startDatePicker);
 
-        String[] roles = getResources().getStringArray(R.array.roles);
-        adapter= new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_multiple_choice, roles);
+        myLocation=(ImageButton)findViewById(R.id.currentLocation);
+
+        List<Country> countryList=SessionInfo.getInstance().getCountries();
+        ArrayAdapter<Country> countryAdapter = new ArrayAdapter<Country>(ProfileActivity.this, R.layout.drop_down_list, countryList);
+        country.setAdapter(countryAdapter);
+
+        List<City> cities=new ArrayList<City>();
+        City defaultCity = new City();
+        defaultCity.setId(0);
+        defaultCity.setName("Select City");
+        cities.add(0, defaultCity);
+        final ArrayAdapter<City> cityAdapter = new ArrayAdapter<City>(ProfileActivity.this, R.layout.drop_down_list, cities);
+        city.setAdapter(cityAdapter);
+
+        List<ProfileType> profileTypes=SessionInfo.getInstance().getProfileTypes();
+
+        profileAdapter= new ArrayAdapter<ProfileType>(this,
+                android.R.layout.simple_list_item_multiple_choice, profileTypes);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        listView.setAdapter(adapter);
+        listView.setAdapter(profileAdapter);
+       // listView.setItemChecked(0,true);
+       // listView.setSelection(3);
+
+
+//        List<ProfileType> roles = getResources().getStringArray(R.array.roles);
+//
+
+
+
+
+        user = SessionInfo.getInstance().getUser();
+        if(user!=null) {
+            screenName.setText(user.getScreenName());
+            name.setText(user.getFbName());
+            emailAddress.setText(user.getFbEmail());
+            phoneNumber.setText(user.getPhoneNumber());
+            whatsappNumber.setText(user.getWhatsappNumber());
+
+            List<Country> countries=SessionInfo.getInstance().getCountries();
+            for(int i=0;i<countries.size();i++){
+                if(countries.get(i).getCode().equals(user.getCountryCode())){
+                    country.setSelection(i);
+                    break;
+
+                }
+
+            }
+
+            int gender1=user.getGender();
+            if(gender1==0)
+                gender.check(R.id.gender_male);
+
+            else if(gender1==1)
+                gender.check(R.id.gender_female);
+            else if(gender1==2)
+                gender.check(R.id.gender_other);
+            dob.setText(String.valueOf(user.getDateOfBirth()));
+
+
+            //list of roles has been selected been checked
+
+            List<UserRole> userRoles=user.getUserRoles();
+
+            for(int i=0;i<userRoles.size();i++)
+            {
+                for(int j=0;j<profileTypes.size();j++)
+                {
+                    if(profileTypes.get(j).getId()==userRoles.get(i).getRoleType().getId()){
+                        listView.setItemChecked(j,true);
+                    }
+                }
+            }
+
+
+
+
+
+
+        }
+
+
+
+
+
 
 
 
@@ -129,7 +219,7 @@ public class ProfileActivity extends SCABaseActivity {
         }
 
 
-
+/*
         Call<List<Country>> countryDTOCall = new SCAClient().getClient().getCountries();
         countryDTOCall.enqueue(new Callback<List<Country>>() {
             @Override
@@ -162,7 +252,14 @@ public class ProfileActivity extends SCABaseActivity {
 
         });
 
+*/
+
+
+
+
         //List<Country> countryList= SessionInfo.getInstance().getCountries();
+
+
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +272,154 @@ public class ProfileActivity extends SCABaseActivity {
             @Override
             public void onClick(View v) {
                 reset();
+            }
+        });
+
+        myLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                AsyncTask task = new AsyncTask() {
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+                        LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                        String locationProvider = LocationManager.GPS_PROVIDER;
+                        String fullAddress = "";
+                        if (ActivityCompat.checkSelfPermission(ProfileActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                                && ActivityCompat.checkSelfPermission(ProfileActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            fullAddress = "No Permission available";
+                            ActivityCompat.requestPermissions(ProfileActivity.this, new String[] {
+                                            Manifest.permission.ACCESS_FINE_LOCATION,
+                                            Manifest.permission.ACCESS_COARSE_LOCATION },
+                                    1);
+                            // TODO: Consider calling
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                        }
+                        {
+
+                            try {
+                                Looper.prepare();
+                                manager.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
+                                    @Override
+                                    public void onLocationChanged(Location location) {
+                                        System.out.println("Location Changed ");
+                                    }
+
+                                    @Override
+                                    public void onStatusChanged(String s, int i, Bundle bundle) {
+                                        System.out.println("Location Status Changed ");
+                                    }
+
+                                    @Override
+                                    public void onProviderEnabled(String s) {
+                                        System.out.println("Provider Enabled ");
+                                    }
+
+                                    @Override
+                                    public void onProviderDisabled(String s) {
+                                        System.out.println("Provider Disabled");
+                                    }
+                                }, null);
+                            }
+                            catch (Exception e){
+                                e.printStackTrace();
+                            }
+                            Location currentLocation = manager.getLastKnownLocation(locationProvider);
+                            if(currentLocation==null){
+                                return "No Permission Available";
+                            }
+                            Geocoder coder = new Geocoder(ProfileActivity.this);
+                            try {
+                                List<Address> addresses = coder.getFromLocation(currentLocation.getLatitude() , currentLocation.getLongitude() , 20 );
+                                //List<Address> addresses = coder.getFromLocation(10.828547,78.666821,20);
+                                if(addresses.size()>3){
+                                    Address address = addresses.get(0);
+
+                                    return address;
+                                }
+
+
+
+                            } catch (IOException e) {
+                                fullAddress+="Error "+e;
+                                e.printStackTrace();
+                            }
+
+                        }
+                        return fullAddress;
+                    }
+                };
+
+                task.execute((Object[])null);
+                Address address = null;
+                try {
+                    Object result = task.get();
+                    if( result instanceof  Address ){
+                        address = (Address) result;
+
+                        String  address1 = address.getAddressLine(0);
+                        String address2 = address.getAddressLine(1);
+                        String address3 = address.getAddressLine(2);
+                        String[] address1Array = address1.split(" ");
+
+                        StringTokenizer st = new StringTokenizer(address2,", ");
+                        String[] address2Array = address2.split(", ");
+
+
+
+                        ArrayAdapter<Country> ctryadapter =(ArrayAdapter<Country>) country.getAdapter();
+                        int ctryCount =  ctryadapter.getCount();
+                        for(int i = 0; i<ctryCount; i++){
+                            Country aCountry= ctryadapter.getItem(i);
+                            if(aCountry.getName().equalsIgnoreCase(address3)){
+                                country.setSelection(i);
+                                break;
+                            }
+                        }
+
+                        ArrayAdapter<City> cityadapter =(ArrayAdapter<City>) city.getAdapter();
+                        int count =  cityadapter.getCount();
+                        for(int i = 0; i<count; i++){
+                            City aCity= cityadapter.getItem(i);
+                            if(aCity.getName().equalsIgnoreCase(st.nextToken())){
+                                city.setSelection(i);
+                                break;
+                            }
+                        }
+                    }
+                    else if( result instanceof  String ) {
+                        String errorText = (String) task.get();
+                        //TODO UnitNumber setError.
+                    }
+                } catch (InterruptedException e) {
+
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
+
+        sameAsPhone.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                if(sameAsPhone.isChecked()){
+                   whatsappNumber.setText(phoneNumber.getText());
+                }else{
+                    whatsappNumber.setText("");
+
+                }
             }
         });
 
@@ -195,20 +440,34 @@ public class ProfileActivity extends SCABaseActivity {
 
 
 
+                        if(cityList!=null) {
+                            City defaultCity = new City();
+                            defaultCity.setId(0);
+                            defaultCity.setName("Select City");
 
-                        City defaultCity = new City();
-                        defaultCity.setId(0);
-                        defaultCity.setName("Select Country");
-                        cityList.add(0, defaultCity  );
+                            cityList.add(0, defaultCity);
 
-                        SessionInfo.getInstance().setCities(cityList);
+                            SessionInfo.getInstance().setCities(cityList);
 
-                        final ArrayAdapter<City> cityAdapter = new ArrayAdapter<City>(ProfileActivity.this, R.layout.drop_down_list, cityList);
-                        city.setAdapter(cityAdapter);
+                            final ArrayAdapter<City> cityAdapter = new ArrayAdapter<City>(ProfileActivity.this, R.layout.drop_down_list, cityList);
+                            city.setAdapter(cityAdapter);
+
+                            if (user != null) {
+
+                                for (int i = 0; i < cityList.size(); i++) {
+                                    if (cityList.get(i).getId() == user.getCityId()) {
+                                        city.setSelection(i);
+                                        break;
+                                    }
+
+                                }
+                            }
+                        }
 
 
 
                     }
+
 
                     @Override
                     public void onFailure(Call<List<City>> call, Throwable t) {
@@ -217,139 +476,6 @@ public class ProfileActivity extends SCABaseActivity {
 
 
                 });
-
-                    AsyncTask task = new AsyncTask() {
-                        @Override
-                        protected Object doInBackground(Object[] objects) {
-                            LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                            String locationProvider = LocationManager.GPS_PROVIDER;
-                            String fullAddress = "";
-                            if (ActivityCompat.checkSelfPermission(ProfileActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                                    && ActivityCompat.checkSelfPermission(ProfileActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                fullAddress = "No Permission available";
-                                ActivityCompat.requestPermissions(ProfileActivity.this, new String[] {
-                                                Manifest.permission.ACCESS_FINE_LOCATION,
-                                                Manifest.permission.ACCESS_COARSE_LOCATION },
-                                        1);
-                                // TODO: Consider calling
-                                //    ActivityCompat#requestPermissions
-                                // here to request the missing permissions, and then overriding
-                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                //                                          int[] grantResults)
-                                // to handle the case where the user grants the permission. See the documentation
-                                // for ActivityCompat#requestPermissions for more details.
-                            }
-                            {
-
-                                try {
-                                    Looper.prepare();
-                                    manager.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
-                                        @Override
-                                        public void onLocationChanged(Location location) {
-                                            System.out.println("Location Changed ");
-                                        }
-
-                                        @Override
-                                        public void onStatusChanged(String s, int i, Bundle bundle) {
-                                            System.out.println("Location Status Changed ");
-                                        }
-
-                                        @Override
-                                        public void onProviderEnabled(String s) {
-                                            System.out.println("Provider Enabled ");
-                                        }
-
-                                        @Override
-                                        public void onProviderDisabled(String s) {
-                                            System.out.println("Provider Disabled");
-                                        }
-                                    }, null);
-                                }
-                                catch (Exception e){
-                                    e.printStackTrace();
-                                }
-                                Location currentLocation = manager.getLastKnownLocation(locationProvider);
-                                if(currentLocation==null){
-                                    return "No Permission Available";
-                                }
-                                Geocoder coder = new Geocoder(ProfileActivity.this);
-                                try {
-                                    List<Address> addresses = coder.getFromLocation(currentLocation.getLatitude() , currentLocation.getLongitude() , 20 );
-                                    //List<Address> addresses = coder.getFromLocation(10.828547,78.666821,20);
-                                    if(addresses.size()>3){
-                                        Address address = addresses.get(0);
-
-                                        return address;
-                                    }
-
-
-
-                                } catch (IOException e) {
-                                    fullAddress+="Error "+e;
-                                    e.printStackTrace();
-                                }
-
-                            }
-                            return fullAddress;
-                        }
-                    };
-
-                    task.execute((Object[])null);
-                    Address address = null;
-                    try {
-                        Object result = task.get();
-                        if( result instanceof  Address ){
-                            address = (Address) result;
-
-                            String  address1 = address.getAddressLine(0);
-                            String address2 = address.getAddressLine(1);
-                            String address3 = address.getAddressLine(2);
-                            String[] address1Array = address1.split(" ");
-
-                            StringTokenizer st = new StringTokenizer(address2,", ");
-                            String[] address2Array = address2.split(", ");
-
-
-
-                            ArrayAdapter<Country> ctryadapter =(ArrayAdapter<Country>) country.getAdapter();
-                            int ctryCount =  ctryadapter.getCount();
-                            for(int i = 0; i<ctryCount; i++){
-                                Country aCountry= ctryadapter.getItem(i);
-                                if(aCountry.getName().equalsIgnoreCase(address3)){
-                                    country.setSelection(i);
-                                    break;
-                                }
-                            }
-
-                            ArrayAdapter<City> cityadapter =(ArrayAdapter<City>) city.getAdapter();
-                            int count =  cityadapter.getCount();
-                            for(int i = 0; i<count; i++){
-                                City aCity= cityadapter.getItem(i);
-                                if(aCity.getName().equalsIgnoreCase(st.nextToken())){
-                                    city.setSelection(i);
-                                    break;
-                                }
-                            }
-                        }
-                        else if( result instanceof  String ) {
-                            String errorText = (String) task.get();
-                            //TODO UnitNumber setError.
-                        }
-                    } catch (InterruptedException e) {
-
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
-
-                        e.printStackTrace();
-                    }
-
-
-
-
-
-
-
-
 
 
             }
@@ -429,23 +555,7 @@ public class ProfileActivity extends SCABaseActivity {
 
     public void attemptRegister(){
 
-//        Call<String> registerDTOCall = new SCAClient().getClient().sample(9);
-//        registerDTOCall.enqueue(new Callback<String>() {
-//            @Override
-//            public void onResponse(Call<String> call, Response<String> response) {
-//                if (response.isSuccessful()) {
-//
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<String> call, Throwable t) {
-//                t.printStackTrace();
-//
-//            }
-//        });
-        //String customerId=null;
+
         String screenName1=screenName.getText().toString();
         String name1=name.getText().toString();
         String email=emailAddress.getText().toString();
@@ -453,23 +563,22 @@ public class ProfileActivity extends SCABaseActivity {
         String phone=phoneNumber.getText().toString();
         String whatsapp=phoneNumber.getText().toString();
         int selectedCityPosition= city.getSelectedItemPosition();
-        City selectedCity = (City) city.getSelectedItem();
-        String selectedCityName = selectedCity.getName();
 
         String isSearchable;
         int ctry = country.getSelectedItemPosition();
-        Country selectedCountry = (Country) country.getSelectedItem();
-        String selectedCountryCode = selectedCountry.getCode();
 
-        String gender1;
+        String gender1="";
 
         int whichIndex = gender.getCheckedRadioButtonId();
         if(whichIndex==R.id.gender_male)
         {
             gender1="0";
         }
-        else{
+        else if(whichIndex==R.id.gender_female){
             gender1="1";
+        }
+        else if(whichIndex==R.id.gender_other){
+            gender1="2";
         }
 
 
@@ -481,24 +590,24 @@ public class ProfileActivity extends SCABaseActivity {
         }
 
         SparseBooleanArray checked = listView.getCheckedItemPositions();
-        ArrayList<String> selectedItems = new ArrayList<String>();
+        ArrayList<ProfileType> selectedItems = new ArrayList<ProfileType>();
         for (int i = 0; i < checked.size(); i++) {
             // Item position in adapter
             int position = checked.keyAt(i);
             // Add sport if it is checked i.e.) == TRUE!
             if (checked.valueAt(i))
-                selectedItems.add(adapter.getItem(position));
+                selectedItems.add(profileAdapter.getItem(position));
         }
 
-        String[] rolesList = new String[selectedItems.size()];
+        int[] rolesList = new int[selectedItems.size()];
 
         for (int i = 0; i < selectedItems.size(); i++) {
-            rolesList[i] = selectedItems.get(i);
+            rolesList[i] = selectedItems.get(i).getId();
         }
 
 
 
-        boolean validation=  validation(screenName1,name1,email,phone,whatsapp,selectedCityPosition,ctry);
+        boolean validation=  validation(screenName1,name1,email,phone,whatsapp,selectedCityPosition,ctry,gender.getCheckedRadioButtonId());
         if (validation) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -508,14 +617,27 @@ public class ProfileActivity extends SCABaseActivity {
        else {
 
             try {
-                String fbUser="dwde"; //SessionInfo.getInstance().getFbUserDetails().getId();
-                String url="cfe";//SessionInfo.getInstance().getFbUserDetails().getId()
 
-                Call<User> registerDTOCall = new SCAClient().getClient().registerNewUser(fbUser, screenName1, name1, email, selectedCountryCode, selectedCityName, phone, whatsapp, gender1, dob.getText().toString(), isSearchable,url, rolesList);
+                City selectedCity = (City) city.getSelectedItem();
+                String selectedCityId = String.valueOf(selectedCity.getId());
+
+                Country selectedCountry = (Country) country.getSelectedItem();
+                String selectedCountryCode = selectedCountry.getCode();
+
+                String fbUser=SessionInfo.getInstance().getFbUserDetails().getId();
+                String url=SessionInfo.getInstance().getFbUserDetails().getId();
+
+                Call<User> registerDTOCall = new SCAClient().getClient().registerNewUser(fbUser, screenName1, name1, email, selectedCountryCode, selectedCityId, phone, whatsapp, gender1, dob.getText().toString(), isSearchable,url, rolesList);
                 registerDTOCall.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
                         if (response.isSuccessful()) {
+                            User user=response.body();
+                            Toast.makeText(context,"You Have Registered With Start,Camera,Action Successfully!",Toast.LENGTH_LONG).show();
+                            SessionInfo.getInstance().setUser(user);
+                            Intent intent=new Intent(ProfileActivity.this,HomeActivity.class);
+                            intent.putExtra("Registered",true);
+                            startActivity(intent);
 
 
                         }
@@ -533,7 +655,7 @@ public class ProfileActivity extends SCABaseActivity {
             }
         }
     }
-    public boolean validation(String screenName1,String name1,String email,String phone,String whatsapp,int city1,int ctry){
+    public boolean validation(String screenName1,String name1,String email,String phone,String whatsapp,int city1,int ctry,int gender1){
         //  public boolean validation(){
 
         // Reset errors.
@@ -598,6 +720,14 @@ public class ProfileActivity extends SCABaseActivity {
             valid = true;
             return  valid;
         }
+        if(gender1==-1)
+        {
+            RadioButton otherButton = (RadioButton) findViewById(R.id.gender_other);
+            otherButton.setError("Select Gender");
+            focusView=otherButton;
+            valid = true;
+            return  valid;
+        }
         return valid;
     }
 
@@ -618,6 +748,8 @@ public class ProfileActivity extends SCABaseActivity {
 
         country.setSelection(0);
     }
+
+
 
 
 

@@ -15,12 +15,12 @@
         android:layout_marginRight="5dp"
         android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/currentLocation"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="end"
-            android:background="@drawable/location_searching" />
+        <!--<ImageButton-->
+            <!--android:id="@+id/currentLocation"-->
+            <!--android:layout_width="25dp"-->
+            <!--android:layout_height="25dp"-->
+            <!--android:layout_gravity="end"-->
+            <!--android:background="@drawable/location_searching" />-->
 
 
         <android.support.design.widget.TextInputLayout
@@ -28,10 +28,10 @@
             android:layout_width="match_parent">
 
             <EditText
-                android:id="@+id/screenName"
+                android:id="@+id/addProjectName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Screen Name"
+                android:hint="Project Name"
                 android:inputType="text"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"/>
@@ -42,10 +42,10 @@
             android:layout_width="match_parent">
 
             <EditText
-                android:id="@+id/name"
+                android:id="@+id/addProjectdetails"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:hint="Name"
+                android:hint="Project Details"
                 android:inputType="text"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
@@ -56,76 +56,66 @@
             android:layout_width="match_parent">
 
             <EditText
-                android:id="@+id/emailAddress"
+                android:id="@+id/addProductionCompany"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
 
-                android:hint="Email Address"
-                android:inputType="text|textWebEmailAddress"
+                android:hint="Production Company"
+                android:inputType="text"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <EditText
+                android:id="@+id/addRole"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+
+                android:hint="Role"
+                android:inputType="text"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
         </android.support.design.widget.TextInputLayout>
 
 
-
         <android.support.design.widget.TextInputLayout
             android:layout_height="wrap_content"
             android:layout_width="match_parent">
 
             <EditText
-                android:id="@+id/phoneNumber"
-                android:inputType="phone"
-                android:hint="Phone Number"
+                android:id="@+id/addStartAge"
+                android:inputType="numberDecimal"
+                android:hint="Start Age"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true" />
         </android.support.design.widget.TextInputLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Same As Phone Number"
-                android:layout_gravity="center"
-                />
 
 
 
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:id="@+id/sameAsPhone"
-                android:hint=""
-
-
-                android:gravity="end"/>
-
-
-        </LinearLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_height="wrap_content"
             android:layout_width="match_parent">
 
             <EditText
-                android:id="@+id/whatsappNumber"
+                android:id="@+id/addEndAge"
                 android:inputType="phone"
-                android:hint="Whatsapp Number"
+                android:hint="End Age"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true" />
         </android.support.design.widget.TextInputLayout>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -137,27 +127,27 @@
                 android:layout_weight="1"
                 android:padding="0dp" >
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Country"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Country"
 
-                android:id="@+id/countryTextHint"
-                android:gravity="top"
-                android:textColor="@android:color/darker_gray"
+                    android:id="@+id/countryHint"
+                    android:gravity="top"
+                    android:textColor="@android:color/darker_gray"
 
-                />
+                    />
 
-            <Spinner
-                android:id="@+id/editCountry"
-                android:layout_width="match_parent"
-                android:layout_marginTop="4dp"
-                android:layout_height="28dp"
-                android:paddingBottom="2dp"
-                android:visibility="visible"
-                android:layout_gravity="center"
+                <Spinner
+                    android:id="@+id/addCountry"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="4dp"
+                    android:layout_height="28dp"
+                    android:paddingBottom="2dp"
+                    android:visibility="visible"
+                    android:layout_gravity="center"
 
-                android:layout_below="@id/countryTextHint"/>
+                    android:layout_below="@id/countryHint"/>
             </RelativeLayout>
 
 
@@ -180,14 +170,14 @@
                     android:layout_height="wrap_content"
                     android:text="City"
 
-                    android:id="@+id/cityTextHint"
+                    android:id="@+id/cityHint"
                     android:gravity="top"
                     android:textColor="@android:color/darker_gray"
 
                     />
 
                 <Spinner
-                    android:id="@+id/city"
+                    android:id="@+id/addCity"
                     android:layout_width="match_parent"
                     android:layout_marginTop="4dp"
                     android:layout_height="28dp"
@@ -195,14 +185,13 @@
                     android:visibility="visible"
                     android:layout_gravity="center"
 
-                    android:layout_below="@id/cityTextHint"/>
+                    android:layout_below="@id/cityHint"/>
 
             </RelativeLayout>
 
 
 
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -225,30 +214,49 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:id="@+id/gender">
+                android:id="@+id/addGender">
                 <RadioButton
-                    android:id="@+id/gender_male"
+                    android:id="@+id/male"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Male"
 
-                 />
+                    />
                 <RadioButton
-                    android:id="@+id/gender_female"
+                    android:id="@+id/female"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Female"
                     />
                 <RadioButton
-                    android:id="@+id/gender_other"
+                    android:id="@+id/other"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Female"
+                    android:text="Other"
                     />
 
             </RadioGroup>
 
         </LinearLayout>
+
+
+
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <EditText
+                android:id="@+id/addAddress"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+
+                android:hint="Address"
+                android:inputType="text|textWebEmailAddress"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+        </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -258,68 +266,54 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/startDate"
+                android:id="@+id/addStartDate"
                 style="@style/datePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date Of Birth"
+                android:text="Start Date"
                 android:layout_gravity="center"
                 />
 
             <ImageButton
-                android:id="@+id/startDatePicker"
+                android:id="@+id/addStartDatePicker"
                 android:background="@drawable/ic_date_picker"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"/>
 
-            <CheckBox
-
+            <TextView
+                android:id="@+id/addEndDate"
+                style="@style/datePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="End Date"
                 android:layout_gravity="center"
-                android:checked="true"
-                android:hint=""
-                android:id="@+id/searchable"
-
-
-                android:gravity="end"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="Searchable"
-
-                android:gravity="end"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="30sp"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="Roles"
-
-                android:gravity="start"/>
-
-            <ListView
-                android:id="@+id/roleList"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="true"
-
                 />
+
+            <ImageButton
+                android:id="@+id/addEndDatePicker"
+                android:background="@drawable/ic_date_picker"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"/>
+
+
         </LinearLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <EditText
+                android:id="@+id/addHours"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+
+                android:hint="Hours"
+                android:inputType="text"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+        </android.support.design.widget.TextInputLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -328,7 +322,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/reset"
+                android:id="@+id/castingCallreset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -337,13 +331,13 @@
                 android:visibility="visible" />
 
             <Button
-                android:id="@+id/register"
+                android:id="@+id/castingCallCreate"
                 android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Register"
+                android:text="CREATE"
                 android:visibility="visible" />
 
         </LinearLayout>

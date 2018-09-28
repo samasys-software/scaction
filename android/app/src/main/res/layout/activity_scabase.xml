@@ -23,6 +23,20 @@
                 android:visibility="visible"
                 android:layout_weight="1"
                 />
+            <ImageView
+                android:id="@+id/notificationAlert"
+                android:layout_width="match_parent"
+                android:src="@drawable/ic_notification"
+
+                android:gravity="bottom|right"
+                android:textColor="@color/colorInversePrimary"
+                android:background="@color/colorPrimaryDark"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:text=""
+                />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -36,7 +50,7 @@
                     android:layout_width="match_parent"
                     android:src="@drawable/logo"
 
-                    android:gravity="bottom|right"
+                    android:gravity="center_vertical|right"
                     android:textColor="@color/colorInversePrimary"
                     android:background="@color/colorPrimaryDark"
                     android:layout_height="0dp"
@@ -73,14 +87,27 @@
     </LinearLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="210dp"
+        android:layout_width="210sp"
         android:layout_height="wrap_content"
         app:theme="@style/PopupMenuItem"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
 
         app:headerLayout="@layout/nav_header_navigation_drawer"
-        app:menu="@menu/menu" />
+        app:menu="@menu/navigation_menu" >
+    <android.support.design.widget.NavigationView
+        android:id="@+id/popup_menu_view"
+        android:layout_gravity="center_horizontal"
+        android:visibility="invisible"
+        android:layout_width="210dp"
+        android:layout_marginStart="100sp"
+        android:layout_height="wrap_content"
+        app:theme="@style/PopupMenuItem"
+        android:fitsSystemWindows="true"
+
+        />
+    </android.support.design.widget.NavigationView>
+
 
 
 </android.support.v4.widget.DrawerLayout>

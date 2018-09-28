@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -36,6 +37,11 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
         loginButton = (LoginButton) findViewById(R.id.fb_login_id);
 
         callbackManager = CallbackManager.Factory.create();
+
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+
+
         loginButton.setReadPermissions("email");
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -57,6 +63,8 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
 
             }
         });
+
+
 
     }
 
@@ -113,6 +121,7 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
                             // Log.i("Login" + "Gender", gender);
 
                             Intent intent=new Intent(UseFacebookLoginActivity.this,HomeActivity.class);
+                            intent.putExtra("Registered",false);
                             startActivity(intent);
 
 

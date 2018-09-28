@@ -5,7 +5,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string-array name="roles">
-       <item> Actor</item>
+        <item> Actor</item>
         <item> Photographer</item>
         <item>  Director</item>
         <item>Designer</item>
