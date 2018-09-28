@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -11,13 +12,23 @@ import android.widget.ImageButton;
 import com.samayu.scaction.R;
 import com.samayu.scaction.dto.CastingCall;
 import com.samayu.scaction.dto.User;
+import com.samayu.scaction.dto.UserNotification;
+import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
+
+import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ApplyCastingCallActivity extends AppCompatActivity {
 
     Button registerToApply,apply;
     ImageButton edit;
     Context context;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +39,9 @@ public class ApplyCastingCallActivity extends AppCompatActivity {
         apply=(Button) findViewById(R.id.apply);
         edit=(ImageButton) findViewById(R.id.edit);
 
-        CastingCall currentCastingCall= SessionInfo.getInstance().getCurrentCastingCall();
+        final CastingCall currentCastingCall= SessionInfo.getInstance().getCurrentCastingCall();
 
-        User user=SessionInfo.getInstance().getUser();
+        user=SessionInfo.getInstance().getUser();
         if(user==null){
             registerToApply.setVisibility(View.VISIBLE);
         }
@@ -55,6 +66,27 @@ public class ApplyCastingCallActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent=new Intent(ApplyCastingCallActivity.this,CreateUserCastingCallsActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        apply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<ResponseBody> applyCastingCallDTOCall = new SCAClient().getClient().applyCastingCall(currentCastingCall.getId(),user.getUserId());
+                applyCastingCallDTOCall.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Log.i("Success","kkHai");
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+
             }
         });
     }

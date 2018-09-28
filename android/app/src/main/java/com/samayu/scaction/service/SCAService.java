@@ -11,6 +11,7 @@ import com.samayu.scaction.dto.UserNotification;
 import java.time.LocalDate;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -91,5 +92,13 @@ public interface SCAService {
 
     @GET("user/notifications/{userId}")
     public Call<List<UserNotification>> getUserNotifications(@Path("userId") long userId);
+
+
+
+    @POST("user/castingcall/apply")
+    @FormUrlEncoded
+    public Call<ResponseBody> applyCastingCall(
+            @Field("castingCallId") long castingCallId , @Field("userId") long userId) ;
+
 
 }
