@@ -64,7 +64,7 @@ public interface SCAService {
     @POST("global/castingCall")
     @FormUrlEncoded
     public Call<CastingCall> createCastingCall(
-            @Field("castingCallId") int castingCallId,
+            @Field("castingCallId") long castingCallId,
             @Field("projectName") String projectName,
             @Field("projectDetails") String projectDetails,
             @Field("productionCompany") String productionCompany,

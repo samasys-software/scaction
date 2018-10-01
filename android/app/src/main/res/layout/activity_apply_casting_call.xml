@@ -2,37 +2,133 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:orientation="vertical" android:layout_width="match_parent"
 android:layout_height="match_parent">
-
-    <Button
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/registerToApply"
+        android:id="@+id/actionButtonLayout">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/registerToApply"
 
 
-        android:layout_alignParentEnd="true"
-        android:text="Register To Apply"
-        android:visibility="invisible">
+            android:layout_alignParentEnd="true"
+            android:text="Register To Apply"
+            android:visibility="invisible">
 
-    </Button>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/apply"
+        </Button>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/apply"
 
-        android:text="Apply"
-        android:layout_alignParentEnd="true"
-        android:visibility="invisible">
+            android:text="Apply"
+            android:layout_alignParentEnd="true"
+            android:visibility="invisible">
 
-    </Button>
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/edit_icon"
-        android:id="@+id/edit"
+        </Button>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/edit_icon"
+            android:id="@+id/edit"
 
 
-        android:layout_alignParentEnd="true"
-        android:visibility="invisible">
+            android:layout_alignParentEnd="true"
+            android:visibility="invisible">
 
-    </ImageButton>
+        </ImageButton>
+
+    </RelativeLayout>
+
+
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_below="@id/actionButtonLayout"
+            >
+
+       <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           android:orientation="vertical"
+           >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Project Name :"
+              />
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/displayProjectName"
+               />
+       </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Project Details :"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/displayProjectDetails"
+
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Production Company :"
+               />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/displayProductionCompany"
+
+             />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Role"
+               />
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/displayRole"
+
+            />
+
+
+        </LinearLayout>
+
+        </LinearLayout>
+
+
+
 </RelativeLayout>

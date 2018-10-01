@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.samayu.scaction.R;
 import com.samayu.scaction.dto.CastingCall;
@@ -25,6 +26,8 @@ import retrofit2.Response;
 public class UserCastingCallsActivity extends SCABaseActivity {
 
     ListView castingCalls;
+
+
     ImageButton addNew;
     LinearLayout castingCallHeader;
     Context context;
@@ -39,6 +42,7 @@ public class UserCastingCallsActivity extends SCABaseActivity {
         castingCalls=(ListView) findViewById(R.id.listOfCastingCalls);
         addNew=(ImageButton) findViewById(R.id.addNewCastingCall);
         castingCallHeader=(LinearLayout) findViewById(R.id.castingCallHeader);
+
         Boolean userCastingCall = getIntent().getExtras().getBoolean("UserCastingCall");
         if(userCastingCall ) {
             Call<List<CastingCall>> getUserCastingCallsDTOCall = new SCAClient().getClient().getMyCastingCalls(SessionInfo.getInstance().getUser().getUserId());
@@ -90,6 +94,7 @@ public class UserCastingCallsActivity extends SCABaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(UserCastingCallsActivity.this,CreateUserCastingCallsActivity.class);
+                intent.putExtra("isNew",true);
                 startActivity(intent);
             }
         });

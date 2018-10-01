@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.samayu.scaction.R;
 import com.samayu.scaction.dto.CastingCall;
@@ -29,6 +30,7 @@ public class ApplyCastingCallActivity extends AppCompatActivity {
     ImageButton edit;
     Context context;
     User user;
+    TextView projectName,projectDetails,productionCompany,role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,18 @@ public class ApplyCastingCallActivity extends AppCompatActivity {
         apply=(Button) findViewById(R.id.apply);
         edit=(ImageButton) findViewById(R.id.edit);
 
+        projectName=(TextView) findViewById(R.id.displayProjectName);
+        projectDetails=(TextView) findViewById(R.id.displayProjectDetails);
+        productionCompany=(TextView) findViewById(R.id.displayProductionCompany);
+        role=(TextView) findViewById(R.id.displayRole);
+
         final CastingCall currentCastingCall= SessionInfo.getInstance().getCurrentCastingCall();
+        if(currentCastingCall!=null){
+            projectName.setText(currentCastingCall.getProjectName());
+            projectDetails.setText(currentCastingCall.getProjectDetails());
+            productionCompany.setText(currentCastingCall.getProductionCompany());
+            role.setText(currentCastingCall.getRoleDetails());
+        }
 
         user=SessionInfo.getInstance().getUser();
         if(user==null){
@@ -57,6 +70,7 @@ public class ApplyCastingCallActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(ApplyCastingCallActivity.this,ProfileActivity.class);
+                intent.putExtra("isNew",true);
                 startActivity(intent);
             }
         });
@@ -65,6 +79,7 @@ public class ApplyCastingCallActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(ApplyCastingCallActivity.this,CreateUserCastingCallsActivity.class);
+                intent.putExtra("isNew",false);
                 startActivity(intent);
             }
         });

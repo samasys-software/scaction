@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -28,6 +29,7 @@ import com.samayu.scaction.dto.City;
 import com.samayu.scaction.dto.Country;
 import com.samayu.scaction.dto.ProfileType;
 import com.samayu.scaction.dto.User;
+import com.samayu.scaction.dto.UserRole;
 import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
 
@@ -55,11 +57,19 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
 
     RadioGroup gender;
 
+    ListView listView;
+
 
     View focusView=null;
     boolean valid=false;
 
     Context context;
+
+    ArrayAdapter<ProfileType> profileAdapter;
+
+    long castingCallId;
+
+    String message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +94,8 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
         city = (Spinner) findViewById(R.id.addCity);
         country=(Spinner) findViewById(R.id.addCountry);
         gender = (RadioGroup) findViewById(R.id.addGender);
+        listView=(ListView) findViewById(R.id.addRoleList);
+        final CastingCall currentCastingCall;
 
         List<Country> countryList= SessionInfo.getInstance().getCountries();
         ArrayAdapter<Country> countryAdapter = new ArrayAdapter<Country>(CreateUserCastingCallsActivity.this, R.layout.drop_down_list, countryList);
@@ -96,8 +108,25 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
         cities.add(0, defaultCity);
         final ArrayAdapter<City> cityAdapter = new ArrayAdapter<City>(CreateUserCastingCallsActivity.this, R.layout.drop_down_list, cities);
         city.setAdapter(cityAdapter);
-        final CastingCall currentCastingCall=SessionInfo.getInstance().getCurrentCastingCall();
-        if(currentCastingCall!=null){
+
+        List<ProfileType> profileTypes=SessionInfo.getInstance().getProfileTypes();
+
+        profileAdapter= new ArrayAdapter<ProfileType>(this,
+                android.R.layout.simple_list_item_multiple_choice, profileTypes);
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        listView.setAdapter(profileAdapter);
+
+        boolean isNew=getIntent().getExtras().getBoolean("isNew");
+
+        if(isNew){
+            castingCallId=-1;
+            message="You Have Created A New Casting Call With Start,Camera,Action Successfully!";
+            currentCastingCall=null;
+        }
+        else{
+            currentCastingCall=SessionInfo.getInstance().getCurrentCastingCall();
+            castingCallId=currentCastingCall.getId();
+            message="You Have Edited A Casting Call With Start,Camera,Action Successfully!";
             projectName.setText(currentCastingCall.getProjectName());
             projectDetails.setText(currentCastingCall.getProjectDetails());
             productionCompany.setText(currentCastingCall.getProductionCompany());
@@ -126,6 +155,19 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
                 gender.check(R.id.female);
             else if(gender1==2)
                 gender.check(R.id.other);
+
+
+            /*List<UserRole> userRoles=(UserRole)currentCastingCall.getRoleIds();
+
+            for(int i=0;i<userRoles.size();i++)
+            {
+                for(int j=0;j<profileTypes.size();j++)
+                {
+                    if(profileTypes.get(j).getId()==userRoles.get(i).getRoleType().getId()){
+                        listView.setItemChecked(j,true);
+                    }
+                }
+            }*/
 
         }
 
@@ -322,11 +364,27 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
         String startDate1=startDate.getText().toString();
         String endDate1=endDate.getText().toString();
         String hours1=hours.getText().toString();
-        String[] rolesList = new String[2];
+
+        SparseBooleanArray checked = listView.getCheckedItemPositions();
+        ArrayList<ProfileType> selectedItems = new ArrayList<ProfileType>();
+        for (int i = 0; i < checked.size(); i++) {
+            // Item position in adapter
+            int position = checked.keyAt(i);
+            // Add sport if it is checked i.e.) == TRUE!
+            if (checked.valueAt(i))
+                selectedItems.add(profileAdapter.getItem(position));
+        }
+
+        String[] rolesList = new String[selectedItems.size()];
+
+        for (int i = 0; i < selectedItems.size(); i++) {
+            rolesList[i] = String.valueOf(selectedItems.get(i).getId());
+        }
+
+        String[] rolesList1= new String[2];
 
         for (int i = 0; i < 2; i++) {
-            rolesList[i] = "Actor";
-
+            rolesList1[i] = "ACTOR";
         }
 
 
@@ -354,13 +412,14 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
                 int selectedCountryId = selectedCountry.getId();
 
 
-                Call<CastingCall> createCastingCallDTOCall = new SCAClient().getClient().createCastingCall(1,projectName1,projectDetails1,productionCompany1,role1,sAge,eAge,gender1,selectedCityId,selectedCountryId,address1,startDate1,endDate1, hours1,SessionInfo.getInstance().getUser().getUserId(),rolesList);
+                Call<CastingCall> createCastingCallDTOCall = new SCAClient().getClient().createCastingCall(castingCallId,projectName1,projectDetails1,productionCompany1,role1,sAge,eAge,gender1,selectedCityId,selectedCountryId,address1,startDate1,endDate1, hours1,SessionInfo.getInstance().getUser().getUserId(),rolesList);
                 createCastingCallDTOCall.enqueue(new Callback<CastingCall>() {
                     @Override
                     public void onResponse(Call<CastingCall> call, Response<CastingCall> response) {
                         if (response.isSuccessful()) {
                             CastingCall castingCall=response.body();
-                            Toast.makeText(context,"You Have Created A New Casting Call With Start,Camera,Action Successfully!",Toast.LENGTH_LONG).show();
+                            Toast.makeText(context,message,Toast.LENGTH_LONG).show();
+                            resetCastingCall();
                             Intent intent=new Intent(CreateUserCastingCallsActivity.this,UserCastingCallsActivity.class);
                             intent.putExtra("UserCastingCall",true);
                             startActivity(intent);
@@ -526,6 +585,8 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
         country.setSelection(0);
         city.setSelection(0);
         hours.setText("");
+        gender.setSelected(false);
+        listView.setSelected(false);
 
     }
 }
