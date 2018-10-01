@@ -86,6 +86,8 @@ public class ProfileActivity extends SCABaseActivity {
 
     private DatePickerDialog.OnDateSetListener mDateSetListener1;
 
+    String message;
+
 
 
 
@@ -147,59 +149,64 @@ public class ProfileActivity extends SCABaseActivity {
 //        List<ProfileType> roles = getResources().getStringArray(R.array.roles);
 //
 
+        boolean isNew=getIntent().getExtras().getBoolean("isNew");
 
+        if(isNew){
 
+            message="You Have Registered With Start,Camera,Action Successfully!";
+            user=null;
+        }
+        else {
 
-        user = SessionInfo.getInstance().getUser();
-        if(user!=null) {
-            screenName.setText(user.getScreenName());
-            name.setText(user.getFbName());
-            emailAddress.setText(user.getFbEmail());
-            phoneNumber.setText(user.getPhoneNumber());
-            whatsappNumber.setText(user.getWhatsappNumber());
+            user = SessionInfo.getInstance().getUser();
 
-            List<Country> countries=SessionInfo.getInstance().getCountries();
-            for(int i=0;i<countries.size();i++){
-                if(countries.get(i).getCode().equals(user.getCountryCode())){
-                    country.setSelection(i);
-                    break;
+            if (user != null) {
+                message="You Have Edited Your Profile With Start,Camera,Action Successfully!";
+                screenName.setText(user.getScreenName());
+                name.setText(user.getFbName());
+                emailAddress.setText(user.getFbEmail());
+                phoneNumber.setText(user.getPhoneNumber());
+                whatsappNumber.setText(user.getWhatsappNumber());
+
+                List<Country> countries = SessionInfo.getInstance().getCountries();
+                for (int i = 0; i < countries.size(); i++) {
+                    if (countries.get(i).getCode().equals(user.getCountryCode())) {
+                        country.setSelection(i);
+                        break;
+
+                    }
 
                 }
 
-            }
+                int gender1 = user.getGender();
+                if (gender1 == 0)
+                    gender.check(R.id.gender_male);
 
-            int gender1=user.getGender();
-            if(gender1==0)
-                gender.check(R.id.gender_male);
-
-            else if(gender1==1)
-                gender.check(R.id.gender_female);
-            else if(gender1==2)
-                gender.check(R.id.gender_other);
-            dob.setText(String.valueOf(user.getDateOfBirth()));
+                else if (gender1 == 1)
+                    gender.check(R.id.gender_female);
+                else if (gender1 == 2)
+                    gender.check(R.id.gender_other);
+                dob.setText(String.valueOf(user.getDateOfBirth()));
 
 
-            //list of roles has been selected been checked
+                //list of roles has been selected been checked
 
-            List<UserRole> userRoles=user.getUserRoles();
+                List<UserRole> userRoles = user.getUserRoles();
 
-            for(int i=0;i<userRoles.size();i++)
-            {
-                for(int j=0;j<profileTypes.size();j++)
-                {
-                    if(profileTypes.get(j).getId()==userRoles.get(i).getRoleType().getId()){
-                        listView.setItemChecked(j,true);
+                for (int i = 0; i < userRoles.size(); i++) {
+                    for (int j = 0; j < profileTypes.size(); j++) {
+                        if (profileTypes.get(j).getId() == userRoles.get(i).getRoleType().getId()) {
+                            listView.setItemChecked(j, true);
+                        }
                     }
                 }
+
+
             }
-
-
-
-
-
-
+            else{
+                message="You Have Registered With Start,Camera,Action Successfully!";
+            }
         }
-
 
 
 
@@ -633,7 +640,7 @@ public class ProfileActivity extends SCABaseActivity {
                     public void onResponse(Call<User> call, Response<User> response) {
                         if (response.isSuccessful()) {
                             User user=response.body();
-                            Toast.makeText(context,"You Have Registered With Start,Camera,Action Successfully!",Toast.LENGTH_LONG).show();
+                            Toast.makeText(context,message,Toast.LENGTH_LONG).show();
                             SessionInfo.getInstance().setUser(user);
                             Intent intent=new Intent(ProfileActivity.this,HomeActivity.class);
                             intent.putExtra("Registered",true);
@@ -747,6 +754,8 @@ public class ProfileActivity extends SCABaseActivity {
         city.setSelection(0);
 
         country.setSelection(0);
+        gender.setSelected(false);
+        listView.setSelected(false);
     }
 
 

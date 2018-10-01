@@ -106,6 +106,7 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
                                 break;
                             case R.id.myProfile:
                                 intent=new Intent(SCABaseActivity.this,ProfileActivity.class);
+                                intent.putExtra("isNew",false);
                                 startActivity(intent);
                                 break;
                             case R.id.notifications:

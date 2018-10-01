@@ -162,6 +162,7 @@ public class HomeActivity extends SCABaseActivity {
 
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent=new Intent(HomeActivity.this,ProfileActivity.class);
+                        intent.putExtra("isNew",true);
                         startActivity(intent);
                     }
 
