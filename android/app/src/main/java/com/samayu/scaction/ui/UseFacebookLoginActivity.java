@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
@@ -14,6 +16,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.samayu.scaction.R;
@@ -23,10 +26,19 @@ import com.samayu.scaction.service.SessionInfo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Arrays;
+
 public class UseFacebookLoginActivity extends AppCompatActivity {
-    LoginButton loginButton;
+    //LoginButton loginButton;
+
+    Button loginButton;
     TextView textView;
     CallbackManager callbackManager;
+    public static final String FILE_NAME = "SCALogin.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,17 +46,40 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_use_facebook_login);
 
-        loginButton = (LoginButton) findViewById(R.id.fb_login_id);
+        //loginButton = (LoginButton) findViewById(R.id.fb_login_id);
+        loginButton = (Button) findViewById(R.id.fb_login_id);
+
+
 
         callbackManager = CallbackManager.Factory.create();
-
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+        if(isLoggedIn){
+            FBUserDetails fbUserDetails=loginRetrive(FILE_NAME);
+            SessionInfo.getInstance().setFbUserDetails(fbUserDetails);
+            Intent intent=new Intent(UseFacebookLoginActivity.this,HomeActivity.class);
+            intent.putExtra("Registered",false);
+            startActivity(intent);
 
 
-        loginButton.setReadPermissions("email");
+        }
 
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginManager.getInstance().logInWithReadPermissions(UseFacebookLoginActivity.this, Arrays.asList("email"));
+
+            }
+        });
+        //loginButton.setReadPermissions("email");
+
+
+
+        //loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
 
@@ -90,9 +125,12 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
                             fbUserDetails.setName(object.get("name").toString());
                             fbUserDetails.setEmailAddress(object.get("email").toString());
                             JSONObject profile_pic_data= new JSONObject(object.get("picture").toString());
-                            fbUserDetails.setProfile_pic_data(profile_pic_data);
-                            fbUserDetails.setProfile_pic_url(new JSONObject(profile_pic_data.getString("data")));
+                           // fbUserDetails.setProfile_pic_data(profile_pic_data);
+                           JSONObject pic_url=new JSONObject(profile_pic_data.getString("data"));
+                           String url=pic_url.getString("url");
+                           fbUserDetails.setUrl(url);
                             SessionInfo.getInstance().setFbUserDetails(fbUserDetails);
+                            loginToFile(fbUserDetails,FILE_NAME);
 
 
 //                            String firstName = response.getJSONObject().getString("first_name");
@@ -135,5 +173,34 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
         request.setParameters(parameters);
         request.executeAsync();
 
+    }
+
+    public void loginToFile(FBUserDetails details,String fileName) {
+        File file = new File(getFilesDir(), fileName);
+        file.delete();
+
+        FileOutputStream outputStream;
+
+        try {
+            outputStream = openFileOutput(fileName, UseFacebookLoginActivity.this.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(outputStream);
+            oos.writeObject(details);
+            outputStream.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public FBUserDetails loginRetrive(String fileName) {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(openFileInput(fileName));
+            FBUserDetails r = (FBUserDetails) ois.readObject();
+            return r;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

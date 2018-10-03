@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
@@ -125,6 +126,7 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
         }
         else{
             currentCastingCall=SessionInfo.getInstance().getCurrentCastingCall();
+            Log.i("currentCastingCall",currentCastingCall.getRoleIds());
             castingCallId=currentCastingCall.getId();
             message="You Have Edited A Casting Call With Start,Camera,Action Successfully!";
             projectName.setText(currentCastingCall.getProjectName());
@@ -156,18 +158,27 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
             else if(gender1==2)
                 gender.check(R.id.other);
 
+            String[] arrayOfId = currentCastingCall.getRoleIds().split(",");
 
-            /*List<UserRole> userRoles=(UserRole)currentCastingCall.getRoleIds();
+            int[] roleIdList=new int[arrayOfId.length];
 
-            for(int i=0;i<userRoles.size();i++)
+
+            for(int i=0;i<arrayOfId.length;i++ ){
+                roleIdList[i]=Integer.parseInt(arrayOfId[i]);
+                System.out.println(i+"th Id"+roleIdList[i]);
+            }
+
+
+
+            for(int i=0;i<roleIdList.length;i++)
             {
                 for(int j=0;j<profileTypes.size();j++)
                 {
-                    if(profileTypes.get(j).getId()==userRoles.get(i).getRoleType().getId()){
+                    if(profileTypes.get(j).getId()==roleIdList[i]){
                         listView.setItemChecked(j,true);
                     }
                 }
-            }*/
+            }
 
         }
 
