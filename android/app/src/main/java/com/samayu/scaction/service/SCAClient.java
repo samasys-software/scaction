@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -25,7 +26,10 @@ public class SCAClient {
     public SCAService getClient(){
 
 
-        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
+        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder()
+        .connectTimeout(15, TimeUnit.MINUTES)
+                .readTimeout(15L, TimeUnit.MINUTES)
+                .writeTimeout(15L, TimeUnit.MINUTES);
         httpClientBuilder.interceptors().add(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {

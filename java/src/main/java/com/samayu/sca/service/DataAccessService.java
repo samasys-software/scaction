@@ -217,6 +217,7 @@ public class DataAccessService {
         castingCall.setUserId(userId);
         for (String roleId : roleIds) {
             role.append(roleId);
+            role.append(",");
         }
         castingCall.setRoleIds(role.toString());
         castingCallRepository.save(castingCall);
