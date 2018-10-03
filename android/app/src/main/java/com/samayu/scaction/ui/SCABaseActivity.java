@@ -30,12 +30,14 @@ import com.samayu.scaction.dto.UserNotification;
 import com.samayu.scaction.service.SessionInfo;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 public abstract class SCABaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     NavigationView popupMenuView;
     ImageView notificationAlert;
+    public static final String FILE_NAME = "SCALogin.txt";
 
 
     @Override
@@ -69,7 +71,7 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
         if(fbUserDetails!=null)
         {
             try{
-                Picasso.with(this).load(fbUserDetails.getProfile_pic_url().getString("url"))
+                Picasso.with(this).load(fbUserDetails.getUrl())
                         .into(userImage);
                 userName.setText(fbUserDetails.getName());
             }
@@ -114,6 +116,16 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
                             case R.id.signout:
                                 LoginManager.getInstance().logOut();
                                 SessionInfo.getInstance().destroy();
+
+                                File dir =getFilesDir();
+                                File file = new File(dir, FILE_NAME);
+
+                                boolean deleted = file.delete();
+
+
+
+
+
                                 intent=new Intent(SCABaseActivity.this,UseFacebookLoginActivity.class);
                                 startActivity(intent);
                                 break;
