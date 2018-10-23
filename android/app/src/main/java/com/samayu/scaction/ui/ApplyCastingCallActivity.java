@@ -44,14 +44,14 @@ public class ApplyCastingCallActivity extends AppCompatActivity {
         projectName=(TextView) findViewById(R.id.displayProjectName);
         projectDetails=(TextView) findViewById(R.id.displayProjectDetails);
         productionCompany=(TextView) findViewById(R.id.displayProductionCompany);
-        role=(TextView) findViewById(R.id.displayRole);
+       // role=(TextView) findViewById(R.id.displayRole);
 
         final CastingCall currentCastingCall= SessionInfo.getInstance().getCurrentCastingCall();
         if(currentCastingCall!=null){
             projectName.setText(currentCastingCall.getProjectName());
             projectDetails.setText(currentCastingCall.getProjectDetails());
             productionCompany.setText(currentCastingCall.getProductionCompany());
-            role.setText(currentCastingCall.getRoleDetails());
+//            role.setText(currentCastingCall.getRoleDetails());
         }
 
         user=SessionInfo.getInstance().getUser();

@@ -357,19 +357,20 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
 
 
 //        int gender1="";
+        int gender1=0;
 
-        int gender1=gender.getCheckedRadioButtonId();
+        int whichIndex=gender.getCheckedRadioButtonId();
 
-//        if(whichIndex==R.id.male)
-//        {
-//            gender1="0";
-//        }
-//        else if(whichIndex==R.id.female){
-//            gender1="1";
-//        }
-//        else if(whichIndex==R.id.other){
-//            gender1="2";
-//        }
+        if(whichIndex==R.id.male)
+        {
+            gender1=0;
+        }
+        else if(whichIndex==R.id.female){
+            gender1=1;
+        }
+        else if(whichIndex==R.id.other){
+            gender1=2;
+        }
 
         String address1=address.getText().toString();
         String startDate1=startDate.getText().toString();
@@ -401,7 +402,7 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
 
 
 
-        boolean validation=  validation(projectName1,projectDetails1,productionCompany1,role1,startAge1,endAge1,selectedCityPosition,ctry,gender1,address1,startDate1,endDate1,hours1);
+        boolean validation=  validation(projectName1,projectDetails1,productionCompany1,role1,startAge1,endAge1,selectedCityPosition,ctry,whichIndex,address1,startDate1,endDate1,hours1);
         if (validation) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
