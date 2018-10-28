@@ -251,7 +251,7 @@ public class DataAccessService {
         }
 
         if( !found ) {
-            application.setCreateDate( new java.sql.Date(System.currentTimeMillis()));
+            application.setCreateDate( new java.sql.Timestamp(System.currentTimeMillis()));
             applicationRepository.save(application);
         }
 
@@ -261,6 +261,11 @@ public class DataAccessService {
     public List<CastingCallApplication> getCastingCallApplicationForUser(long castingCallId , long userId )
     {
         return applicationRepository.findByCastingCallIdAndUserId( castingCallId , userId );
+    }
+
+    public List<CastingCallApplication> getCastingCallApplications(long castingCallId )
+    {
+        return applicationRepository.findByCastingCallId( castingCallId );
     }
 
 }
