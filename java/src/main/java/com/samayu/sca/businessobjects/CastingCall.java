@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Table(name="scaction_casting_call")
@@ -59,6 +60,16 @@ public class CastingCall {
     @Column(name="role_ids")
     private String roleIds;
 
+    public List<CastingCallApplication> getUserApplications() {
+        return userApplications;
+    }
+
+    public void setUserApplications(List<CastingCallApplication> userApplications) {
+        this.userApplications = userApplications;
+    }
+
+    @Transient
+    private List<CastingCallApplication> userApplications;
 
     public long getId() {
         return id;

@@ -6,20 +6,14 @@ import com.samayu.sca.Application;
 import com.samayu.sca.businessobjects.*;
 import com.samayu.sca.dto.ProfileDefaultsDTO;
 import com.samayu.sca.service.DataAccessService;
-import com.sun.istack.internal.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 import javax.ws.rs.core.Response;
-
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -96,6 +90,23 @@ public class GlobalRest {
     public ResponseEntity<Iterable<CastingCall>> getAllCastingCalls()  {
         return ResponseEntity.ok(dataAccessService.findAllCastingCalls());
     }
+
+    @GetMapping(path = "/castingcallDetails/{castingCallId}")
+    public ResponseEntity<CastingCall> getCastingCall(@PathVariable("castingCallId") long castingCallId,@RequestParam(name="userId",required = false) Long userId )  {
+
+        CastingCall castingCall = dataAccessService.findCastingCall( castingCallId);
+
+        if( userId != null ){
+            List<CastingCallApplication> applications = dataAccessService.getCastingCallApplicationForUser( castingCallId , userId );
+
+            if( applications != null && applications.size() > 0 ){
+                castingCall.setUserApplications( applications );
+            }
+        }
+
+        return ResponseEntity.ok( castingCall );
+    }
+
 
 
 }

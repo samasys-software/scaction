@@ -1,5 +1,6 @@
 package com.samayu.sca.endpoints;
 
+import com.samayu.sca.businessobjects.CastingCallApplication;
 import com.samayu.sca.businessobjects.User;
 import com.samayu.sca.businessobjects.UserNotification;
 import com.samayu.sca.service.DataAccessService;
@@ -59,5 +60,18 @@ public class UserRest {
     public ResponseEntity<Iterable<UserNotification>> getNotificationsForUser(@PathVariable("userId") long userId ){
         return ResponseEntity.ok( dataAccessService.findNotificationsByUser( userId ));
     }
+
+    @PostMapping(path="/applyForCastingCall")
+    public ResponseEntity<Boolean> applyForCastingCall(@RequestParam("castingCallId") long castingCallId , @RequestParam("userId") long userId , @RequestParam("roleId") int roleId )
+    {
+        CastingCallApplication application = new CastingCallApplication();
+        application.setCastingCallId( castingCallId );
+        application.setUserId( userId );
+        application.setRoleId( roleId );
+        return ResponseEntity.ok(dataAccessService.createCastingCallApplication( application ));
+
+    }
+
+
 
 }
