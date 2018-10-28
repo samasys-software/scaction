@@ -4,16 +4,10 @@ import com.samayu.sca.businessobjects.*;
 import com.samayu.sca.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import sun.java2d.cmm.Profile;
 
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalField;
-import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,6 +36,9 @@ public class DataAccessService {
 
     @Autowired
     private UserNotificationRepository userNotificationRepository;
+
+    @Autowired
+    private CastingCallApplicationRepository applicationRepository;
 
     public User register( String fbUser, String screenName, String name, String email ,
                           String countryCode,  String city, String phoneNumber,
@@ -168,7 +165,12 @@ public class DataAccessService {
     public User findUser(String fbUser ){
         User user = userRepository.findByFbUser( fbUser );
         if( user != null ) {
-            user.setUserRoles(userRoleRepository.findByUserId(user.getUserId()));
+            try {
+                user.setUserRoles(userRoleRepository.findByUserId(user.getUserId()));
+            }
+            catch(Exception er){
+                er.printStackTrace();
+            }
         }
         return user;
     }
@@ -233,6 +235,31 @@ public class DataAccessService {
 
     public Iterable<UserNotification> findNotificationsByUser(long userId ){
         return userNotificationRepository.findByUserId( userId );
+    }
+
+    public CastingCall findCastingCall(long castingCallId){
+        return castingCallRepository.findOne(castingCallId);
+    }
+
+    public boolean createCastingCallApplication(CastingCallApplication application){
+        boolean found = false;
+
+        CastingCallApplication existingApplication = applicationRepository.findByCastingCallIdAndUserIdAndRoleId(application.getCastingCallId(), application.getUserId(), application.getRoleId());
+        if( existingApplication != null ) {
+            found = true;
+        }
+
+        if( !found ) {
+            application.setCreateDate( new java.sql.Date(System.currentTimeMillis()));
+            applicationRepository.save(application);
+        }
+
+        return !found;
+    }
+
+    public List<CastingCallApplication> getCastingCallApplicationForUser(long castingCallId , long userId )
+    {
+        return applicationRepository.findByCastingCallIdAndUserId( castingCallId , userId );
     }
 
 }
