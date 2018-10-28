@@ -250,7 +250,7 @@ public class DataAccessService {
         }
 
         if( !found ) {
-            application.setCreateDate( new java.sql.Date(System.currentTimeMillis()));
+            application.setCreateDate( new java.sql.Timestamp(System.currentTimeMillis()));
             applicationRepository.save(application);
         }
 
