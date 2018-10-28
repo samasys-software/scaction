@@ -262,4 +262,9 @@ public class DataAccessService {
         return applicationRepository.findByCastingCallIdAndUserId( castingCallId , userId );
     }
 
+    public List<CastingCallApplication> getCastingCallApplications(long castingCallId )
+    {
+        return applicationRepository.findByCastingCallId( castingCallId );
+    }
+
 }

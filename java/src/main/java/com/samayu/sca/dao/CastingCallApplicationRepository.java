@@ -9,4 +9,5 @@ public interface CastingCallApplicationRepository extends CrudRepository<Casting
 
     List<CastingCallApplication> findByCastingCallIdAndUserId(long castingCallId, long userId);
     CastingCallApplication findByCastingCallIdAndUserIdAndRoleId(long castingCallId, long userId , int roleId);
+    List<CastingCallApplication> findByCastingCallId(long castingCallId);
 }
