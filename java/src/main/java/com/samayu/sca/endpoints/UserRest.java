@@ -66,7 +66,7 @@ public class UserRest {
     {
         CastingCallApplication application = new CastingCallApplication();
         application.setCastingCallId( castingCallId );
-        application.setUserId( userId );
+        application.setUser( dataAccessService.findUser( userId ));
         application.setRoleId( roleId );
         return ResponseEntity.ok(dataAccessService.createCastingCallApplication( application ));
 
