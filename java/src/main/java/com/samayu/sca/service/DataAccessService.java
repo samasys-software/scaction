@@ -175,6 +175,10 @@ public class DataAccessService {
         return user;
     }
 
+    public User findUser(long userId ){
+        return userRepository.findOne( userId );
+    }
+
     public Iterable<Country> findAllCountries(){
         return countryRepository.findAll();
     }
@@ -245,7 +249,8 @@ public class DataAccessService {
     public boolean createCastingCallApplication(CastingCallApplication application){
         boolean found = false;
 
-        CastingCallApplication existingApplication = applicationRepository.findByCastingCallIdAndUserIdAndRoleId(application.getCastingCallId(), application.getUserId(), application.getRoleId());
+        CastingCallApplication existingApplication = applicationRepository.findByCastingCallIdAndUserAndRoleId(application.getCastingCallId(), application.getUser(), application.getRoleId());
+
         if( existingApplication != null ) {
             found = true;
         }
@@ -260,7 +265,7 @@ public class DataAccessService {
 
     public List<CastingCallApplication> getCastingCallApplicationForUser(long castingCallId , long userId )
     {
-        return applicationRepository.findByCastingCallIdAndUserId( castingCallId , userId );
+        return applicationRepository.findByCastingCallIdAndUser( castingCallId , findUser( userId ) );
     }
 
     public List<CastingCallApplication> getCastingCallApplications(long castingCallId )

@@ -1,7 +1,7 @@
 package com.samayu.sca.businessobjects;
 
 import javax.persistence.*;
-import java.sql.Date;
+
 import java.sql.Timestamp;
 
 @Entity
@@ -16,8 +16,9 @@ public class CastingCallApplication {
     @Column(name="casting_call_id")
     private long castingCallId;
 
-    @Column(name="user_id")
-    private long userId;
+    @ManyToOne
+    @JoinColumn(name="user_id" )
+    private User user;
 
     @Column(name="create_dt")
     private Timestamp createDate;
@@ -34,12 +35,12 @@ public class CastingCallApplication {
         this.castingCallId = castingCallId;
     }
 
-    public long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Timestamp getCreateDate() {
