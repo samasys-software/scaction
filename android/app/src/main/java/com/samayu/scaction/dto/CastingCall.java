@@ -1,6 +1,7 @@
 package com.samayu.scaction.dto;
 
 import java.sql.Date;
+import java.util.List;
 
 /**
  * Created by NandhiniGovindasamy on 9/17/18.
@@ -18,6 +19,8 @@ public class CastingCall {
     private int startAge,endAge,gender,cityId,countryId;
 
     private Date startDate,endDate;
+
+    private List<CastingCallApplication> userApplications;
 
     public long getId() {
         return id;
@@ -117,6 +120,14 @@ public class CastingCall {
 
     public int getCityId() {
         return cityId;
+    }
+
+    public List<CastingCallApplication> getUserApplications() {
+        return userApplications;
+    }
+
+    public void setUserApplications(List<CastingCallApplication> userApplications) {
+        this.userApplications = userApplications;
     }
 
     public void setCityId(int cityId) {

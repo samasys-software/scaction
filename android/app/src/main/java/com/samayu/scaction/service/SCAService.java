@@ -2,6 +2,7 @@ package com.samayu.scaction.service;
 
 import com.samayu.scaction.domain.CreateUser;
 import com.samayu.scaction.dto.CastingCall;
+import com.samayu.scaction.dto.CastingCallApplication;
 import com.samayu.scaction.dto.City;
 import com.samayu.scaction.dto.Country;
 import com.samayu.scaction.dto.ProfileDefaults;
@@ -20,6 +21,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by NandhiniGovindasamy on 8/22/18.
@@ -43,11 +45,11 @@ public interface SCAService {
                                       @Field("searchable") String searchable,
                                       @Field("profilePic") String profilePic,
                                       @Field("roles") int[] roles);
-
-    @POST("user/method5")
-    @FormUrlEncoded
-
-    public Call<String> sample(@Field("id") int id);
+//
+//    @POST("user/method5")
+//    @FormUrlEncoded
+//
+//    public Call<String> sample(@Field("id") int id);
 
     @GET("user/checkUser/{fbUser}")
     public Call<User> checkUser(@Path("fbUser") String fbUser);
@@ -95,10 +97,21 @@ public interface SCAService {
 
 
 
-    @POST("user/castingcall/apply")
+    @POST("user/applyForCastingCall")
     @FormUrlEncoded
-    public Call<ResponseBody> applyCastingCall(
-            @Field("castingCallId") long castingCallId , @Field("userId") long userId) ;
+    public Call<Boolean> applyCastingCall(
+            @Field("castingCallId") long castingCallId ,
+            @Field("userId") long userId ,
+            @Field("roleId") int roleId
+    );
+
+    @GET( "global/castingcallDetails/{castingCallId}")
+    public Call<CastingCall> getCastingCall(@Path("castingCallId") long castingCallId,@Query("userId") long userId );
+
+    @GET("coordinator/castingCallApplications/{castingCallId}")
+    public Call<List<CastingCallApplication >> getCastingCallApplications(@Path("castingCallId") long castingCallId );
 
 
-}
+
+
+    }

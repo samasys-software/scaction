@@ -1,8 +1,6 @@
 package com.samayu.scaction.ui;
 
-/**
- * Created by NandhiniGovindasamy on 9/28/18.
- */
+
 
 import android.content.Context;
 import android.content.Intent;

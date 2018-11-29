@@ -1,99 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--android:orientation="vertical" android:layout_width="match_parent"-->
-<!--android:layout_height="match_parent">-->
-   <!---->
 
-
-
-    <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-
-            <!--android:layout_below="@id/actionButtonLayout"-->
-            <!--&gt;-->
-
-       <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-           <!--android:orientation="vertical"-->
-           <!--&gt;-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Project Name :"-->
-              <!--/>-->
-
-           <!--<TextView-->
-               <!--android:layout_width="wrap_content"-->
-               <!--android:layout_height="wrap_content"-->
-               <!--android:id="@+id/displayProjectName"-->
-               <!--/>-->
-       <!--</LinearLayout>-->
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="vertical"-->
-            <!--&gt;-->
-
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Project Details :"-->
-                <!--/>-->
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/displayProjectDetails"-->
-
-                <!--/>-->
-        <!--</LinearLayout>-->
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="vertical"-->
-            <!--&gt;-->
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Production Company :"-->
-               <!--/>-->
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/displayProductionCompany"-->
-
-             <!--/>-->
-        <!--</LinearLayout>-->
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="vertical"-->
-            <!--&gt;-->
-           <!--<TextView-->
-               <!--android:layout_width="wrap_content"-->
-               <!--android:layout_height="wrap_content"-->
-               <!--android:text="Role"-->
-               <!--/>-->
-           <!--<TextView-->
-               <!--android:layout_width="wrap_content"-->
-               <!--android:layout_height="wrap_content"-->
-               <!--android:id="@+id/displayRole"-->
-
-            <!--/>-->
-
-
-        <!--</LinearLayout>-->
-
-        <!--</LinearLayout>-->
-
-
-
-<!--</RelativeLayout>-->
 
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -144,6 +50,17 @@
                     android:visibility="invisible">
 
                 </Button>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/unApply"
+
+
+                    android:layout_alignParentEnd="true"
+                    android:text="Unapply"
+                    android:visibility="invisible">
+
+                </Button>
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -164,128 +81,277 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/castingCallsDetailsLayout"
         android:layout_below="@id/rolesPage">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="start"
-            android:gravity="start"
-            android:layout_weight="7">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/love_red"
+        android:layout_marginStart="15sp"
+        android:layout_marginEnd="15sp"
+        android:layout_gravity="start"
+        android:gravity="start"
+        android:layout_weight="7">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:id="@+id/castingCallRoleListLayout"
+                android:layout_height="100sp"
                 android:orientation="horizontal">
 
+                <ListView
+                    android:id="@+id/castingCallRoleList"
 
-                <TextView
-                    android:id="@+id/projectNameText"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:padding="2dp"
-                    android:text="Project Name : "
-                    />
-                <TextView
-                    android:id="@+id/displayProjectName"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:padding="2dp"
+                    android:nestedScrollingEnabled="true"
 
                     />
-
             </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-
-                <TextView
-                    android:id="@+id/projectDetailsText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:padding="2dp"
-                    android:text="Project Details : "
-                    />
-                <TextView
-                    android:id="@+id/displayProjectDetails"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:padding="2dp"
-
-                    />
-
-            </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
                 android:orientation="horizontal">
+            <!--android:layout_below="@id/castingCallRoleListLayout"-->
 
 
-                <TextView
-                    android:id="@+id/productionCompanyText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:padding="2dp"
-                    android:text="Production Company : "
-                    />
+                <!--<TextView-->
+                    <!--android:id="@+id/projectNameText"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="3"-->
+                    <!--android:gravity="center"-->
+                    <!--android:textColor="@color/colorPrimaryDark"-->
+                    <!--android:padding="2dp"-->
+                    <!--android:text="Project Name : "-->
+                    <!--android:textSize="20dp"-->
+                    <!--android:textAllCaps="true"-->
+                    <!--/>-->
                 <TextView
                     android:id="@+id/displayProductionCompany"
+                    android:text="ABC"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:gravity="center"
+                    android:textColor="@color/bee_yellow"
                     android:padding="2dp"
+                    android:textSize="18dp"
+                    android:textAllCaps="true"
 
                     />
 
             </LinearLayout>
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:orientation="horizontal">
 
+
+                <!--<TextView-->
+                    <!--android:id="@+id/projectDetailsText"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="3"-->
+                    <!--android:textColor="@color/colorPrimaryDark"-->
+                    <!--android:padding="2dp"-->
+                    <!--android:text="Project Details : "-->
+                    <!--/>-->
+                <TextView
+
+                    android:text="presents"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:textColor="@color/bee_yellow"
+                    android:padding="2dp"
+                    android:gravity="center"
+
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:orientation="horizontal">
+
+
+                <!--<TextView-->
+                    <!--android:id="@+id/productionCompanyText"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="3"-->
+                    <!--android:textColor="@color/colorAccent"-->
+                    <!--android:padding="2dp"-->
+                    <!--android:text="Production Company : "-->
+                    <!--/>-->
+                <TextView
+                    android:id="@+id/displayProjectName"
+                    android:text="AGS"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:textColor="@color/bee_yellow"
+                    android:padding="2dp"
+                    android:gravity="center"
+                    android:textSize="40sp"
+                    android:textAllCaps="true"
+
+                    />
+
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="3">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15sp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/displayDate"
+                    android:text="14/05/1995-15/05/1995"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:textColor="@color/bee_yellow"
+                    android:padding="2dp"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:textAllCaps="true"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/displayHours"
+                android:text="14/05/1995-15/05/1995"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:textColor="@color/bee_yellow"
+                android:padding="2dp"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:textAllCaps="true"
+
+                />
+
+            </LinearLayout>
             <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
 
-            <!--android:id="@+id/delivery"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="horizontal">-->
+                <!--<TextView-->
 
-            <!--<TextView-->
-            <!--android:visibility="gone"-->
-            <!--android:id="@+id/deliveryType"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:textColor="@color/colorPrimaryDark"-->
-            <!--android:padding="2dp"-->
-            <!--android:text="Type "/>-->
+                    <!--android:text="at"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="3"-->
+                    <!--android:textColor="@color/colorPrimary"-->
+                    <!--android:padding="2dp"-->
+                    <!--android:gravity="center"-->
 
-            <!--<TextView-->
-            <!--android:visibility="gone"-->
-            <!--android:id="@+id/type"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1.3"-->
-            <!--android:textColor="@color/colorPrimaryDark"-->
-            <!--android:padding="2dp"/>-->
+
+                    <!--/>-->
 
             <!--</LinearLayout>-->
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15sp"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:id="@+id/displayAddress"
+                    android:text="6/17,Mariyamman kovil treet"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:textColor="@color/bee_yellow"
+                    android:padding="2dp"
+                    android:gravity="center"
+
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:id="@+id/displayCityAndCountry"
+                    android:text="Tiruchy,India"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:textColor="@color/bee_yellow"
+                    android:padding="2dp"
+                    android:gravity="center"
+
+
+                    />
+
+            </LinearLayout>
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<TextView-->
+
+                    <!--android:id="@+id/displayCountry"-->
+                    <!--android:text="India"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="3"-->
+                    <!--android:textColor="@color/colorAccent"-->
+                    <!--android:padding="2dp"-->
+                    <!--android:gravity="center"-->
+
+
+                    <!--/>-->
+
+            <!--</LinearLayout>-->
+        </LinearLayout>
+
+
+
+
+
 
 
 
@@ -300,14 +366,43 @@
 
     </LinearLayout>
 
-    <!--<android.support.design.widget.FloatingActionButton
-        android:id="@+id/newOrderPin"
-        app:srcCompat="@drawable/ic_prodcast_print"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:text="+"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>-->
+        android:layout_height="wrap_content"
+        android:layout_below="@id/castingCallsDetailsLayout"
+        android:id="@+id/castingcallApplicationsListLayout"
+        android:layout_marginTop="17sp"
+        android:layout_marginStart="100sp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
+        <TextView
+
+            android:id="@+id/text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:padding="2dp"
+            android:visibility="invisible"
+            android:text="Casting Call Applications"
+            android:textColor="@color/pumpkin_orange"
+
+
+            />
+
+    </LinearLayout>
+
+
+
+    <ListView
+        android:id="@+id/listOfCastingCallsApplications"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="1dp"
+        android:layout_below="@id/castingcallApplicationsListLayout"
+        android:divider="@android:color/darker_gray"
+        android:headerDividersEnabled="true"/>
 
 </RelativeLayout>

@@ -5,18 +5,26 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.samayu.scaction.R;
 import com.samayu.scaction.dto.CastingCall;
+import com.samayu.scaction.dto.CastingCallApplication;
+import com.samayu.scaction.dto.City;
+import com.samayu.scaction.dto.Country;
+import com.samayu.scaction.dto.ProfileType;
 import com.samayu.scaction.dto.User;
 import com.samayu.scaction.dto.UserNotification;
 import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -24,13 +32,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ApplyCastingCallActivity extends AppCompatActivity {
+public class ApplyCastingCallActivity extends SCABaseActivity {
 
-    Button registerToApply,apply;
+    Button registerToApply,apply,unapply;
     ImageButton edit;
     Context context;
     User user;
-    TextView projectName,projectDetails,productionCompany,role;
+    TextView projectName,projectDetails,productionCompany,eventDate,hours,address,cityAndCountry,text;
+    ListView listView,castingCallApplicationsView;
+    View focusView=null;
+    boolean valid=false;
+    ArrayAdapter<ProfileType> profileAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +51,101 @@ public class ApplyCastingCallActivity extends AppCompatActivity {
         context=this;
         registerToApply=(Button) findViewById(R.id.registerToApply);
         apply=(Button) findViewById(R.id.apply);
+        unapply=(Button) findViewById(R.id.unApply);
         edit=(ImageButton) findViewById(R.id.edit);
 
         projectName=(TextView) findViewById(R.id.displayProjectName);
-        projectDetails=(TextView) findViewById(R.id.displayProjectDetails);
+       // projectDetails=(TextView) findViewById(R.id.displayProjectDetails);
         productionCompany=(TextView) findViewById(R.id.displayProductionCompany);
-       // role=(TextView) findViewById(R.id.displayRole);
+        eventDate=(TextView) findViewById(R.id.displayDate);
+        hours=(TextView) findViewById(R.id.displayHours);
+        address=(TextView) findViewById(R.id.displayAddress);
+        cityAndCountry=(TextView) findViewById(R.id.displayCityAndCountry);
+        text=(TextView) findViewById(R.id.text);
+        listView=(ListView) findViewById(R.id.castingCallRoleList) ;
+        castingCallApplicationsView=(ListView) findViewById(R.id.listOfCastingCallsApplications);
+
+
+        List<ProfileType> profileTypes=SessionInfo.getInstance().getProfileTypes();
+
+        List<ProfileType> castingCallProfileTypes=new ArrayList<ProfileType>();
+        // role=(TextView) findViewById(R.id.displayRole);
 
         final CastingCall currentCastingCall= SessionInfo.getInstance().getCurrentCastingCall();
         if(currentCastingCall!=null){
             projectName.setText(currentCastingCall.getProjectName());
-            projectDetails.setText(currentCastingCall.getProjectDetails());
+           // projectDetails.setText(currentCastingCall.getProjectDetails());
+
             productionCompany.setText(currentCastingCall.getProductionCompany());
+            eventDate.setText(String.valueOf(currentCastingCall.getStartDate())+" to "+String.valueOf(currentCastingCall.getEndDate()));
+            hours.setText(currentCastingCall.getHours());
+            address.setText(currentCastingCall.getAddress());
+            String country1="";
+
+            List<Country> countries=SessionInfo.getInstance().getCountries();
+            for(Country country:countries){
+                if(country.getId()==currentCastingCall.getCountryId()){
+                    country1=country.getName();
+                    break;
+                }
+            }
+
+            String city1="";
+            List<City> cities=SessionInfo.getInstance().getCities();
+            if(cities!=null) {
+                for (City city : cities) {
+                    if (city.getId() == currentCastingCall.getCityId()) {
+                        city1 = city.getName();
+                        break;
+                    }
+                }
+            }
+
+//            String country1="";
+//            List<Country> countries=SessionInfo.getInstance().getCountries();
+//            for(Country country:countries){
+//                if(country.getId()==currentCastingCall.getCountryId()){
+//                    country1=country.getName();
+//                    break;
+//                }
+//            }
+
+            cityAndCountry.setText(city1 +" , "+country1);
+
+
+            String[] arrayOfId = currentCastingCall.getRoleIds().split(",");
+
+            int[] roleIdList=new int[arrayOfId.length];
+
+
+            for(int i=0;i<arrayOfId.length;i++ ){
+                roleIdList[i]=Integer.parseInt(arrayOfId[i]);
+                System.out.println(i+"th Id"+roleIdList[i]);
+            }
+
+
+
+            for(int i=0;i<roleIdList.length;i++)
+            {
+                for(int j=0;j<profileTypes.size();j++)
+                {
+                    if(profileTypes.get(j).getId()==roleIdList[i]){
+                        ProfileType profileType=new ProfileType();
+                        profileType.setId(profileTypes.get(j).getId());
+                        profileType.setName(profileTypes.get(j).getName());
+                        castingCallProfileTypes.add(profileType);
+                    }
+                }
+            }
+
+
+
+
+            profileAdapter= new ArrayAdapter<ProfileType>(this,
+                    android.R.layout.simple_list_item_multiple_choice, castingCallProfileTypes);
+            listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+            listView.setAdapter(profileAdapter);
+
 //            role.setText(currentCastingCall.getRoleDetails());
         }
 
@@ -61,9 +156,72 @@ public class ApplyCastingCallActivity extends AppCompatActivity {
         else{
             if(currentCastingCall.getUserId()==user.getUserId()){
                 edit.setVisibility(View.VISIBLE);
+
+                Call<List<CastingCallApplication>> getUserCastingCallApplicationsDTOCall = new SCAClient().getClient().getCastingCallApplications(currentCastingCall.getId());
+                getUserCastingCallApplicationsDTOCall.enqueue(new Callback<List<CastingCallApplication>>() {
+                    @Override
+                    public void onResponse(Call<List<CastingCallApplication>> call, Response<List<CastingCallApplication>> response) {
+
+                         List<CastingCallApplication> castingCallApplicationList= response.body();
+                        if(castingCallApplicationList!=null){
+                            text.setVisibility(View.VISIBLE);
+                            CastingCallApplicationsAdapter adapter=new CastingCallApplicationsAdapter(ApplyCastingCallActivity.this,castingCallApplicationList);
+                            castingCallApplicationsView.setAdapter(adapter);
+
+                        }
+
+
+                    }
+
+
+
+
+                    @Override
+                    public void onFailure(Call<List<CastingCallApplication>> call, Throwable t) {
+
+
+                    }
+                });
+
+
+
+
             }
-            else{
-                apply.setVisibility(View.VISIBLE);
+           else{
+                Call<CastingCall> getCastingCallDTOCall = new SCAClient().getClient().getCastingCall(currentCastingCall.getId(),user.getUserId());
+                System.out.println(user.getUserId());
+                getCastingCallDTOCall.enqueue(new Callback<CastingCall>() {
+                    @Override
+                    public void onResponse(Call<CastingCall> call, Response<CastingCall> response) {
+
+                        CastingCall castingCall= response.body();
+                        List<CastingCallApplication> castingCallApplicationList=castingCall.getUserApplications();
+                        if(castingCallApplicationList==null) {
+                            apply.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            for (CastingCallApplication currentCastingCallApplication : castingCallApplicationList) {
+                                if (currentCastingCallApplication.getUser().getUserId() == user.getUserId()) {
+                                    unapply.setVisibility(View.VISIBLE);
+                                    break;
+                                } else {
+                                    apply.setVisibility(View.VISIBLE);
+                                    break;
+                                }
+                            }
+                        }
+
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<CastingCall> call, Throwable t) {
+
+
+                    }
+                });
+               // apply.setVisibility(View.VISIBLE);
             }
         }
         registerToApply.setOnClickListener(new View.OnClickListener() {
@@ -87,22 +245,33 @@ public class ApplyCastingCallActivity extends AppCompatActivity {
         apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Call<ResponseBody> applyCastingCallDTOCall = new SCAClient().getClient().applyCastingCall(currentCastingCall.getId(),user.getUserId());
-                applyCastingCallDTOCall.enqueue(new Callback<ResponseBody>() {
+
+                SparseBooleanArray checked = listView.getCheckedItemPositions();
+                int selectedRoleId=0;
+                for (int i = 0; i < checked.size(); i++) {
+                    // Item position in adapter
+                    int position = checked.keyAt(i);
+                    // Add sport if it is checked i.e.) == TRUE!
+                    if (checked.valueAt(i))
+                        selectedRoleId=profileAdapter.getItem(position).getId();
+                }
+                Call<Boolean> applyCastingCallDTOCall = new SCAClient().getClient().applyCastingCall(currentCastingCall.getId(),user.getUserId(),selectedRoleId);
+                applyCastingCallDTOCall.enqueue(new Callback<Boolean>() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         Log.i("Success","kkHai");
 
 
                     }
 
                     @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    public void onFailure(Call<Boolean> call, Throwable t) {
 
                     }
                 });
 
             }
         });
+       // listView.setOnContextClickListener();
     }
 }
