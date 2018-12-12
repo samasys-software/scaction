@@ -46,6 +46,7 @@ import com.samayu.scaction.dto.ProfileDefaults;
 import com.samayu.scaction.dto.ProfileType;
 import com.samayu.scaction.dto.User;
 import com.samayu.scaction.dto.UserRole;
+import com.samayu.scaction.service.DateFormatter;
 import com.samayu.scaction.service.SCAClient;
 
 import com.samayu.scaction.service.SessionInfo;
@@ -117,10 +118,10 @@ public class ProfileActivity extends SCABaseActivity {
          gender = (RadioGroup) findViewById(R.id.gender);
          listView=(ListView) findViewById(R.id.roleList) ;
 
-        dob=(TextView)findViewById(R.id.startDate);
+        dob=(TextView)findViewById(R.id.dob);
 
 
-        dateOfBirthPicker=(ImageButton)findViewById(R.id.startDatePicker);
+        dateOfBirthPicker=(ImageButton)findViewById(R.id.dateOfBirthPicker);
 
         myLocation=(ImageButton)findViewById(R.id.currentLocation);
 
@@ -186,7 +187,7 @@ public class ProfileActivity extends SCABaseActivity {
                     gender.check(R.id.gender_female);
                 else if (gender1 == 2)
                     gender.check(R.id.gender_other);
-                dob.setText(String.valueOf(user.getDateOfBirth()));
+                dob.setText(DateFormatter.getMonthDateYearFormat(String.valueOf(user.getDateOfBirth())));
 
 
                 //list of roles has been selected been checked
@@ -535,21 +536,9 @@ public class ProfileActivity extends SCABaseActivity {
             public void onDateSet(DatePicker datePicker, int syear, int smonth, int sday)
             {
 
-                int month1 = smonth + 1;
-                String formattedMonth1 = "" + month1;
-                String formattedDayOfMonth1 = "" + sday;
 
-                if(month1 < 10)
-                {
-                    formattedMonth1 = "0" + month1;
-                }
-                if(sday < 10)
-                {
-                    formattedDayOfMonth1 = "0" + sday;
-                }
-
-                String date1 = syear +"-" + formattedMonth1  + "-" +formattedDayOfMonth1;
-                dob.setText(date1);
+                //dateOfBirthFormat=DateFormatter.getYearMonthDateFormat(syear,smonth,sday);
+                dob.setText(DateFormatter.getMonthDateYearFormat(syear,smonth,sday));
             }
         };
 
@@ -634,7 +623,9 @@ public class ProfileActivity extends SCABaseActivity {
                 String fbUser=SessionInfo.getInstance().getFbUserDetails().getId();
                 String url=SessionInfo.getInstance().getFbUserDetails().getId();
 
-                Call<User> registerDTOCall = new SCAClient().getClient().registerNewUser(fbUser, screenName1, name1, email, selectedCountryCode, selectedCityId, phone, whatsapp, gender1, dob.getText().toString(), isSearchable,url, rolesList);
+                //System.out.println();
+
+                Call<User> registerDTOCall = new SCAClient().getClient().registerNewUser(fbUser, screenName1, name1, email, selectedCountryCode, selectedCityId, phone, whatsapp, gender1,DateFormatter.getYearMonthDateFormat(dob.getText().toString()) , isSearchable,url, rolesList);
                 registerDTOCall.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {

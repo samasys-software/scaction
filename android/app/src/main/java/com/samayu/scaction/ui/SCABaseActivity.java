@@ -106,6 +106,16 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
                                 intent.putExtra("Registered",false);
                                 startActivity(intent);
                                 break;
+                            case R.id.myJobs:
+                                intent=new Intent(SCABaseActivity.this,HomeActivity.class);
+                                intent.putExtra("Registered",false);
+                                startActivity(intent);
+                                break;
+                            case R.id.myPortfolio:
+                                intent=new Intent(SCABaseActivity.this,CreatePortfolioActivity.class);
+                                startActivity(intent);
+                                break;
+
                             case R.id.myProfile:
                                 intent=new Intent(SCABaseActivity.this,ProfileActivity.class);
                                 intent.putExtra("isNew",false);

@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import com.samayu.scaction.R;
 import com.samayu.scaction.dto.CastingCall;
+import com.samayu.scaction.dto.ProfileType;
 import com.samayu.scaction.dto.UserRole;
+import com.samayu.scaction.service.SessionInfo;
 
 import java.util.List;
 
@@ -88,7 +90,19 @@ public class CastingCallsAdapter extends BaseAdapter {
 
                 holder.projectName.setText(castingCall.getProjectName());
                 holder.projectCompany.setText(castingCall.getProductionCompany());
-                holder.role.setText(castingCall.getRoleDetails());
+                String roles="";
+                String[] roleIds=castingCall.getRoleIds().split(",");
+                List<ProfileType> profileTypeList= SessionInfo.getInstance().getProfileTypes();
+                for(int i=0;i<profileTypeList.size();i++){
+                    for(int j=0;j<roleIds.length;j++)
+                    {
+                        if(profileTypeList.get(i).getId()==Integer.parseInt(roleIds[j]))
+                        {
+                            roles.concat(roles+profileTypeList.get(i).getName()+",");
+                        }
+                    }
+                }
+                holder.role.setText(roles);
 
 
 

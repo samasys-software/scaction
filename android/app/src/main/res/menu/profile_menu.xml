@@ -7,23 +7,35 @@
         android:id="@+id/profile"
         >
 
-    <item
-        android:id="@+id/myHome"
-        android:title="My Home"
-        app:showAsAction="always">
-    </item>
+        <item
+            android:id="@+id/myHome"
+            android:title="My Home"
+            app:showAsAction="always">
+        </item>
+        <item
+            android:id="@+id/myJobs"
+            android:title="My Jobs"
+            app:showAsAction="always">
+        </item>
 
-    <item
-        android:id="@+id/myProfile"
-        android:title="My Profile"
-        app:showAsAction="always">
-    </item>
+        <item
+            android:id="@+id/myPortfolio"
+            android:title="My Portfolio"
+            app:showAsAction="always">
+        </item>
 
-    <item
-        android:id="@+id/notifications"
-        android:title="Notifications"
-        app:showAsAction="always">
-    </item>
+        <item
+            android:id="@+id/myProfile"
+            android:title="My Profile"
+            app:showAsAction="always">
+        </item>
+
+        <item
+            android:id="@+id/notifications"
+            android:title="Notifications"
+            app:showAsAction="always">
+        </item>
+
     </group>
     <item
         android:id="@+id/signout"
