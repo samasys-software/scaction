@@ -31,11 +31,14 @@ import com.samayu.scaction.dto.Country;
 import com.samayu.scaction.dto.ProfileType;
 import com.samayu.scaction.dto.User;
 import com.samayu.scaction.dto.UserRole;
+import com.samayu.scaction.service.DateFormatter;
 import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -135,8 +138,8 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
             role.setText(currentCastingCall.getRoleDetails());
             startAge.setText(String.valueOf(currentCastingCall.getStartAge()));
             endAge.setText(String.valueOf(currentCastingCall.getEndAge()));
-            startDate.setText(String.valueOf(currentCastingCall.getStartDate()));
-            endDate.setText(String.valueOf(currentCastingCall.getEndDate()));
+            startDate.setText(DateFormatter.getMonthDateYearFormat(String.valueOf(currentCastingCall.getStartDate())));
+            endDate.setText(DateFormatter.getMonthDateYearFormat(String.valueOf(currentCastingCall.getEndDate())));
             address.setText(String.valueOf(currentCastingCall.getAddress()));
             hours.setText(String.valueOf(currentCastingCall.getHours()));
             List<Country> countries=SessionInfo.getInstance().getCountries();
@@ -284,7 +287,8 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int syear, int smonth, int sday)
             {
-                startDate.setText(dateSetter(syear,smonth,sday));
+                //startDateFormat=DateFormatter.getYearMonthDateFormat(syear,smonth,sday);
+                startDate.setText(DateFormatter.getMonthDateYearFormat(syear,smonth,sday));
             }
         };
 
@@ -315,29 +319,13 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
             public void onDateSet(DatePicker datePicker, int syear, int smonth, int sday)
             {
 
-
-                endDate.setText(dateSetter(syear,smonth,sday));
+                //endDateFormat=DateFormatter.getYearMonthDateFormat(syear,smonth,sday);
+                endDate.setText(DateFormatter.getMonthDateYearFormat(syear,smonth,sday));
             }
         };
     }
 
-    private String dateSetter(int year,int month,int day){
-        int month1 = month + 1;
-        String formattedMonth1 = "" + month1;
-        String formattedDayOfMonth1 = "" + day;
 
-        if(month1 < 10)
-        {
-            formattedMonth1 = "0" + month1;
-        }
-        if(day < 10)
-        {
-            formattedDayOfMonth1 = "0" + day;
-        }
-
-        String date = year +"-" + formattedMonth1  + "-" +formattedDayOfMonth1;
-        return date;
-    }
 
     public void createCastingCall(){
         String projectName1=projectName.getText().toString();
@@ -373,8 +361,8 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
         }
 
         String address1=address.getText().toString();
-        String startDate1=startDate.getText().toString();
-        String endDate1=endDate.getText().toString();
+        String startDate1=DateFormatter.getYearMonthDateFormat(startDate.getText().toString());
+        String endDate1=DateFormatter.getYearMonthDateFormat(endDate.getText().toString());
         String hours1=hours.getText().toString();
 
         SparseBooleanArray checked = listView.getCheckedItemPositions();
@@ -601,4 +589,6 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
         listView.setSelected(false);
 
     }
+
+
 }

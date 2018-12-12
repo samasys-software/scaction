@@ -35,7 +35,8 @@
         <activity android:name=".ui.UserCastingCallsActivity" />
         <activity android:name=".ui.CreateUserCastingCallsActivity" />
         <activity android:name=".ui.ApplyCastingCallActivity" />
-        <activity android:name=".ui.NotificationActivity"></activity>
+        <activity android:name=".ui.NotificationActivity" />
+        <activity android:name=".ui.CreatePortfolioActivity"></activity>
     </application>
 
 </manifest>

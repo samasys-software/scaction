@@ -21,10 +21,15 @@ import com.samayu.scaction.dto.Country;
 import com.samayu.scaction.dto.ProfileType;
 import com.samayu.scaction.dto.User;
 import com.samayu.scaction.dto.UserNotification;
+import com.samayu.scaction.service.DateFormatter;
 import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -77,7 +82,11 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
            // projectDetails.setText(currentCastingCall.getProjectDetails());
 
             productionCompany.setText(currentCastingCall.getProductionCompany());
-            eventDate.setText(String.valueOf(currentCastingCall.getStartDate())+" to "+String.valueOf(currentCastingCall.getEndDate()));
+            eventDate.setText(DateFormatter.getMonthDateYearFormat(String.valueOf(currentCastingCall.getStartDate()))+" to "+DateFormatter.getMonthDateYearFormat(String.valueOf(currentCastingCall.getEndDate())));
+
+
+
+
             hours.setText(currentCastingCall.getHours());
             address.setText(currentCastingCall.getAddress());
             String country1="";

@@ -258,7 +258,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/startDate"
+                android:id="@+id/dob"
                 style="@style/datePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -267,7 +267,7 @@
                 />
 
             <ImageButton
-                android:id="@+id/startDatePicker"
+                android:id="@+id/dateOfBirthPicker"
                 android:background="@drawable/ic_date_picker"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
