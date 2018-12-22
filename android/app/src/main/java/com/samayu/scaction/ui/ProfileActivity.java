@@ -633,8 +633,8 @@ public class ProfileActivity extends SCABaseActivity {
                             User user=response.body();
                             Toast.makeText(context,message,Toast.LENGTH_LONG).show();
                             SessionInfo.getInstance().setUser(user);
-                            Intent intent=new Intent(ProfileActivity.this,HomeActivity.class);
-                            intent.putExtra("Registered",true);
+                            Intent intent=new Intent(ProfileActivity.this,MainActivity.class);
+                            //intent.putExtra("Registered",true);
                             startActivity(intent);
 
 

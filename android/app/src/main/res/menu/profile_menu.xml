@@ -30,11 +30,11 @@
             app:showAsAction="always">
         </item>
 
-        <item
-            android:id="@+id/notifications"
-            android:title="Notifications"
-            app:showAsAction="always">
-        </item>
+        <!--<item-->
+            <!--android:id="@+id/notifications"-->
+            <!--android:title="Notifications"-->
+            <!--app:showAsAction="always">-->
+        <!--</item>-->
 
     </group>
     <item
