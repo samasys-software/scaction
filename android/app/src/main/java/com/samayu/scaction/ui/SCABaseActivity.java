@@ -17,32 +17,45 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.samayu.scaction.R;
 import com.samayu.scaction.domain.FBUserDetails;
+import com.samayu.scaction.dto.City;
 import com.samayu.scaction.dto.UserNotification;
+import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.ObjectInputStream;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public abstract class SCABaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     NavigationView popupMenuView;
     ImageView notificationAlert;
     public static final String FILE_NAME = "SCALogin.txt";
+    List<City> cityList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
 
     }
@@ -58,7 +71,31 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
 
         final ImageView userImage = (ImageView) fullView.findViewById(R.id.userImage);
         notificationAlert= (ImageView) fullView.findViewById(R.id.notificationAlert);
+        Button loginFB=(Button) fullView.findViewById(R.id.fb_login_id);
         TextView userName = (TextView)fullView.findViewById(R.id.userName);
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+        if(isLoggedIn){
+            FBUserDetails fbUserDetails=loginRetrive(FILE_NAME);
+            SessionInfo.getInstance().setFbUserDetails(fbUserDetails);
+            loginFB.setVisibility(View.GONE);
+
+
+
+        }
+        else{
+            userName.setVisibility(View.GONE);
+            userImage.setVisibility(View.GONE);
+            notificationAlert.setVisibility(View.INVISIBLE);
+        }
+        loginFB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(SCABaseActivity.this,UseFacebookLoginActivity.class);
+                startActivity(intent);
+            }
+        });
         //setOrderTotal();
 
         List<UserNotification> userNotifications=SessionInfo.getInstance().getUserNotifications();
@@ -132,11 +169,7 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
 
                                 boolean deleted = file.delete();
 
-
-
-
-
-                                intent=new Intent(SCABaseActivity.this,UseFacebookLoginActivity.class);
+                                intent=new Intent(SCABaseActivity.this,MainActivity.class);
                                 startActivity(intent);
                                 break;
 
@@ -336,6 +369,20 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
         return new BitmapDrawable(getResources(), bitmap);
 
         //return view;
+    }
+
+
+
+    public  FBUserDetails loginRetrive(String fileName) {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(openFileInput(fileName));
+            FBUserDetails r = (FBUserDetails) ois.readObject();
+            return r;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
 

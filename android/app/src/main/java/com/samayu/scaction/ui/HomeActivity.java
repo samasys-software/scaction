@@ -58,36 +58,7 @@ public class HomeActivity extends SCABaseActivity {
         listView=(ListView) findViewById(R.id.listOfRoles);
         userName=(TextView) findViewById(R.id.screenName);
 
-        Call<ProfileDefaults> profileDefaultsCall = new SCAClient().getClient().getProfileDefaults();
-        profileDefaultsCall.enqueue(new Callback<ProfileDefaults>() {
-            @Override
-            public void onResponse(Call<ProfileDefaults> call, Response<ProfileDefaults> response) {
 
-                ProfileDefaults profileDefaults = response.body();
-
-                List<Country> countries=profileDefaults.getCountries();
-
-                Country defaultCountry = new Country();
-                defaultCountry.setId(0);
-                defaultCountry.setIsdCode("");
-                defaultCountry.setCode("");
-                defaultCountry.setName("Select Country");
-                countries.add(0, defaultCountry  );
-
-                SessionInfo.getInstance().setCountries(countries);
-
-                List<ProfileType> profileTypes=profileDefaults.getProfileTypes();
-                SessionInfo.getInstance().setProfileTypes(profileTypes);
-
-            }
-
-            @Override
-            public void onFailure(Call<ProfileDefaults> call, Throwable t) {
-
-            }
-
-
-        });
 
         Boolean registered = getIntent().getExtras().getBoolean("Registered");
         if(registered ) {

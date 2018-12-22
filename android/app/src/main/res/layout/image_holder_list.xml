@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <LinearLayout
+
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+            <ImageView
+                android:id="@+id/portfolioImages"
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+
+                android:layout_weight="0.5"
+                android:src="@drawable/edit_icon" />
+
+        </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+</RelativeLayout>

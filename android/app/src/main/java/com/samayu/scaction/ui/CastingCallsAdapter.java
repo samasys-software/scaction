@@ -98,14 +98,11 @@ public class CastingCallsAdapter extends BaseAdapter {
                     {
                         if(profileTypeList.get(i).getId()==Integer.parseInt(roleIds[j]))
                         {
-                            roles.concat(roles+profileTypeList.get(i).getName()+",");
+                           roles= roles.concat(profileTypeList.get(i).getName()+",");
                         }
                     }
                 }
                 holder.role.setText(roles);
-
-
-
                 return convertView;
             }
 
