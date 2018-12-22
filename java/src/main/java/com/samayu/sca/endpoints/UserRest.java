@@ -72,6 +72,12 @@ public class UserRest {
 
     }
 
+    @RequestMapping(path="/createPortfolio",method = RequestMethod.POST)
+    public ResponseEntity<Void> createPortfolio() {
+        return null;
+    }
+
+
 
 
 }

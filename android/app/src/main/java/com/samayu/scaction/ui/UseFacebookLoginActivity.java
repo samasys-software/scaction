@@ -32,7 +32,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
 
-public class UseFacebookLoginActivity extends AppCompatActivity {
+public class UseFacebookLoginActivity extends SCABaseActivity {
     //LoginButton loginButton;
 
     Button loginButton;
@@ -54,26 +54,26 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
-        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+       boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
         if(isLoggedIn){
-            FBUserDetails fbUserDetails=loginRetrive(FILE_NAME);
-            SessionInfo.getInstance().setFbUserDetails(fbUserDetails);
-            Intent intent=new Intent(UseFacebookLoginActivity.this,HomeActivity.class);
+
+            Intent intent=new Intent(UseFacebookLoginActivity.this,MainActivity.class);
             intent.putExtra("Registered",false);
             startActivity(intent);
 
 
         }
+        else {
+            LoginManager.getInstance().logInWithReadPermissions(UseFacebookLoginActivity.this, Arrays.asList("email"));
+        }
 
 
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoginManager.getInstance().logInWithReadPermissions(UseFacebookLoginActivity.this, Arrays.asList("email"));
-
-            }
-        });
+//        loginButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
         //loginButton.setReadPermissions("email");
 
 
@@ -158,7 +158,7 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
 
                             // Log.i("Login" + "Gender", gender);
 
-                            Intent intent=new Intent(UseFacebookLoginActivity.this,HomeActivity.class);
+                            Intent intent=new Intent(UseFacebookLoginActivity.this,MainActivity.class);
                             intent.putExtra("Registered",false);
                             startActivity(intent);
 
@@ -192,15 +192,5 @@ public class UseFacebookLoginActivity extends AppCompatActivity {
         }
     }
 
-    public FBUserDetails loginRetrive(String fileName) {
-        try {
-            ObjectInputStream ois = new ObjectInputStream(openFileInput(fileName));
-            FBUserDetails r = (FBUserDetails) ois.readObject();
-            return r;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+
 }

@@ -47,6 +47,7 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
     ListView listView,castingCallApplicationsView;
     View focusView=null;
     boolean valid=false;
+    String country1="";
     ArrayAdapter<ProfileType> profileAdapter;
 
     @Override
@@ -89,26 +90,66 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
 
             hours.setText(currentCastingCall.getHours());
             address.setText(currentCastingCall.getAddress());
-            String country1="";
+
+            String countryCode="";
 
             List<Country> countries=SessionInfo.getInstance().getCountries();
             for(Country country:countries){
                 if(country.getId()==currentCastingCall.getCountryId()){
                     country1=country.getName();
+                    countryCode=country.getCode();
                     break;
                 }
             }
 
-            String city1="";
-            List<City> cities=SessionInfo.getInstance().getCities();
-            if(cities!=null) {
-                for (City city : cities) {
-                    if (city.getId() == currentCastingCall.getCityId()) {
-                        city1 = city.getName();
-                        break;
+            Call<List<City>> cityDTOCall = new SCAClient().getClient().getCities(countryCode);
+            cityDTOCall.enqueue(new Callback<List<City>>() {
+                @Override
+                public void onResponse(Call<List<City>> call, Response<List<City>> response) {
+
+                    List<City> cityList = response.body();
+
+                    String city1="";
+
+
+                    if(cityList!=null) {
+
+
+                        City defaultCity = new City();
+                        defaultCity.setId(0);
+                        defaultCity.setName("Select City");
+                        cityList.add(0, defaultCity);
+
+                        SessionInfo.getInstance().setCities(cityList);
+
+                        for (City city : cityList) {
+                            if (city.getId() == currentCastingCall.getCityId()) {
+                                city1 = city.getName();
+                                break;
+                            }
+                        }
+
+                        cityAndCountry.setText(city1 +" , "+country1);
+
+
+
+
+
                     }
+
+
                 }
-            }
+
+                @Override
+                public void onFailure(Call<List<City>> call, Throwable t) {
+
+                }
+
+
+            });
+
+
+
 
 //            String country1="";
 //            List<Country> countries=SessionInfo.getInstance().getCountries();
@@ -119,7 +160,6 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
 //                }
 //            }
 
-            cityAndCountry.setText(city1 +" , "+country1);
 
 
             String[] arrayOfId = currentCastingCall.getRoleIds().split(",");
