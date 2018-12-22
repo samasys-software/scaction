@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -140,12 +141,11 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
                         {
                             case R.id.myHome:
                                 intent=new Intent(SCABaseActivity.this,HomeActivity.class);
-                                intent.putExtra("Registered",false);
                                 startActivity(intent);
                                 break;
                             case R.id.myJobs:
                                 intent=new Intent(SCABaseActivity.this,HomeActivity.class);
-                                intent.putExtra("Registered",false);
+
                                 startActivity(intent);
                                 break;
                             case R.id.myPortfolio:
@@ -158,8 +158,7 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
                                 intent.putExtra("isNew",false);
                                 startActivity(intent);
                                 break;
-                            case R.id.notifications:
-                                break;
+
                             case R.id.signout:
                                 LoginManager.getInstance().logOut();
                                 SessionInfo.getInstance().destroy();
@@ -383,6 +382,28 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void getAllUserNotifications(long userId){
+
+        Call<List<UserNotification>> userNotificationDTOCall = new SCAClient().getClient().getUserNotifications(userId);
+        userNotificationDTOCall.enqueue(new Callback<List<UserNotification>>() {
+            @Override
+            public void onResponse(Call<List<UserNotification>> call, Response<List<UserNotification>> response) {
+                Log.i("Success","Hai");
+                List<UserNotification> userNotifications=response.body();
+                SessionInfo.getInstance().setUserNotifications(userNotifications);
+                setNotificationCount(userNotifications);
+                System.out.println(userNotifications.toString());
+
+            }
+
+            @Override
+            public void onFailure(Call<List<UserNotification>> call, Throwable t) {
+
+            }
+        });
+
     }
 }
 

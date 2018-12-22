@@ -43,7 +43,6 @@ import retrofit2.Response;
 public class HomeActivity extends SCABaseActivity {
 
     boolean useFacebookLogin=false;
-    boolean isNewUser;
 
 
     ListView listView;
@@ -57,47 +56,11 @@ public class HomeActivity extends SCABaseActivity {
         context=this;
         listView=(ListView) findViewById(R.id.listOfRoles);
         userName=(TextView) findViewById(R.id.screenName);
+        User user=SessionInfo.getInstance().getUser();
+        addAdapter(user);
 
 
 
-        Boolean registered = getIntent().getExtras().getBoolean("Registered");
-        if(registered ) {
-            User user=SessionInfo.getInstance().getUser();
-            if(user!=null){
-                addAdapter(user);
-            }
-        } else {
-
-
-            Call<User> checkUserDTOCall = new SCAClient().getClient().checkUser(SessionInfo.getInstance().getFbUserDetails().getId());
-            checkUserDTOCall.enqueue(new Callback<User>() {
-                @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-
-                        User user = response.body();
-
-                        if (user == null) {
-                            isNewUser = false;
-                            registerNewUser();
-                        } else {
-                            SessionInfo.getInstance().setUser(user);
-                            addAdapter(user);
-                        }
-
-                    }
-
-
-
-
-                @Override
-                public void onFailure(Call<User> call, Throwable t) {
-
-
-                }
-            });
-
-
-        }
 
       /*  listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -110,67 +73,9 @@ public class HomeActivity extends SCABaseActivity {
 
     }
 
-    private void registerNewUser(){
-
-        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this, R.style.AlertTheme);
-        //alertDialog.setTitle();
-        alertDialog.setCancelable(true);
-        LayoutInflater inflater = HomeActivity.this.getLayoutInflater();
-        View diaView = inflater.inflate(R.layout.alert_base, null);
-        alertDialog.setView(diaView);
-
-        alertDialog.setNegativeButton("CANCEL",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Write your code here to execute after dialog
-                        dialog.cancel();
-
-                    }
-                });
-
-        alertDialog.setPositiveButton("Ok",
-                new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent=new Intent(HomeActivity.this,ProfileActivity.class);
-                        intent.putExtra("isNew",true);
-                        startActivity(intent);
-                    }
-
-                });
-//alertDialog.show();
-        final AlertDialog checkout = alertDialog.create();
-        checkout.show();
-
-
-      /*  CreateUser createUser=new CreateUser();
-        createUser.setFbUser("Nandhini Govindasamy Thevaraya Pillai");
-        createUser.setFbEmail("nandini-14@outlook.com");
-        createUser.setProfile_pic("https://graph.facebook.com/2183841428553289?fields=picture.width(720).height(720)");
 
 
 
-
-        Call<User> registerNewUserCall = new SCAClient().getClient().registerNewUser(createUser);
-            registerNewUserCall.enqueue(new Callback<User>() {
-                @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-                    Log.i("Success","Hai");
-
-                }
-
-                @Override
-                public void onFailure(Call<User> call, Throwable t) {
-
-                }
-            });*/
-    }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu navigation_menu) {
-//        getMenuInflater().inflate(R.navigation_menu.navigation_menu,((ActionMenuView)findViewById(R.id.actionMenuView)).getMenu());
-//        return true;
-//    }
 
     private void addAdapter(User currentUser){
         System.out.println(currentUser.toString());
@@ -183,27 +88,7 @@ public class HomeActivity extends SCABaseActivity {
 
        listView.setAdapter(adapter);
     }
-    private void getAllUserNotifications(long userId){
 
-        Call<List<UserNotification>> userNotificationDTOCall = new SCAClient().getClient().getUserNotifications(userId);
-        userNotificationDTOCall.enqueue(new Callback<List<UserNotification>>() {
-            @Override
-            public void onResponse(Call<List<UserNotification>> call, Response<List<UserNotification>> response) {
-                Log.i("Success","Hai");
-                List<UserNotification> userNotifications=response.body();
-                SessionInfo.getInstance().setUserNotifications(userNotifications);
-                setNotificationCount(userNotifications);
-                System.out.println(userNotifications.toString());
-
-            }
-
-            @Override
-            public void onFailure(Call<List<UserNotification>> call, Throwable t) {
-
-            }
-        });
-
-    }
 
 }
 
