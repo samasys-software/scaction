@@ -199,79 +199,69 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
         }
 
         user=SessionInfo.getInstance().getUser();
-        if(user==null){
-            registerToApply.setVisibility(View.VISIBLE);
-        }
-        else{
-            if(currentCastingCall.getUserId()==user.getUserId()){
-                edit.setVisibility(View.VISIBLE);
+        if(SessionInfo.getInstance().getFbUserDetails()!=null) {
+            if (user == null) {
+                registerToApply.setVisibility(View.VISIBLE);
+            } else {
+                if (currentCastingCall.getUserId() == user.getUserId()) {
+                    edit.setVisibility(View.VISIBLE);
 
-                Call<List<CastingCallApplication>> getUserCastingCallApplicationsDTOCall = new SCAClient().getClient().getCastingCallApplications(currentCastingCall.getId());
-                getUserCastingCallApplicationsDTOCall.enqueue(new Callback<List<CastingCallApplication>>() {
-                    @Override
-                    public void onResponse(Call<List<CastingCallApplication>> call, Response<List<CastingCallApplication>> response) {
+                    Call<List<CastingCallApplication>> getUserCastingCallApplicationsDTOCall = new SCAClient().getClient().getCastingCallApplications(currentCastingCall.getId());
+                    getUserCastingCallApplicationsDTOCall.enqueue(new Callback<List<CastingCallApplication>>() {
+                        @Override
+                        public void onResponse(Call<List<CastingCallApplication>> call, Response<List<CastingCallApplication>> response) {
 
-                         List<CastingCallApplication> castingCallApplicationList= response.body();
-                        if(castingCallApplicationList!=null){
-                            text.setVisibility(View.VISIBLE);
-                            CastingCallApplicationsAdapter adapter=new CastingCallApplicationsAdapter(ApplyCastingCallActivity.this,castingCallApplicationList);
-                            castingCallApplicationsView.setAdapter(adapter);
+                            List<CastingCallApplication> castingCallApplicationList = response.body();
+                            if (castingCallApplicationList != null) {
+                                text.setVisibility(View.VISIBLE);
+                                CastingCallApplicationsAdapter adapter = new CastingCallApplicationsAdapter(ApplyCastingCallActivity.this, castingCallApplicationList);
+                                castingCallApplicationsView.setAdapter(adapter);
 
+                            }
                         }
 
-
-                    }
-
-
+                        @Override
+                        public void onFailure(Call<List<CastingCallApplication>> call, Throwable t) {
 
 
-                    @Override
-                    public void onFailure(Call<List<CastingCallApplication>> call, Throwable t) {
-
-
-                    }
-                });
-
-
-
-
-            }
-           else{
-                Call<CastingCall> getCastingCallDTOCall = new SCAClient().getClient().getCastingCall(currentCastingCall.getId(),user.getUserId());
-                System.out.println(user.getUserId());
-                getCastingCallDTOCall.enqueue(new Callback<CastingCall>() {
-                    @Override
-                    public void onResponse(Call<CastingCall> call, Response<CastingCall> response) {
-
-                        CastingCall castingCall= response.body();
-                        List<CastingCallApplication> castingCallApplicationList=castingCall.getUserApplications();
-                        if(castingCallApplicationList==null) {
-                            apply.setVisibility(View.VISIBLE);
                         }
-                        else {
-                            for (CastingCallApplication currentCastingCallApplication : castingCallApplicationList) {
-                                if (currentCastingCallApplication.getUser().getUserId() == user.getUserId()) {
-                                    unapply.setVisibility(View.VISIBLE);
-                                    break;
-                                } else {
-                                    apply.setVisibility(View.VISIBLE);
-                                    break;
+                    });
+
+                } else {
+                    Call<CastingCall> getCastingCallDTOCall = new SCAClient().getClient().getCastingCall(currentCastingCall.getId(), user.getUserId());
+                    System.out.println(user.getUserId());
+                    getCastingCallDTOCall.enqueue(new Callback<CastingCall>() {
+                        @Override
+                        public void onResponse(Call<CastingCall> call, Response<CastingCall> response) {
+
+                            CastingCall castingCall = response.body();
+                            List<CastingCallApplication> castingCallApplicationList = castingCall.getUserApplications();
+                            if (castingCallApplicationList == null) {
+                                apply.setVisibility(View.VISIBLE);
+                            } else {
+                                for (CastingCallApplication currentCastingCallApplication : castingCallApplicationList) {
+                                    if (currentCastingCallApplication.getUser().getUserId() == user.getUserId()) {
+                                        unapply.setVisibility(View.VISIBLE);
+                                        break;
+                                    } else {
+                                        apply.setVisibility(View.VISIBLE);
+                                        break;
+                                    }
                                 }
                             }
                         }
 
-
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<CastingCall> call, Throwable t) {
-
-
-                    }
-                });
-               // apply.setVisibility(View.VISIBLE);
+                        @Override
+                        public void onFailure(Call<CastingCall> call, Throwable t) {
+                        }
+                    });
+                    // apply.setVisibility(View.VISIBLE);
+                }
             }
+        }
+        else
+        {
+
         }
         registerToApply.setOnClickListener(new View.OnClickListener() {
             @Override
