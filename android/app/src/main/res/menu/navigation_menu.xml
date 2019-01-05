@@ -4,16 +4,13 @@
     android:layout_height="match_parent">
 
     <item
-    android:id="@+id/talent"
-    android:icon="@drawable/ic_launcher_foreground"
-    android:title="Talent"
-    app:showAsAction="always">
-
-
-
-
+        android:id="@+id/talent"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Talent"
+        app:showAsAction="always">
 
     </item>
+
     <item
         android:id="@+id/castingCalls"
         android:icon="@drawable/ic_launcher_foreground"
@@ -21,6 +18,7 @@
         app:showAsAction="always">
 
     </item>
+
     <item
         android:id="@+id/locations"
         android:icon="@drawable/ic_launcher_foreground"
@@ -28,6 +26,7 @@
         app:showAsAction="always">
 
     </item>
+
     <item
         android:id="@+id/studios"
         android:icon="@drawable/ic_launcher_foreground"
@@ -35,6 +34,7 @@
         app:showAsAction="always">
 
     </item>
+
     <item
         android:id="@+id/movieConsulting"
         android:icon="@drawable/ic_launcher_foreground"
@@ -42,13 +42,5 @@
         app:showAsAction="always">
 
     </item>
-
-    <group
-        android:id="@+id/groupi">
-
-    </group>
-
-
-
 
 </menu>
