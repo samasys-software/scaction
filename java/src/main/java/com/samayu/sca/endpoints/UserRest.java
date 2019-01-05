@@ -1,16 +1,30 @@
 package com.samayu.sca.endpoints;
 
 import com.samayu.sca.businessobjects.CastingCallApplication;
+import com.samayu.sca.businessobjects.PortfolioPicture;
 import com.samayu.sca.businessobjects.User;
 import com.samayu.sca.businessobjects.UserNotification;
 import com.samayu.sca.service.DataAccessService;
+import com.samayu.sca.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.xml.ws.Response;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -19,6 +33,12 @@ public class UserRest {
 
     @Autowired
     DataAccessService dataAccessService;
+
+    @Autowired
+    StorageService storageService;
+
+    @Value("${portfolio.basefolder}")
+    String baseFolder;
 
 
     @RequestMapping(path="/register",method = RequestMethod.POST)
@@ -72,12 +92,43 @@ public class UserRest {
 
     }
 
-    @RequestMapping(path="/createPortfolio",method = RequestMethod.POST)
-    public ResponseEntity<Void> createPortfolio() {
-        return null;
+    @PostMapping(path="/uploadPicture")
+    public ResponseEntity<List<PortfolioPicture>> uploadPicture(@RequestParam("userId") long userId , @RequestParam("pictureType") int pictureType , @RequestParam("file") MultipartFile file) throws IOException
+    {
+
+        String filename = UUID.randomUUID().toString();
+        InputStream inputStream = file.getInputStream();
+
+        dataAccessService.savePortfolioPicture( userId , "" , filename , pictureType );
+
+        storageService.store( userId , inputStream , filename , baseFolder );
+
+        return ResponseEntity.ok(dataAccessService.getPortfolioPicsForUser( userId ));
+
+
     }
 
+    @PostMapping(path="/deletePicture")
+    public ResponseEntity<List<PortfolioPicture>> deletePicture(@RequestParam("userId") long userId , @RequestParam("portfolioId") long portfolioId )
+    {
+        dataAccessService.deletePortfolioPicture( userId , portfolioId );
+        return ResponseEntity.ok(dataAccessService.getPortfolioPicsForUser( userId ));
+    }
 
+    @GetMapping(path="/downloadFile/{userId}/{filename}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable("filename") String filename , @PathVariable("userId") long userId, HttpServletRequest httpRequest) throws MalformedURLException,IOException
+    {
+        Resource resource = storageService.getFile(baseFolder , userId , filename );
+        String contentType = httpRequest.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
 
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
 
 }
