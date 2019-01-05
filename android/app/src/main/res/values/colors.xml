@@ -5,4 +5,10 @@
     <color name="colorAccent">#FF4081</color>
     <color name="black">#000000</color>
     <color name="colorInversePrimary">#FFFFFF</color>
+    <color name="chocolate">#C85A17</color>
+    <color name="papaya_orange">#E56717</color>
+    <color name="pumpkin_orange">#F87217</color>
+    <color name="love_red">#E41B17</color>
+    <color name="bright_yellow">#FDD017</color>
+    <color name="bee_yellow">#E9AB17</color>
 </resources>

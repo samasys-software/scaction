@@ -1,0 +1,38 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+
+
+    <item
+        android:id="@+id/projectConsulting"
+        android:title="Project Consulting"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/agreements"
+        android:title="Agreements"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/audioLaunch"
+        android:title="Audio Launch"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/promotions"
+        android:title="Promotions"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/overseasShooting"
+        android:title="Overseas Shooting"
+        app:showAsAction="always">
+    </item>
+
+</menu>

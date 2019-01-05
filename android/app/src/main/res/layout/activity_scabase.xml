@@ -8,10 +8,12 @@
     android:id="@+id/drawer_layout">
     <LinearLayout
         android:layout_width="match_parent"
+
         android:layout_height="match_parent" android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
             android:orientation="horizontal">
             <android.support.v7.widget.Toolbar
                 android:id="@+id/proToolBar"
@@ -23,20 +25,40 @@
                 android:visibility="visible"
                 android:layout_weight="1"
                 />
+
+            <ImageView
+                android:id="@+id/notificationAlert"
+                android:layout_width="match_parent"
+                android:src="@drawable/ic_notification"
+
+                android:gravity="bottom|right"
+                android:textColor="@color/colorInversePrimary"
+                android:background="@color/colorPrimaryDark"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:text=""
+                />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_weight="1"
 
-                android:background="@color/colorInversePrimary"
+                android:background="@color/colorPrimaryDark"
                 >
+                <Button
+                    android:id="@+id/fb_login_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Login"/>
                 <ImageView
                     android:id="@+id/userImage"
                     android:layout_width="match_parent"
                     android:src="@drawable/logo"
 
-                    android:gravity="bottom|right"
+                    android:gravity="center_vertical|right"
                     android:textColor="@color/colorInversePrimary"
                     android:background="@color/colorPrimaryDark"
                     android:layout_height="0dp"
@@ -48,12 +70,13 @@
                 <TextView
                     android:id="@+id/userName"
 
-                    android:layout_width="match_parent"
-                    android:gravity="center_vertical|right"
+                    android:layout_width="wrap_content"
+                    android:gravity="center"
 
                     android:textColor="@color/colorInversePrimary"
                     android:background="@color/colorPrimaryDark"
                     android:layout_height="0dp"
+                    android:layout_marginLeft="4sp"
                     android:layout_weight="1"
                     android:text=""
 
@@ -73,14 +96,27 @@
     </LinearLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="210dp"
+        android:layout_width="210sp"
         android:layout_height="wrap_content"
         app:theme="@style/PopupMenuItem"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
 
         app:headerLayout="@layout/nav_header_navigation_drawer"
-        app:menu="@menu/menu" />
+        app:menu="@menu/navigation_menu" >
+    <android.support.design.widget.NavigationView
+        android:id="@+id/popup_menu_view"
+        android:layout_gravity="center_horizontal"
+        android:visibility="invisible"
+        android:layout_width="210dp"
+        android:layout_marginStart="100sp"
+        android:layout_height="wrap_content"
+        app:theme="@style/PopupMenuItem"
+        android:fitsSystemWindows="true"
+
+        />
+    </android.support.design.widget.NavigationView>
+
 
 
 </android.support.v4.widget.DrawerLayout>

@@ -1,0 +1,55 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+    <item
+        android:id="@+id/actor"
+        android:title="Actor"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/photographer"
+        android:title="Photographer"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/director"
+        android:title="Director"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/designer"
+        android:title="Designer"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/dubbingArtist"
+        android:title="Dubbing Artist"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/singer"
+        android:title="Singer"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/musician"
+        android:title="Musician"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/otherTechnicians"
+        android:title="Other Technicians"
+        app:showAsAction="always">
+    </item>
+
+
+</menu>
