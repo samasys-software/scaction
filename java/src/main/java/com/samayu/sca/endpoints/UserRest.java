@@ -131,7 +131,7 @@ public class UserRest {
                 .body(resource);
     }
 
-    @GetMapping(path="/getAllPortfolio/{userId}")
+    @GetMapping(path="/getAllPortfolio/{userId}" )
     public ResponseEntity<List<PortfolioPicture>> findAllPortfolio(@PathVariable("userId") long userId )
     {
         return ResponseEntity.ok(dataAccessService.getPortfolioPicsForUser( userId ));
