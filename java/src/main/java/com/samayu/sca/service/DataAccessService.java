@@ -40,6 +40,9 @@ public class DataAccessService {
     @Autowired
     private CastingCallApplicationRepository applicationRepository;
 
+    @Autowired
+    private PortfolioRepository portfolioRepository;
+
     public User register( String fbUser, String screenName, String name, String email ,
                           String countryCode,  String city, String phoneNumber,
                           String whatsappNumber, int gender, LocalDate dateOfBirth,
@@ -271,6 +274,31 @@ public class DataAccessService {
     public List<CastingCallApplication> getCastingCallApplications(long castingCallId )
     {
         return applicationRepository.findByCastingCallId( castingCallId );
+    }
+
+    public List<PortfolioPicture> getPortfolioPicsForUser(long userId ){
+
+        return portfolioRepository.findByUserIdAndActive( userId , true );
+    }
+
+    public void savePortfolioPicture(long userId , String extension , String filename , int type ){
+        PortfolioPicture picture = new PortfolioPicture();
+        picture.setActive(true );
+        picture.setUserId( userId );
+        picture.setExtension( extension );
+        picture.setFileName( filename );
+        picture.setType( type );
+
+        portfolioRepository.save( picture );
+
+    }
+
+    public void deletePortfolioPicture(long userId, long portfolioId ){
+        PortfolioPicture picture = portfolioRepository.findOne( portfolioId );
+        if( picture.getUserId() == userId ){
+            picture.setActive(false);
+            portfolioRepository.save(picture );
+        }
     }
 
 }
