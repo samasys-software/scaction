@@ -52,6 +52,7 @@
                     android:id="@+id/fb_login_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
                     android:text="Login"/>
                 <ImageView
                     android:id="@+id/userImage"
@@ -76,9 +77,9 @@
                     android:textColor="@color/colorInversePrimary"
                     android:background="@color/colorPrimaryDark"
                     android:layout_height="0dp"
-                    android:layout_marginLeft="4sp"
+                    android:layout_marginLeft="25sp"
                     android:layout_weight="1"
-                    android:text=""
+                    android:text="No Meha"
 
                     />
             </LinearLayout>

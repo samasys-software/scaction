@@ -320,8 +320,9 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
 
    public void setNotificationCount(List<UserNotification> userNotificationList)  {
        //int count=0;
-
-       notificationAlert.setImageDrawable(buildCounterDrawable(userNotificationList.size()));
+       if(userNotificationList.size()!=0) {
+           notificationAlert.setImageDrawable(buildCounterDrawable(userNotificationList.size()));
+       }
 
    }
 
