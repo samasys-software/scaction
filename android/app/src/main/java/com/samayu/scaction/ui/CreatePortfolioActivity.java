@@ -1,11 +1,13 @@
 package com.samayu.scaction.ui;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -26,13 +28,29 @@ import android.widget.Toast;
 
 import com.samayu.scaction.R;
 import com.samayu.scaction.dto.CastingCall;
+import com.samayu.scaction.dto.PortfolioPicture;
+import com.samayu.scaction.service.SCAClient;
+import com.samayu.scaction.service.SessionInfo;
+
+import com.ipaulpro.afilechooser.utils.FileUtils;
+
+
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CreatePortfolioActivity extends SCABaseActivity {
 
@@ -48,7 +66,7 @@ public class CreatePortfolioActivity extends SCABaseActivity {
     private static final int GET_PORTFOLIO_IMAGES = 3;
     private static final int GET_THUMBNAILS_IMAGES = 4;
     private static final int GET_MEDIUM_IMAGES = 5;
-    private static final int Take_PORTFOLIO_IMAGES = 6;
+    private static final int TAKE_PORTFOLIO_IMAGES = 6;
     private static final int TAKE_THUMBNAILS_IMAGES = 7;
     private static final int TAKE_MEDIUM_IMAGES = 8;
     private static final int PIC_CROP = 3;
@@ -252,6 +270,7 @@ public class CreatePortfolioActivity extends SCABaseActivity {
             }
             else if (requestCode == GET_THUMBNAILS_IMAGES) {
                 Uri uri = intent.getData();
+                sendPortfolioToServer(uri,0);
                 setThumbnailImage(uri);
 
             }
@@ -317,6 +336,57 @@ public class CreatePortfolioActivity extends SCABaseActivity {
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bmp, "Title", null);
         return Uri.parse(path);
     }
+    private String getRealPathFromURIPath(Uri contentURI, Activity activity) {
+//        Cursor cursor = activity.getContentResolver().query(contentURI, null, null, null, null);
+//        if (cursor == null) {
+//            return contentURI.getPath();
+//        } else {
+//            cursor.moveToFirst();
+//            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+//            return cursor.getString(idx);
+//        }
+
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+    private void sendPortfolioToServer(Uri imageuri,int pictureType)
+    {
+        //String filePath = //mageuri.getPath();// getRealPathFromURIPath(imageuri, CreatePortfolioActivity.this);
+        File file= FileUtils.getFile(this,imageuri);
+
+        //Log.d("msg", "Filename " + file.getName());
+        //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        //RequestBody mFile = RequestBody.create(MediaType.parse("image/*"), file);
+        RequestBody mFile = RequestBody.create(
+                MediaType.parse(getContentResolver().getType(imageuri)),
+               file
+        );
+
+        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", "saple", mFile);
+
+        Call<List<PortfolioPicture>> getPortfolioPictureDTOCall= new SCAClient().getClient().uploadPicture(SessionInfo.getInstance().getUser().getUserId(),pictureType,fileToUpload);
+        getPortfolioPictureDTOCall.enqueue(new Callback<List<PortfolioPicture>>() {
+            @Override
+            public void onResponse(Call<List<PortfolioPicture>> call, Response<List<PortfolioPicture>> response) {
+                List<PortfolioPicture> portfolioPictures=response.body();
+                System.out.println(portfolioPictures.size());
+
+
+            }
+
+
+
+
+            @Override
+            public void onFailure(Call<List<PortfolioPicture>> call, Throwable t) {
+
+
+            }
+        });
+
+    }
     public void setThumbnailImage(Uri currentURI)
     {
         thumbnailImages.setImageURI(currentURI);
@@ -334,7 +404,7 @@ public class CreatePortfolioActivity extends SCABaseActivity {
         switch (imageSize) {
             case 1:
 
-                startActivityForResult(intent, Take_PORTFOLIO_IMAGES);
+                startActivityForResult(intent, TAKE_PORTFOLIO_IMAGES);
                 break;
             case 2:
 
