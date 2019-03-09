@@ -107,6 +107,11 @@ public class GlobalRest {
         return ResponseEntity.ok( castingCall );
     }
 
+    @GetMapping( path="/search/{pageNo}/{profilesPerPage}")
+    public ResponseEntity<Iterable<User>> getActorProfiles(@PathVariable("pageNo") int pageNo, @PathVariable("profilesPerPage") int resultSize ){
+            return ResponseEntity.ok(dataAccessService.getActorProfiles( pageNo , resultSize ));
+    }
+
 
 
 }

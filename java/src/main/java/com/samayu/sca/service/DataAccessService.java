@@ -8,10 +8,7 @@ import org.springframework.stereotype.Component;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class DataAccessService {
@@ -299,6 +296,12 @@ public class DataAccessService {
             picture.setActive(false);
             portfolioRepository.save(picture );
         }
+    }
+
+    public Iterable<User> getActorProfiles(int pageNo , int resultSize){
+
+        return userRepository.findAll();
+
     }
 
 }
