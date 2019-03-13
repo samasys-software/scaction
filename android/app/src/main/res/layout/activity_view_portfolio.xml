@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:dividerHeight="1dp"
+                android:divider="@android:color/darker_gray"
+                android:headerDividersEnabled="true"
+                android:nestedScrollingEnabled="true"
+                android:id="@+id/viewPortfolioThumbnail"
+                android:layout_weight="0.2"
+                android:visibility="visible"
+
+
+
+                />
+
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/viewPortfolioMedium"
+                android:layout_below="@+id/choose_medium"
+                android:layout_weight="0.2"
+                android:visibility="visible"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:dividerHeight="1dp"
+                android:divider="@android:color/darker_gray"
+                android:headerDividersEnabled="true"
+
+                />
+
+
+
+
+
+
+            <!--</RelativeLayout>-->
+
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/viewPortfolioImage"
+                android:layout_below="@+id/view_medium"
+                android:layout_weight="0.2"
+                android:visibility="visible"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:dividerHeight="1dp"
+                android:divider="@android:color/darker_gray"
+                android:headerDividersEnabled="true"
+
+                />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+    </RelativeLayout>
+
+
+
+
+
+</android.support.v4.widget.NestedScrollView>

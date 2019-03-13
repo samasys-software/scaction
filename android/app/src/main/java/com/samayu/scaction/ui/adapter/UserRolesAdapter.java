@@ -1,4 +1,4 @@
-package com.samayu.scaction.ui;
+package com.samayu.scaction.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.samayu.scaction.R;
 import com.samayu.scaction.dto.UserRole;
+import com.samayu.scaction.ui.HomeActivity;
+import com.samayu.scaction.ui.UserCastingCallsActivity;
 
 import java.util.List;
 

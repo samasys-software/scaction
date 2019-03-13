@@ -1,8 +1,6 @@
 package com.samayu.scaction.ui;
 
-import android.app.Notification;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,6 +10,7 @@ import android.widget.Toast;
 import com.samayu.scaction.R;
 import com.samayu.scaction.dto.UserNotification;
 import com.samayu.scaction.service.SessionInfo;
+import com.samayu.scaction.ui.adapter.NotificationAdapter;
 
 import java.util.List;
 

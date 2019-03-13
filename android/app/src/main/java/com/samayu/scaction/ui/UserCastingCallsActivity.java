@@ -2,20 +2,18 @@ package com.samayu.scaction.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.samayu.scaction.R;
 import com.samayu.scaction.dto.CastingCall;
-import com.samayu.scaction.dto.User;
 import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
+import com.samayu.scaction.ui.adapter.CastingCallsAdapter;
 
 import java.util.List;
 

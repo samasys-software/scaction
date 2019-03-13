@@ -1,4 +1,4 @@
-package com.samayu.scaction.ui;
+package com.samayu.scaction.ui.adapter;
 
 import android.app.Activity;
 import android.content.Context;

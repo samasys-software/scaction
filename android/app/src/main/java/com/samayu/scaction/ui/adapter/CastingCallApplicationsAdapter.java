@@ -1,4 +1,4 @@
-package com.samayu.scaction.ui;
+package com.samayu.scaction.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.samayu.scaction.R;
 import com.samayu.scaction.dto.CastingCallApplication;
 import com.samayu.scaction.dto.ProfileType;
-import com.samayu.scaction.dto.UserNotification;
 import com.samayu.scaction.service.SessionInfo;
+import com.samayu.scaction.ui.ApplyCastingCallActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -87,7 +87,7 @@ public class CastingCallApplicationsAdapter extends BaseAdapter {
             final CastingCallApplication castingCallApplication = castingCallApplications.get(position);
 
             try{
-                Picasso.with(context).load(castingCallApplication.getUser().getProfilePic())
+                Picasso.with(context).load("https://graph.facebook.com/"+castingCallApplication.getUser().getFbUser()+"/picture?height=40&weight=40")
                         .into(holder.profilePic);
 
             }
