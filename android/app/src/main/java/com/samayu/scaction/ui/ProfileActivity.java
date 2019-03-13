@@ -621,7 +621,7 @@ public class ProfileActivity extends SCABaseActivity {
                 String selectedCountryCode = selectedCountry.getCode();
 
                 String fbUser=SessionInfo.getInstance().getFbUserDetails().getId();
-                String url=SessionInfo.getInstance().getFbUserDetails().getId();
+                String url=SessionInfo.getInstance().getFbUserDetails().getUrl();
 
                 //System.out.println();
 

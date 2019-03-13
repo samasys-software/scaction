@@ -94,21 +94,21 @@
         android:gravity="start"
         android:layout_weight="7">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:id="@+id/castingCallRoleListLayout"
-                android:layout_height="100sp"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:id="@+id/castingCallRoleListLayout"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
 
-                <ListView
+                <android.support.v7.widget.RecyclerView
                     android:id="@+id/castingCallRoleList"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:dividerHeight="1dp"
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="true"
 
                     />
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
 
 

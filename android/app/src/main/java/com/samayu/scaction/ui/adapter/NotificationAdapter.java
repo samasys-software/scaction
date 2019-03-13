@@ -1,4 +1,4 @@
-package com.samayu.scaction.ui;
+package com.samayu.scaction.ui.adapter;
 
 
 
@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.samayu.scaction.R;
 import com.samayu.scaction.dto.UserNotification;
 import com.samayu.scaction.dto.UserRole;
+import com.samayu.scaction.ui.NotificationActivity;
 
 import java.util.List;
 

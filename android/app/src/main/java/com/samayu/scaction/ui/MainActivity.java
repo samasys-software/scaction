@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.samayu.scaction.R;
 import com.samayu.scaction.dto.Country;
@@ -110,6 +111,9 @@ public class MainActivity extends SCABaseActivity {
         alertDialog.setCancelable(true);
         LayoutInflater inflater = MainActivity.this.getLayoutInflater();
         View diaView = inflater.inflate(R.layout.alert_base, null);
+        TextView sortTextHint=(TextView) diaView.findViewById(R.id.sortTextHint);
+        sortTextHint.setText("Do You Want to Register in Start Camera, Action! ?");
+
         alertDialog.setView(diaView);
 
         alertDialog.setNegativeButton("CANCEL",
@@ -132,8 +136,8 @@ public class MainActivity extends SCABaseActivity {
 
                 });
 //alertDialog.show();
-        final AlertDialog checkout = alertDialog.create();
-        checkout.show();
+        final AlertDialog registerUser = alertDialog.create();
+        registerUser.show();
 
 
       /*  CreateUser createUser=new CreateUser();

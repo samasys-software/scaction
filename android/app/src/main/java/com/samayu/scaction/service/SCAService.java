@@ -1,5 +1,7 @@
 package com.samayu.scaction.service;
 
+import android.content.res.Resources;
+
 import com.samayu.scaction.domain.CreateUser;
 import com.samayu.scaction.dto.CastingCall;
 import com.samayu.scaction.dto.CastingCallApplication;
@@ -9,12 +11,15 @@ import com.samayu.scaction.dto.PortfolioPicture;
 import com.samayu.scaction.dto.ProfileDefaults;
 import com.samayu.scaction.dto.User;
 import com.samayu.scaction.dto.UserNotification;
+import com.squareup.picasso.Downloader;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.util.List;
 
 import okhttp3.MultipartBody;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -118,17 +123,21 @@ public interface SCAService {
 
     @POST("user/uploadPicture")
     @Multipart
-
     public Call<List<PortfolioPicture>> uploadPicture(
             @Part("userId") long userId ,
             @Part("pictureType") int pictureType ,
             @Part MultipartBody.Part file );
+
 
     @POST("user/deletePicture")
     @FormUrlEncoded
     public Call<List<PortfolioPicture>> deletePicture(
             @Field("userId") long userId ,
             @Field("portfolioId") long portfolioId );
+
+    @GET("user/downloadFile/{userId}/{filename}")
+    public Call<ResponseBody> downloadFile(@Path("filename") String filename , @Path("userId") long userId);
+
 
     @GET("user/getAllPortfolio/{userId}" )
     public Call<List<PortfolioPicture>> findAllPortfolio(@Path("userId") long userId );

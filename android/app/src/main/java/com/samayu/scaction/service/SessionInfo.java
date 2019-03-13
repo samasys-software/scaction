@@ -5,6 +5,7 @@ import com.samayu.scaction.dto.CastingCall;
 import com.samayu.scaction.dto.City;
 import com.samayu.scaction.dto.Country;
 import com.samayu.scaction.dto.ProfileType;
+import com.samayu.scaction.dto.SelectedCastingCallRoles;
 import com.samayu.scaction.dto.User;
 import com.samayu.scaction.dto.UserNotification;
 
@@ -95,6 +96,16 @@ public class SessionInfo {
         this.userNotifications = userNotifications;
     }
 
+
+    private List<SelectedCastingCallRoles> selectedCastingCallRoles;
+
+    public List<SelectedCastingCallRoles> getSelectedCastingCallRoles() {
+        return selectedCastingCallRoles;
+    }
+
+    public void setSelectedCastingCallRoles(List<SelectedCastingCallRoles> selectedCastingCallRoles) {
+        this.selectedCastingCallRoles = selectedCastingCallRoles;
+    }
 
     public static SessionInfo getInstance() {
         return ourInstance;
