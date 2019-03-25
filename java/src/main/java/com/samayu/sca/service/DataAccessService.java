@@ -300,7 +300,7 @@ public class DataAccessService {
 
     public Iterable<User> getActorProfiles(int pageNo , int resultSize){
 
-        return userRepository.findAll();
+        return userRepository.findBySearchable(true);
 
     }
 
