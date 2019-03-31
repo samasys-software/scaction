@@ -1,9 +1,6 @@
 package com.samayu.sca.endpoints;
 
-import com.samayu.sca.businessobjects.CastingCallApplication;
-import com.samayu.sca.businessobjects.PortfolioPicture;
-import com.samayu.sca.businessobjects.User;
-import com.samayu.sca.businessobjects.UserNotification;
+import com.samayu.sca.businessobjects.*;
 import com.samayu.sca.service.DataAccessService;
 import com.samayu.sca.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,6 +133,29 @@ public class UserRest {
     {
         return ResponseEntity.ok(dataAccessService.getPortfolioPicsForUser( userId ));
     }
+
+    @PostMapping(path="/updatePortfolio/{userId}")
+    public ResponseEntity<Portfolio> updatePortfolio(@PathVariable("userId") long userId,  @RequestParam("shortDesc") String shortDesc, @RequestParam("areaOfExpertise") String areaOfExpertise, @RequestParam("projectWorked") String projectWorked, @RequestParam("message") String message ){
+
+        Portfolio portfolio = new Portfolio();
+        User user = new User();
+        user.setUserId( userId );
+        user.setPortfolio( portfolio );
+        portfolio.setUserId( userId );
+        portfolio.setMessage( message );
+        portfolio.setAreaOfExpertise( areaOfExpertise );
+        portfolio.setProjectsWorked( projectWorked );
+        portfolio.setShortDescription( shortDesc );
+        dataAccessService.updatePortfolio( portfolio );
+        return ResponseEntity.ok( portfolio );
+    }
+
+    @GetMapping(path="/getPortfolio/{userId}")
+    public ResponseEntity<Portfolio> getPortfolio(@PathVariable("userId") long userId ){
+        return ResponseEntity.ok( dataAccessService.getPortfolio( userId ) );
+    }
+
+
 
 
 

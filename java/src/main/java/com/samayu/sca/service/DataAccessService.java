@@ -5,6 +5,7 @@ import com.samayu.sca.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.sound.sampled.Port;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -39,6 +40,9 @@ public class DataAccessService {
 
     @Autowired
     private PortfolioRepository portfolioRepository;
+
+    @Autowired
+    private PortfolioDetailsRepository portfolioDetailsRepository;
 
     public User register( String fbUser, String screenName, String name, String email ,
                           String countryCode,  String city, String phoneNumber,
@@ -300,8 +304,37 @@ public class DataAccessService {
 
     public Iterable<User> getActorProfiles(int pageNo , int resultSize){
 
-        return userRepository.findBySearchable(true);
+        return userRepository.findActors();
 
+    }
+
+    public Portfolio updatePortfolio(Portfolio portfolio){
+
+        Portfolio existingPortfolio = portfolioDetailsRepository.findByUserId( portfolio.getUserId() );
+
+        if( existingPortfolio == null )
+        {
+            portfolioDetailsRepository.save( portfolio );
+            User user = userRepository.findOne( portfolio.getUserId() );
+            user.setPortfolio( portfolio );
+            userRepository.save( user );
+            return portfolio;
+        }
+        else{
+            existingPortfolio.setShortDescription( portfolio.getShortDescription());
+            existingPortfolio.setAreaOfExpertise( portfolio.getAreaOfExpertise() );
+            existingPortfolio.setMessage( portfolio.getMessage() );
+            existingPortfolio.setProjectsWorked( portfolio.getProjectsWorked() );
+            portfolioDetailsRepository.save( existingPortfolio );
+
+            return existingPortfolio;
+        }
+
+
+    }
+
+    public Portfolio getPortfolio(long userId ){
+        return portfolioDetailsRepository.findByUserId( userId );
     }
 
 }
