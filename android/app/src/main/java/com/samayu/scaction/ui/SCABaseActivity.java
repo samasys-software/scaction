@@ -32,6 +32,7 @@ import com.facebook.login.LoginManager;
 import com.samayu.scaction.R;
 import com.samayu.scaction.domain.FBUserDetails;
 import com.samayu.scaction.dto.City;
+import com.samayu.scaction.dto.PortfolioPicture;
 import com.samayu.scaction.dto.UserNotification;
 import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
@@ -404,6 +405,12 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
 
             }
         });
+
+    }
+
+    public void getAllPortfolioImages(long userId)
+    {
+
 
     }
 }

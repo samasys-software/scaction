@@ -43,6 +43,7 @@ public class ImageHolderAdapter extends RecyclerView.Adapter <ImageHolderAdapter
     Context context;
     LayoutInflater inflater;
     String imageUrl=null;
+    boolean edit;
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
         public ImageView portfolioImages,remove;
@@ -53,10 +54,12 @@ public class ImageHolderAdapter extends RecyclerView.Adapter <ImageHolderAdapter
         }
     }
 
-    public ImageHolderAdapter(Activity mainActivity, List<PortfolioPicture> portfolioPicturesList) {
+    public ImageHolderAdapter(Activity mainActivity, List<PortfolioPicture> portfolioPicturesList,boolean edit1) {
 
         // TODO Auto-generated constructor stub
         portfolioPictures = portfolioPicturesList;
+
+        edit=edit1;
 
 
         context = mainActivity;
@@ -78,6 +81,9 @@ public class ImageHolderAdapter extends RecyclerView.Adapter <ImageHolderAdapter
     @Override
     public void onBindViewHolder(ImageViewHolder holder, int position) {
         final PortfolioPicture portfolioPicture = portfolioPictures.get(position);
+        if(!edit){
+            holder.remove.setVisibility(View.GONE);
+        }
 
 
         //String imageUrl=BuildConfig.SERVER_URL+"Users/NandhiniGovindasamy/Documents/scactionimages/14/"+portfolioPicture.getFileName();
@@ -146,7 +152,7 @@ public class ImageHolderAdapter extends RecyclerView.Adapter <ImageHolderAdapter
         deletePortfolioDTOCall.enqueue(new Callback<List<PortfolioPicture>>() {
             @Override
             public void onResponse(Call<List<PortfolioPicture>> call, Response<List<PortfolioPicture>> response) {
-                ((CreatePortfolioActivity)context). setImagesInAdapter(response);
+                ((CreatePortfolioActivity)context). setImagesInAdapter(response.body());
 
             }
 

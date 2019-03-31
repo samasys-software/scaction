@@ -142,5 +142,8 @@ public interface SCAService {
     @GET("user/getAllPortfolio/{userId}" )
     public Call<List<PortfolioPicture>> findAllPortfolio(@Path("userId") long userId );
 
+    @GET( "global/search/{pageNo}/{profilesPerPage}")
+    public Call<List<User>> getActorProfiles(@Path("pageNo") int pageNo, @Path("profilesPerPage") int resultSize );
+
 
 }

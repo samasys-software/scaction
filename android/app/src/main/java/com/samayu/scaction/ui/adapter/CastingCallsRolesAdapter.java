@@ -48,10 +48,11 @@ import retrofit2.Response;
 
 public class CastingCallsRolesAdapter extends RecyclerView.Adapter <com.samayu.scaction.ui.adapter.CastingCallsRolesAdapter.RolesViewHolder>{
         List<SelectedCastingCallRoles> selectedCastingCallRolesList;
+        List<SelectedCastingCallRoles> profileTypes;
         User user;
         Context context;
         LayoutInflater inflater;
-        int currentUser;
+        int currentUser,currentActivity;
 
        // List<SelectedCastingCallRoles> selectedCastingCallRolesList=new ArrayList<SelectedCastingCallRoles>();
 
@@ -65,10 +66,18 @@ public class CastingCallsRolesAdapter extends RecyclerView.Adapter <com.samayu.s
             }
         }
 
-        public CastingCallsRolesAdapter(Activity mainActivity,int currentUser1,User user1) {
+        public CastingCallsRolesAdapter(Activity mainActivity,int Activity,int currentUser1,User user1) {
 
             // TODO Auto-generated constructor stub
-            selectedCastingCallRolesList = SessionInfo.getInstance().getSelectedCastingCallRoles();
+            currentActivity=Activity;
+
+            if(currentActivity==0)
+            {
+                selectedCastingCallRolesList = SessionInfo.getInstance().getRolesList();
+            }else {
+                selectedCastingCallRolesList = SessionInfo.getInstance().getSelectedCastingCallRoles();
+            }
+
             user=user1;
 
             currentUser=currentUser1;
@@ -95,30 +104,39 @@ public class CastingCallsRolesAdapter extends RecyclerView.Adapter <com.samayu.s
             holder.role.setText(selectedCastingCallRoles.getProfileType().getName());
             holder.checkBox.setChecked(false);
 
-            if(currentUser==1){
-                holder.checkBox.setVisibility(View.GONE);
-            }
-            else if(currentUser==2){
-                List<UserRole> currentUserRoles=user.getUserRoles();
-                for(UserRole userRole:currentUserRoles)
-                {
-                    if(userRole.getRoleType().getId()!=selectedCastingCallRoles.getProfileType().getId())
-                    {
-                        holder.checkBox.setVisibility(View.GONE);
-                    }
-                }
-            }
+//            if(currentUser==1){
+//                holder.checkBox.setVisibility(View.GONE);
+//            }
+//            else if(currentUser==2){
+//                List<UserRole> currentUserRoles=user.getUserRoles();
+//                for(UserRole userRole:currentUserRoles)
+//                {
+//                    if(userRole.getRoleType().getId()!=selectedCastingCallRoles.getProfileType().getId())
+//                    {
+//                        holder.checkBox.setVisibility(View.GONE);
+//                    }
+//                }
+//            }
 
 
 
             holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(holder.checkBox.isChecked()){
-                       SessionInfo.getInstance().getSelectedCastingCallRoles().get(position).setChecked(true);
+                    if(currentUser==0){
+                        if (holder.checkBox.isChecked()) {
+                            SessionInfo.getInstance().getRolesList().get(position).setChecked(true);
+                        } else {
+                            SessionInfo.getInstance().getRolesList().get(position).setChecked(false);
+                        }
+
                     }
-                    else{
-                        SessionInfo.getInstance().getSelectedCastingCallRoles().get(position).setChecked(false);
+                    else {
+                        if (holder.checkBox.isChecked()) {
+                            SessionInfo.getInstance().getSelectedCastingCallRoles().get(position).setChecked(true);
+                        } else {
+                            SessionInfo.getInstance().getSelectedCastingCallRoles().get(position).setChecked(false);
+                        }
                     }
 
                 }

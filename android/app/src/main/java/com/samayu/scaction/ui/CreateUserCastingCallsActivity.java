@@ -86,7 +86,7 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
         startdatePicker=(ImageButton) findViewById(R.id.addStartDatePicker);
         endDatePicker=(ImageButton) findViewById(R.id.addEndDatePicker);
         castingCallCreate=(Button) findViewById(R.id.castingCallCreate);
-        castingCallReset=(Button) findViewById(R.id.castingCallreset);
+       // castingCallReset=(Button) findViewById(R.id.castingCallreset);
         projectName=(EditText) findViewById(R.id.addProjectName);
         projectDetails=(EditText) findViewById(R.id.addProjectdetails);
         productionCompany=(EditText) findViewById(R.id.addProductionCompany);
@@ -277,6 +277,7 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
                         startDateSetListener,
                         year1,month1,day1);
 
+                dialog.getDatePicker().setMinDate(cal1.getTimeInMillis());
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
@@ -307,7 +308,7 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         endDateSetListener,
                         year1,month1,day1);
-
+                dialog.getDatePicker().setMinDate(cal1.getTimeInMillis());
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }

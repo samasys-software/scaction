@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -51,6 +52,7 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
     String country1="";
     CastingCallsRolesAdapter profileAdapter;
     int currentUser;
+    List<CastingCallApplication> castingCallApplicationList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,7 +233,7 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
                         @Override
                         public void onResponse(Call<List<CastingCallApplication>> call, Response<List<CastingCallApplication>> response) {
 
-                            List<CastingCallApplication> castingCallApplicationList = response.body();
+                             castingCallApplicationList = response.body();
                             if (castingCallApplicationList != null) {
                                 text.setVisibility(View.VISIBLE);
                                 CastingCallApplicationsAdapter adapter = new CastingCallApplicationsAdapter(ApplyCastingCallActivity.this, castingCallApplicationList);
@@ -286,7 +288,7 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
         }
 
 
-        profileAdapter= new CastingCallsRolesAdapter(this,currentUser,user);
+        profileAdapter= new CastingCallsRolesAdapter(this,1,currentUser,user);
        // listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         castingcallsRoles.setAdapter(profileAdapter);
         registerToApply.setOnClickListener(new View.OnClickListener() {
@@ -294,6 +296,15 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
             public void onClick(View v) {
                 Intent intent=new Intent(ApplyCastingCallActivity.this,ProfileActivity.class);
                 intent.putExtra("isNew",true);
+                startActivity(intent);
+            }
+        });
+        castingCallApplicationsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                long userId=castingCallApplicationList.get(position).getUser().getUserId();
+                Intent intent=new Intent(ApplyCastingCallActivity.this,ViewPortfolioActivity.class);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
         });
