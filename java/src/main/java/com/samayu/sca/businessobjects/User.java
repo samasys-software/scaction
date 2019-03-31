@@ -1,6 +1,7 @@
 package com.samayu.sca.businessobjects;
 
 import javax.persistence.*;
+import javax.sound.sampled.Port;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -48,8 +49,20 @@ public class User {
     @Column(name="city_id")
     private int cityId;
 
+    @OneToOne
+    @JoinColumn(name="portfolio_id" , referencedColumnName = "scaction_portfolio_details_id")
+    private Portfolio portfolio;
+
     @Transient
     private List<UserRole> userRoles;
+
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+    }
 
     public List<UserRole> getUserRoles() {
         return userRoles;
