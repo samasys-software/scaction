@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -68,6 +69,7 @@ public class CreatePortfolioActivity extends SCABaseActivity {
     private List<Uri> userSelectedImageUriList = new ArrayList<Uri>();
     private ImageView portfolioPic, portfolioPic1, portfolioPic2, portfolioPic3, portfolioPic4, portfolioPic5,portfolioPic6,portfolioPic7,portfolioPic8,portfolioPic9,portfolioPic10,thumbnailImages,mediumImages;
     private Uri selectedImage;
+
     LinearLayout choosePortfolioPicture,chooseThumbnailPicture,chooseMediumPicture;
     Context context;
     private String[] title = {
@@ -106,12 +108,31 @@ public class CreatePortfolioActivity extends SCABaseActivity {
         portfolioListView= (RecyclerView) findViewById(R.id.addPortfolio);
         portfolioListView.setLayoutManager(portfolioLayoutManager);
 
-        getAllPortfolioImages();
+        Call<List<PortfolioPicture>> getAllPortfolioPictureDTOCall= new SCAClient().getClient().findAllPortfolio(SessionInfo.getInstance().getUser().getUserId());
+        getAllPortfolioPictureDTOCall.enqueue(new Callback<List<PortfolioPicture>>() {
+            @Override
+            public void onResponse(Call<List<PortfolioPicture>> call, Response<List<PortfolioPicture>> response) {
+                List<PortfolioPicture> portfolioPictures=response.body();
+                setImagesInAdapter(portfolioPictures);
+            }
+
+            @Override
+            public void onFailure(Call<List<PortfolioPicture>> call, Throwable t) {
+
+
+            }
+        });
+
+
+
+
+
 
         preview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(CreatePortfolioActivity.this,ViewPortfolioActivity.class);
+                intent.putExtra("userId", SessionInfo.getInstance().getUser().getUserId());
                 startActivity(intent);
             }
         });
@@ -349,7 +370,7 @@ public class CreatePortfolioActivity extends SCABaseActivity {
         getPortfolioPictureDTOCall.enqueue(new Callback<List<PortfolioPicture>>() {
             @Override
             public void onResponse(Call<List<PortfolioPicture>> call, Response<List<PortfolioPicture>> response) {
-                setImagesInAdapter(response);
+                setImagesInAdapter(response.body());
 
             }
 
@@ -415,29 +436,14 @@ public class CreatePortfolioActivity extends SCABaseActivity {
 
     }
 
-    public void getAllPortfolioImages()
-    {
-        Call<List<PortfolioPicture>> getAllPortfolioPictureDTOCall= new SCAClient().getClient().findAllPortfolio(SessionInfo.getInstance().getUser().getUserId());
-        getAllPortfolioPictureDTOCall.enqueue(new Callback<List<PortfolioPicture>>() {
-            @Override
-            public void onResponse(Call<List<PortfolioPicture>> call, Response<List<PortfolioPicture>> response) {
-                setImagesInAdapter(response);
-            }
-
-            @Override
-            public void onFailure(Call<List<PortfolioPicture>> call, Throwable t) {
 
 
-            }
-        });
-    }
+    public void setImagesInAdapter(List<PortfolioPicture> response){
 
-    public void setImagesInAdapter(Response<List<PortfolioPicture>> response){
-        List<PortfolioPicture> portfolioPictures=response.body();
         List<PortfolioPicture> thumbnailImages=new ArrayList<PortfolioPicture>();
         List<PortfolioPicture> mediumImages=new ArrayList<PortfolioPicture>();
         List<PortfolioPicture> portfolioImages=new ArrayList<PortfolioPicture>();
-        for(PortfolioPicture portfolioPicture:portfolioPictures)
+        for(PortfolioPicture portfolioPicture:response)
         {
             if(portfolioPicture.getType()==0){
                 thumbnailImages.add(portfolioPicture);
@@ -450,15 +456,15 @@ public class CreatePortfolioActivity extends SCABaseActivity {
             }
         }
         ImageHolderAdapter adapter;
-        adapter= new ImageHolderAdapter(CreatePortfolioActivity.this, thumbnailImages);
+        adapter= new ImageHolderAdapter(CreatePortfolioActivity.this, thumbnailImages,true);
         thumbnailListView.setVisibility(View.VISIBLE);
         thumbnailListView.setAdapter(adapter);
 
-        adapter = new ImageHolderAdapter(CreatePortfolioActivity.this, mediumImages);
+        adapter = new ImageHolderAdapter(CreatePortfolioActivity.this, mediumImages,true);
         mediumListView.setVisibility(View.VISIBLE);
         mediumListView.setAdapter(adapter);
 
-        adapter = new ImageHolderAdapter(CreatePortfolioActivity.this, portfolioImages);
+        adapter = new ImageHolderAdapter(CreatePortfolioActivity.this, portfolioImages,true);
         portfolioListView.setVisibility(View.VISIBLE);
         portfolioListView.setAdapter(adapter);
 
