@@ -33,6 +33,8 @@ import com.samayu.scaction.R;
 import com.samayu.scaction.domain.FBUserDetails;
 import com.samayu.scaction.dto.City;
 import com.samayu.scaction.dto.PortfolioPicture;
+import com.samayu.scaction.dto.ProfileType;
+import com.samayu.scaction.dto.SelectedCastingCallRoles;
 import com.samayu.scaction.dto.UserNotification;
 import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
@@ -40,6 +42,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -408,8 +411,20 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
 
     }
 
-    public void getAllPortfolioImages(long userId)
+    public void setRolesInRecyclerView(List<ProfileType> profileTypes)
     {
+        List<SelectedCastingCallRoles> selectedCastingCallRolesList=new ArrayList<SelectedCastingCallRoles>();
+
+        for(ProfileType profileType:profileTypes) {
+
+            SelectedCastingCallRoles selectedCastingCallRoles = new SelectedCastingCallRoles();
+            selectedCastingCallRoles.setChecked(false);
+            selectedCastingCallRoles.setProfileType(profileType);
+            selectedCastingCallRolesList.add(selectedCastingCallRoles);
+
+        }
+
+        SessionInfo.getInstance().setRolesList(selectedCastingCallRolesList);
 
 
     }

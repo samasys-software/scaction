@@ -6,13 +6,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.SparseBooleanArray;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,8 +26,9 @@ import com.samayu.scaction.dto.User;
 import com.samayu.scaction.service.DateFormatter;
 import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
+import com.samayu.scaction.ui.Listeners.RecyclerListener;
 import com.samayu.scaction.ui.adapter.CastingCallApplicationsAdapter;
-import com.samayu.scaction.ui.adapter.CastingCallsRolesAdapter;
+import com.samayu.scaction.ui.adapter.RolesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,17 +39,17 @@ import retrofit2.Response;
 
 public class ApplyCastingCallActivity extends SCABaseActivity {
 
-    Button registerToApply,apply,unapply;
+    Button registerToApply,apply,unapply,loginAndRegister;
     ImageButton edit;
     Context context;
     User user;
-    TextView projectName,projectDetails,productionCompany,eventDate,hours,address,cityAndCountry,text;
-    ListView castingCallApplicationsView;
+    TextView projectName,projectDetails,productionCompany,eventDate,hours,address,cityAndCountry,castingCallCount;
+    RecyclerView castingCallApplicationsView;
     RecyclerView castingcallsRoles;
     View focusView=null;
     boolean valid=false;
     String country1="";
-    CastingCallsRolesAdapter profileAdapter;
+    RolesAdapter profileAdapter;
     int currentUser;
     List<CastingCallApplication> castingCallApplicationList;
 
@@ -59,8 +58,12 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply_casting_call);
         context=this;
+        LinearLayoutManager castingcallsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager castingcallsApplicationsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
         registerToApply=(Button) findViewById(R.id.registerToApply);
         apply=(Button) findViewById(R.id.apply);
+        loginAndRegister=(Button) findViewById(R.id.loginAndRegister);
         unapply=(Button) findViewById(R.id.unApply);
         edit=(ImageButton) findViewById(R.id.edit);
 
@@ -71,13 +74,13 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
         hours=(TextView) findViewById(R.id.displayHours);
         address=(TextView) findViewById(R.id.displayAddress);
         cityAndCountry=(TextView) findViewById(R.id.displayCityAndCountry);
-        text=(TextView) findViewById(R.id.text);
+        castingCallCount=(TextView) findViewById(R.id.castingCallCount);
 
-        castingCallApplicationsView=(ListView) findViewById(R.id.listOfCastingCallsApplications);
+        castingCallApplicationsView=(RecyclerView) findViewById(R.id.listOfCastingCallsApplications);
+        castingCallApplicationsView.setLayoutManager(castingcallsApplicationsLayoutManager);
 
 
-        LinearLayoutManager castingcallsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        castingcallsRoles=(RecyclerView) findViewById(R.id.castingCallRoleList) ;
+         castingcallsRoles=(RecyclerView) findViewById(R.id.castingCallRoleList) ;
         castingcallsRoles.setLayoutManager(castingcallsLayoutManager);
 
 
@@ -234,8 +237,9 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
                         public void onResponse(Call<List<CastingCallApplication>> call, Response<List<CastingCallApplication>> response) {
 
                              castingCallApplicationList = response.body();
-                            if (castingCallApplicationList != null) {
-                                text.setVisibility(View.VISIBLE);
+                            if (castingCallApplicationList.size()>0) {
+                                castingCallCount.setVisibility(View.VISIBLE);
+                                castingCallCount.setText(getResources().getString(R.string.casting_call_applications)+"("+castingCallApplicationList.size()+")");
                                 CastingCallApplicationsAdapter adapter = new CastingCallApplicationsAdapter(ApplyCastingCallActivity.this, castingCallApplicationList);
                                 castingCallApplicationsView.setAdapter(adapter);
 
@@ -284,11 +288,12 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
         }
         else
         {
-
+            loginAndRegister.setVisibility(View.VISIBLE);
+            currentUser=0;
         }
 
 
-        profileAdapter= new CastingCallsRolesAdapter(this,1,currentUser,user);
+        profileAdapter= new RolesAdapter(this,1,currentUser,user);
        // listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         castingcallsRoles.setAdapter(profileAdapter);
         registerToApply.setOnClickListener(new View.OnClickListener() {
@@ -299,15 +304,41 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
                 startActivity(intent);
             }
         });
-        castingCallApplicationsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        loginAndRegister.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View v) {
+                Intent intent=new Intent(ApplyCastingCallActivity.this,UseFacebookLoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        castingCallApplicationsView.addOnItemTouchListener(new RecyclerListener(context,
+                castingCallApplicationsView, new RecyclerListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
                 long userId=castingCallApplicationList.get(position).getUser().getUserId();
                 Intent intent=new Intent(ApplyCastingCallActivity.this,ViewPortfolioActivity.class);
                 intent.putExtra("userId", userId);
                 startActivity(intent);
+
+                //here your logic
             }
-        });
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
+
+//        castingCallApplicationsView.setOnClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//            }
+//        });
+
+
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override

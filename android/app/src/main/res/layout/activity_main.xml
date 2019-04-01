@@ -8,31 +8,30 @@
     tools:context="com.samayu.scaction.ui.MainActivity">
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/displaySearchDetails"
-        android:orientation="horizontal">
-    <ImageButton
-        android:id="@+id/currentLocation"
-        android:layout_width="25dp"
-        android:layout_height="25sp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="end"
+    <!--<LinearLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/displaySearchDetails"-->
+        <!--android:orientation="horizontal">-->
+    <!--<ImageButton-->
+        <!--android:id="@+id/currentLocation"-->
+        <!--android:layout_width="25dp"-->
+        <!--android:layout_height="25sp"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_gravity="end"-->
 
-        android:layout_marginTop="11dp"
-        android:background="@drawable/ic_search" />
+        <!--android:layout_marginTop="11dp"-->
+        <!--android:background="@drawable/ic_search" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="25sp"
-            android:text= "Display Talent" />
-    </LinearLayout>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="25sp"-->
+            <!--android:text= "Display Talent" />-->
+    <!--</LinearLayout>-->
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_below="@id/displaySearchDetails"
         android:id="@+id/talents"
         android:layout_height="match_parent">
 

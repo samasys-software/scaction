@@ -1,4 +1,4 @@
-package com.samayu.scaction.ui;
+package com.samayu.scaction.ui.Listeners;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

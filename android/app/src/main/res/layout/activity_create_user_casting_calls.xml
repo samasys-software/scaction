@@ -9,18 +9,18 @@
     <LinearLayout
         android:id="@+id/mainlayoutreg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:orientation="vertical">
 
-        <!--<ImageButton-->
-            <!--android:id="@+id/currentLocation"-->
-            <!--android:layout_width="25dp"-->
-            <!--android:layout_height="25dp"-->
-            <!--android:layout_gravity="end"-->
-            <!--android:background="@drawable/location_searching" />-->
+        <ImageButton
+            android:id="@+id/currentLocation"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="end"
+            android:background="@drawable/location_searching" />
 
 
         <android.support.design.widget.TextInputLayout
@@ -221,6 +221,7 @@
                 android:text="Gender"
 
                 android:gravity="start"/>
+            <!--TODo:Gender Field Need to change as CheckBox-->
 
             <RadioGroup
                 android:layout_width="fill_parent"
@@ -277,6 +278,13 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
+            <ImageButton
+                android:id="@+id/addStartDatePicker"
+                android:background="@drawable/ic_date_picker"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"/>
+
             <TextView
                 android:id="@+id/addStartDate"
                 style="@style/datePicker"
@@ -287,11 +295,14 @@
                 />
 
             <ImageButton
-                android:id="@+id/addStartDatePicker"
+                android:id="@+id/addEndDatePicker"
                 android:background="@drawable/ic_date_picker"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"/>
+
+
+
 
             <TextView
                 android:id="@+id/addEndDate"
@@ -299,15 +310,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="End Date"
+                android:layout_marginLeft="20sp"
                 android:layout_gravity="center"
                 />
 
-            <ImageButton
-                android:id="@+id/addEndDatePicker"
-                android:background="@drawable/ic_date_picker"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center"/>
 
 
         </LinearLayout>
@@ -328,7 +334,7 @@
         </android.support.design.widget.TextInputLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
@@ -337,20 +343,33 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:text="Roles"
 
                 android:gravity="start"/>
-
-            <ListView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/addRoleList"
-
-                android:layout_width="wrap_content"
+                android:layout_weight="0.2"
+                android:visibility="visible"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:nestedScrollingEnabled="true"
+                android:dividerHeight="1dp"
+                android:divider="@android:color/darker_gray"
+                android:headerDividersEnabled="true"
 
                 />
+
+
+            <!--<ListView-->
+                <!--android:id="@+id/"-->
+
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:nestedScrollingEnabled="true"-->
+
+                <!--/>-->
         </LinearLayout>
 
         <LinearLayout

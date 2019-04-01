@@ -336,5 +336,4 @@ public class DataAccessService {
     public Portfolio getPortfolio(long userId ){
         return portfolioDetailsRepository.findByUserId( userId );
     }
-
 }

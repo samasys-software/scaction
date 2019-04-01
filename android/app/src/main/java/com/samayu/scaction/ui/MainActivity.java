@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,6 +19,7 @@ import com.samayu.scaction.dto.ProfileType;
 import com.samayu.scaction.dto.User;
 import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
+import com.samayu.scaction.ui.Listeners.RecyclerListener;
 import com.samayu.scaction.ui.adapter.TalentListAdapter;
 
 import java.util.List;
@@ -174,7 +173,7 @@ public class MainActivity extends SCABaseActivity {
         LayoutInflater inflater = MainActivity.this.getLayoutInflater();
         View diaView = inflater.inflate(R.layout.alert_base, null);
         TextView sortTextHint=(TextView) diaView.findViewById(R.id.sortTextHint);
-        sortTextHint.setText("Do You Want to Register in Start Camera, Action! ?");
+        sortTextHint.setText(getResources().getString(R.string.alert_for_register_as_user));
 
         alertDialog.setView(diaView);
 
