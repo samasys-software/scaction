@@ -5,6 +5,10 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="base_url_for_images">"/Users/NandhiniGovindasamy/Documents/scactionimages"</string>
+    <string name="alert_for_register_as_user">Do You Want to Register in Start Camera, Action! ?</string>
+    <string name="profile_edit_message">You Have Edited Your Profile With Start,Camera,Action Successfully!</string>
+    <string name="profile_save_message">You Have Registered With Start,Camera,Action Successfully!</string>
+    <string name="casting_call_applications">Casting Call Applications</string>
 
 
 </resources>
