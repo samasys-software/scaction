@@ -5,15 +5,19 @@ import com.samayu.sca.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityManager;
 import javax.sound.sampled.Port;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class DataAccessService {
 
+    @Autowired
+    private EntityManager entityManager;
     @Autowired
     private UserRepository userRepository;
 
@@ -253,7 +257,7 @@ public class DataAccessService {
     public boolean createCastingCallApplication(CastingCallApplication application){
         boolean found = false;
 
-        CastingCallApplication existingApplication = applicationRepository.findByCastingCallIdAndUserAndRoleId(application.getCastingCallId(), application.getUser(), application.getRoleId());
+        CastingCallApplication existingApplication = applicationRepository.findByCastingCallIdAndUserAndRoleId(application.getCastingCall().getId(), application.getUser(), application.getRoleId());
 
         if( existingApplication != null ) {
             found = true;
@@ -335,6 +339,14 @@ public class DataAccessService {
 
     public Portfolio getPortfolio(long userId ){
         return portfolioDetailsRepository.findByUserId( userId );
+    }
+
+    public List<CastingCall> getMyCastingCalls(long  userId )
+    {
+        User user = new User();
+        user.setUserId( userId );
+        List<CastingCallApplication> apps = applicationRepository.findByUser( user );
+        return apps.stream().map(x-> x.getCastingCall()).collect(Collectors.toList());
     }
 
 }

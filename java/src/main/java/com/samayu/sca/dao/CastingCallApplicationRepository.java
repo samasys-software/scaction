@@ -1,5 +1,6 @@
 package com.samayu.sca.dao;
 
+import com.samayu.sca.businessobjects.CastingCall;
 import com.samayu.sca.businessobjects.CastingCallApplication;
 import com.samayu.sca.businessobjects.User;
 import org.springframework.data.repository.CrudRepository;
@@ -11,4 +12,6 @@ public interface CastingCallApplicationRepository extends CrudRepository<Casting
     List<CastingCallApplication> findByCastingCallIdAndUser(long castingCallId, User user);
     CastingCallApplication findByCastingCallIdAndUserAndRoleId(long castingCallId, User user , int roleId);
     List<CastingCallApplication> findByCastingCallId(long castingCallId);
+    List<CastingCallApplication> findByUser(User user);
+
 }

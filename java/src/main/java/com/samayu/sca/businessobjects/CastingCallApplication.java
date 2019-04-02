@@ -13,8 +13,17 @@ public class CastingCallApplication {
     @Column(name="idscaction_casting_call_application")
     private long id;
 
-    @Column(name="casting_call_id")
-    private long castingCallId;
+    public CastingCall getCastingCall() {
+        return castingCall;
+    }
+
+    public void setCastingCall(CastingCall castingCall) {
+        this.castingCall = castingCall;
+    }
+
+    @ManyToOne
+    @JoinColumn(name="casting_call_id" , referencedColumnName = "casting_call_id")
+    private CastingCall castingCall;
 
     @ManyToOne
     @JoinColumn(name="user_id" )
@@ -27,6 +36,7 @@ public class CastingCallApplication {
         return id;
     }
 
+/*
     public long getCastingCallId() {
         return castingCallId;
     }
@@ -34,6 +44,7 @@ public class CastingCallApplication {
     public void setCastingCallId(long castingCallId) {
         this.castingCallId = castingCallId;
     }
+*/
 
     public User getUser() {
         return user;
