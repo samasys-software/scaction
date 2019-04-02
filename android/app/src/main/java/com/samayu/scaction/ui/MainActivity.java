@@ -1,20 +1,26 @@
 package com.samayu.scaction.ui;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.samayu.scaction.R;
 import com.samayu.scaction.dto.Country;
+import com.samayu.scaction.dto.PortfolioPicture;
 import com.samayu.scaction.dto.ProfileDefaults;
 import com.samayu.scaction.dto.ProfileType;
 import com.samayu.scaction.dto.User;
 import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
+import com.samayu.scaction.ui.Listeners.RecyclerListener;
+import com.samayu.scaction.ui.adapter.TalentListAdapter;
 
 import java.util.List;
 
@@ -24,12 +30,25 @@ import retrofit2.Response;
 
 public class MainActivity extends SCABaseActivity {
     private boolean isNewUser;
+    private RecyclerView talents;
+    Context context;
+
+    List<PortfolioPicture> portfolioPictures=null;
+    List<User> userList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context=this;
+        talents=(RecyclerView) findViewById(R.id.talents);
+        GridLayoutManager layoutManager=new GridLayoutManager(MainActivity.this,2);
+        talents.setHasFixedSize(true);
+        talents.setLayoutManager(layoutManager);
+
+
+
 
         Call<ProfileDefaults> profileDefaultsCall = new SCAClient().getClient().getProfileDefaults();
         profileDefaultsCall.enqueue(new Callback<ProfileDefaults>() {
@@ -101,6 +120,49 @@ public class MainActivity extends SCABaseActivity {
 
 
         });
+
+        Call<List<User>> talentsDTOCall = new SCAClient().getClient().getActorProfiles(0,0);
+        talentsDTOCall.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+
+                 userList = response.body();
+                talents.setAdapter(new TalentListAdapter(MainActivity.this,userList));
+
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+
+            }
+
+
+        });
+
+
+        talents.addOnItemTouchListener(new RecyclerListener(context,
+                talents, new RecyclerListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                User user=userList.get(position);
+                user.getUserId();
+                Intent intent=new Intent(MainActivity.this,ViewPortfolioActivity.class);
+                intent.putExtra("userId",user.getUserId());
+                startActivity(intent);
+
+                //here your logic
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
+
+
+
+
+
     }
 
     private void registerNewUser(){
@@ -110,6 +172,9 @@ public class MainActivity extends SCABaseActivity {
         alertDialog.setCancelable(true);
         LayoutInflater inflater = MainActivity.this.getLayoutInflater();
         View diaView = inflater.inflate(R.layout.alert_base, null);
+        TextView sortTextHint=(TextView) diaView.findViewById(R.id.sortTextHint);
+        sortTextHint.setText(getResources().getString(R.string.alert_for_register_as_user));
+
         alertDialog.setView(diaView);
 
         alertDialog.setNegativeButton("CANCEL",
@@ -132,8 +197,8 @@ public class MainActivity extends SCABaseActivity {
 
                 });
 //alertDialog.show();
-        final AlertDialog checkout = alertDialog.create();
-        checkout.show();
+        final AlertDialog registerUser = alertDialog.create();
+        registerUser.show();
 
 
       /*  CreateUser createUser=new CreateUser();
@@ -158,4 +223,6 @@ public class MainActivity extends SCABaseActivity {
                 }
             });*/
     }
+
+
 }

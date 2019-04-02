@@ -18,10 +18,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -44,12 +47,14 @@ import com.samayu.scaction.dto.City;
 import com.samayu.scaction.dto.Country;
 import com.samayu.scaction.dto.ProfileDefaults;
 import com.samayu.scaction.dto.ProfileType;
+import com.samayu.scaction.dto.SelectedCastingCallRoles;
 import com.samayu.scaction.dto.User;
 import com.samayu.scaction.dto.UserRole;
 import com.samayu.scaction.service.DateFormatter;
 import com.samayu.scaction.service.SCAClient;
 
 import com.samayu.scaction.service.SessionInfo;
+import com.samayu.scaction.ui.adapter.RolesAdapter;
 
 
 import java.io.IOException;
@@ -68,15 +73,16 @@ public class ProfileActivity extends SCABaseActivity {
     EditText screenName,name,emailAddress,phoneNumber,whatsappNumber;
     ImageButton myLocation;
     TextView dob;
-    Button register,reset;
+    Button register;//reset;
     CheckBox searchable,sameAsPhone;
     RadioGroup gender;
     Spinner country,city;
     Context context;
-    ListView listView;
+   // ListView listView;
+    RecyclerView roleList;
     View focusView=null;
     boolean valid=false;
-    ArrayAdapter<ProfileType> profileAdapter;
+    //ArrayAdapter<ProfileType> profileAdapter;
     User user;
 
 
@@ -99,9 +105,12 @@ public class ProfileActivity extends SCABaseActivity {
         setContentView(R.layout.activity_profile);
         context = this;
 
+        LinearLayoutManager roleListLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
+
         //String[] countries = { "IN", "USA"  };
         register = (Button) findViewById(R.id.register);
-        reset = (Button) findViewById(R.id.reset);
+       // reset = (Button) findViewById(R.id.reset);
         screenName = (EditText) findViewById(R.id.screenName);
         name = (EditText) findViewById(R.id.name);
         emailAddress = (EditText) findViewById(R.id.emailAddress);
@@ -116,7 +125,9 @@ public class ProfileActivity extends SCABaseActivity {
 
 
          gender = (RadioGroup) findViewById(R.id.gender);
-         listView=(ListView) findViewById(R.id.roleList) ;
+         //listView=(ListView) findViewById(R.id.roleList) ;
+         roleList=(RecyclerView) findViewById(R.id.roleList) ;
+         roleList.setLayoutManager(roleListLayoutManager);
 
         dob=(TextView)findViewById(R.id.dob);
 
@@ -129,6 +140,7 @@ public class ProfileActivity extends SCABaseActivity {
         ArrayAdapter<Country> countryAdapter = new ArrayAdapter<Country>(ProfileActivity.this, R.layout.drop_down_list, countryList);
         country.setAdapter(countryAdapter);
 
+
         List<City> cities=new ArrayList<City>();
         City defaultCity = new City();
         defaultCity.setId(0);
@@ -138,11 +150,18 @@ public class ProfileActivity extends SCABaseActivity {
         city.setAdapter(cityAdapter);
 
         List<ProfileType> profileTypes=SessionInfo.getInstance().getProfileTypes();
+        setRolesInRecyclerView(profileTypes);
 
-        profileAdapter= new ArrayAdapter<ProfileType>(this,
-                android.R.layout.simple_list_item_multiple_choice, profileTypes);
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        listView.setAdapter(profileAdapter);
+
+        RolesAdapter adapter=new RolesAdapter(ProfileActivity.this,0,0,null);
+        roleList.setAdapter(adapter);
+
+//        profileAdapter= new ArrayAdapter<ProfileType>(this,
+//                android.R.layout.simple_list_item_multiple_choice, profileTypes);
+//        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+//        listView.setAdapter(profileAdapter);
+
+
        // listView.setItemChecked(0,true);
        // listView.setSelection(3);
 
@@ -154,7 +173,7 @@ public class ProfileActivity extends SCABaseActivity {
 
         if(isNew){
 
-            message="You Have Registered With Start,Camera,Action Successfully!";
+            message=getString((R.string.profile_save_message));
             user=null;
         }
         else {
@@ -162,12 +181,14 @@ public class ProfileActivity extends SCABaseActivity {
             user = SessionInfo.getInstance().getUser();
 
             if (user != null) {
-                message="You Have Edited Your Profile With Start,Camera,Action Successfully!";
+                message= getString(R.string.profile_edit_message);
                 screenName.setText(user.getScreenName());
                 name.setText(user.getFbName());
                 emailAddress.setText(user.getFbEmail());
                 phoneNumber.setText(user.getPhoneNumber());
                 whatsappNumber.setText(user.getWhatsappNumber());
+                if(user.getPhoneNumber().equals(user.getWhatsappNumber()))
+                    sameAsPhone.setChecked(true);
 
                 List<Country> countries = SessionInfo.getInstance().getCountries();
                 for (int i = 0; i < countries.size(); i++) {
@@ -194,10 +215,14 @@ public class ProfileActivity extends SCABaseActivity {
 
                 List<UserRole> userRoles = user.getUserRoles();
 
+                //ToDO:Need to vrify after the profile get section
+                List<SelectedCastingCallRoles> selectedCastingCallRoles=SessionInfo.getInstance().getRolesList();
+
                 for (int i = 0; i < userRoles.size(); i++) {
-                    for (int j = 0; j < profileTypes.size(); j++) {
-                        if (profileTypes.get(j).getId() == userRoles.get(i).getRoleType().getId()) {
-                            listView.setItemChecked(j, true);
+                    for (int j = 0; j < selectedCastingCallRoles.size(); j++) {
+                        if (selectedCastingCallRoles.get(j).getProfileType().getId() == userRoles.get(i).getRoleType().getId()) {
+                            selectedCastingCallRoles.get(j).setChecked(true);
+                            //listView.setItemChecked(j, true);
                         }
                     }
                 }
@@ -205,7 +230,7 @@ public class ProfileActivity extends SCABaseActivity {
 
             }
             else{
-                message="You Have Registered With Start,Camera,Action Successfully!";
+                message=getString(R.string.profile_save_message);
             }
         }
 
@@ -276,12 +301,12 @@ public class ProfileActivity extends SCABaseActivity {
             }
         });
 
-        reset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reset();
-            }
-        });
+//        reset.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                reset();
+//            }
+//        });
 
         myLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -459,6 +484,7 @@ public class ProfileActivity extends SCABaseActivity {
 
                             final ArrayAdapter<City> cityAdapter = new ArrayAdapter<City>(ProfileActivity.this, R.layout.drop_down_list, cityList);
                             city.setAdapter(cityAdapter);
+                            city.setSelection(0);
 
                             if (user != null) {
 
@@ -585,14 +611,18 @@ public class ProfileActivity extends SCABaseActivity {
             isSearchable="false";
         }
 
-        SparseBooleanArray checked = listView.getCheckedItemPositions();
+      //  SparseBooleanArray checked = listView.getCheckedItemPositions();
         ArrayList<ProfileType> selectedItems = new ArrayList<ProfileType>();
-        for (int i = 0; i < checked.size(); i++) {
-            // Item position in adapter
-            int position = checked.keyAt(i);
-            // Add sport if it is checked i.e.) == TRUE!
-            if (checked.valueAt(i))
-                selectedItems.add(profileAdapter.getItem(position));
+        List<SelectedCastingCallRoles> selectedCastingCallRolesList=SessionInfo.getInstance().getRolesList();
+        for (SelectedCastingCallRoles selectedCastingCallRoles:selectedCastingCallRolesList) {
+            if(selectedCastingCallRoles.isChecked()){
+                selectedItems.add(selectedCastingCallRoles.getProfileType());
+            }
+//            // Item position in adapter
+//            int position = checked.keyAt(i);
+//            // Add sport if it is checked i.e.) == TRUE!
+//            if (checked.valueAt(i))
+//                selectedItems.add(profileAdapter.getItem(position));
         }
 
         int[] rolesList = new int[selectedItems.size()];
@@ -621,7 +651,7 @@ public class ProfileActivity extends SCABaseActivity {
                 String selectedCountryCode = selectedCountry.getCode();
 
                 String fbUser=SessionInfo.getInstance().getFbUserDetails().getId();
-                String url=SessionInfo.getInstance().getFbUserDetails().getId();
+                String url=SessionInfo.getInstance().getFbUserDetails().getUrl();
 
                 //System.out.println();
 
@@ -633,7 +663,7 @@ public class ProfileActivity extends SCABaseActivity {
                             User user=response.body();
                             Toast.makeText(context,message,Toast.LENGTH_LONG).show();
                             SessionInfo.getInstance().setUser(user);
-                            Intent intent=new Intent(ProfileActivity.this,MainActivity.class);
+                            Intent intent=new Intent(ProfileActivity.this,HomeActivity.class);
                             //intent.putExtra("Registered",true);
                             startActivity(intent);
 
@@ -703,7 +733,7 @@ public class ProfileActivity extends SCABaseActivity {
             //   country.setError("This Field is Required");
             TextView errorText = (TextView)country.getSelectedView();
             errorText.setError(getString(R.string.error_field_required));
-            Toast.makeText(this, "This field is Reqiured", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_field_required), Toast.LENGTH_SHORT).show();
             focusView=errorText;
             valid = true;
             return  valid;
@@ -713,7 +743,7 @@ public class ProfileActivity extends SCABaseActivity {
             //   country.setError("This Field is Required");
             TextView errorText = (TextView)city.getSelectedView();
             errorText.setError(getString(R.string.error_field_required));
-            Toast.makeText(this, "This field is Reqiured", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_field_required), Toast.LENGTH_SHORT).show();
             focusView=errorText;
             valid = true;
             return  valid;
@@ -737,18 +767,18 @@ public class ProfileActivity extends SCABaseActivity {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }*/
-    public void reset(){
-        screenName.setText("");
-
-        phoneNumber.setText("");
-        whatsappNumber.setText("");
-        city.setSelection(0);
-
-        country.setSelection(0);
-        gender.setSelected(false);
-        listView.setSelected(false);
-    }
-
+//    public void reset(){
+//        screenName.setText("");
+//
+//        phoneNumber.setText("");
+//        whatsappNumber.setText("");
+//        city.setSelection(0);
+//
+//        country.setSelection(0);
+//        gender.setSelected(false);
+//        listView.setSelected(false);
+//    }
+//
 
 
 

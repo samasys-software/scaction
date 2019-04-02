@@ -1,38 +1,49 @@
 package com.samayu.scaction.ui;
 
 import android.Manifest;
-import android.content.ContentResolver;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.samayu.scaction.R;
-import com.samayu.scaction.dto.CastingCall;
+import com.samayu.scaction.dto.PortfolioPicture;
+import com.samayu.scaction.service.SCAClient;
+import com.samayu.scaction.service.SessionInfo;
+
+import com.ipaulpro.afilechooser.utils.FileUtils;
+import com.samayu.scaction.ui.adapter.ImageHolderAdapter;
+
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CreatePortfolioActivity extends SCABaseActivity {
 
@@ -48,15 +59,17 @@ public class CreatePortfolioActivity extends SCABaseActivity {
     private static final int GET_PORTFOLIO_IMAGES = 3;
     private static final int GET_THUMBNAILS_IMAGES = 4;
     private static final int GET_MEDIUM_IMAGES = 5;
-    private static final int Take_PORTFOLIO_IMAGES = 6;
+    private static final int TAKE_PORTFOLIO_IMAGES = 6;
     private static final int TAKE_THUMBNAILS_IMAGES = 7;
     private static final int TAKE_MEDIUM_IMAGES = 8;
     private static final int PIC_CROP = 3;
     private final static int REQUEST_PERMISSION_READ_EXTERNAL = 2;
+    private final static int REQUEST_PERMISSION_WRITE_EXTERNAL = 9;
     private final static int REQUEST_PERMISSION_CAMERA = 1;
     private List<Uri> userSelectedImageUriList = new ArrayList<Uri>();
     private ImageView portfolioPic, portfolioPic1, portfolioPic2, portfolioPic3, portfolioPic4, portfolioPic5,portfolioPic6,portfolioPic7,portfolioPic8,portfolioPic9,portfolioPic10,thumbnailImages,mediumImages;
     private Uri selectedImage;
+
     LinearLayout choosePortfolioPicture,chooseThumbnailPicture,chooseMediumPicture;
     Context context;
     private String[] title = {
@@ -66,6 +79,8 @@ public class CreatePortfolioActivity extends SCABaseActivity {
 
     };
     int currentImageSize;
+    RecyclerView thumbnailListView,mediumListView,portfolioListView;
+    TextView preview;
 
 
     @Override
@@ -73,21 +88,54 @@ public class CreatePortfolioActivity extends SCABaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_portfolio);
         context = this;
+        LinearLayoutManager thumbnailLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager mediumLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager portfolioLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+
+        preview = (TextView) findViewById(R.id.preview);
         choosePortfolioPicture = (LinearLayout) findViewById(R.id.choose_portfolio);
         chooseMediumPicture = (LinearLayout) findViewById(R.id.choose_medium);
         chooseThumbnailPicture = (LinearLayout) findViewById(R.id.choose_thumbnail);
-        portfolioPic1 = (ImageView) findViewById(R.id.portfoliopic1);
-        portfolioPic2 = (ImageView) findViewById(R.id.portfoliopic2);
-        portfolioPic3 = (ImageView) findViewById(R.id.portfoliopic3);
-        portfolioPic4 = (ImageView) findViewById(R.id.portfoliopic4);
-        portfolioPic5 = (ImageView) findViewById(R.id.portfoliopic5);
-        portfolioPic6 = (ImageView) findViewById(R.id.portfoliopic6);
-        portfolioPic7 = (ImageView) findViewById(R.id.portfoliopic7);
-        portfolioPic8 = (ImageView) findViewById(R.id.portfoliopic8);
-        portfolioPic9 = (ImageView) findViewById(R.id.portfoliopic9);
-        portfolioPic10= (ImageView) findViewById(R.id.portfoliopic10);
-        thumbnailImages= (ImageView) findViewById(R.id.addThumbnail);
-        mediumImages= (ImageView) findViewById(R.id.addMedium);
+
+
+
+        thumbnailListView= (RecyclerView) findViewById(R.id.addThumbnail);
+        thumbnailListView.setLayoutManager(thumbnailLayoutManager);
+
+        mediumListView= (RecyclerView) findViewById(R.id.addMedium);
+        mediumListView.setLayoutManager(mediumLayoutManager);
+
+        portfolioListView= (RecyclerView) findViewById(R.id.addPortfolio);
+        portfolioListView.setLayoutManager(portfolioLayoutManager);
+
+        Call<List<PortfolioPicture>> getAllPortfolioPictureDTOCall= new SCAClient().getClient().findAllPortfolio(SessionInfo.getInstance().getUser().getUserId());
+        getAllPortfolioPictureDTOCall.enqueue(new Callback<List<PortfolioPicture>>() {
+            @Override
+            public void onResponse(Call<List<PortfolioPicture>> call, Response<List<PortfolioPicture>> response) {
+                List<PortfolioPicture> portfolioPictures=response.body();
+                setImagesInAdapter(portfolioPictures);
+            }
+
+            @Override
+            public void onFailure(Call<List<PortfolioPicture>> call, Throwable t) {
+
+
+            }
+        });
+
+
+
+
+
+
+        preview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(CreatePortfolioActivity.this,ViewPortfolioActivity.class);
+                intent.putExtra("userId", SessionInfo.getInstance().getUser().getUserId());
+                startActivity(intent);
+            }
+        });
         choosePortfolioPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +190,16 @@ public class CreatePortfolioActivity extends SCABaseActivity {
                 }
             }
         }
+        if (requestCode == REQUEST_PERMISSION_WRITE_EXTERNAL) {
+            if (grantResults.length > 0) {
+                int grantResult = grantResults[0];
+                if (grantResult == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "You denied write external storage permission.", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 
 
@@ -184,49 +242,8 @@ public class CreatePortfolioActivity extends SCABaseActivity {
 //                    listView.setAdapter(adapter);
                     for (int i = 0; i < size; i++) {
                         Uri currentUri = userSelectedImageUriList.get(i);
-                        switch (i) {
-                            case 0:
-                                portfolioPic1.setImageURI(currentUri);
-                                portfolioPic1.setVisibility(View.VISIBLE);
-                                break;
-                            case 1:
-                                portfolioPic2.setImageURI(currentUri);
-                                portfolioPic2.setVisibility(View.VISIBLE);
-                                break;
-                            case 2:
-                                portfolioPic3.setImageURI(currentUri);
-                                portfolioPic3.setVisibility(View.VISIBLE);
-                                break;
-                            case 3:
-                                portfolioPic4.setImageURI(currentUri);
-                                portfolioPic4.setVisibility(View.VISIBLE);
-                                break;
-                            case 4:
-                                portfolioPic5.setImageURI(currentUri);
-                                portfolioPic5.setVisibility(View.VISIBLE);
-                                break;
-                            case 5:
-                                portfolioPic6.setImageURI(currentUri);
-                                portfolioPic6.setVisibility(View.VISIBLE);
-                                break;
-                            case 6:
-                                portfolioPic7.setImageURI(currentUri);
-                                portfolioPic7.setVisibility(View.VISIBLE);
-                                break;
-                            case 7:
-                                portfolioPic8.setImageURI(currentUri);
-                                portfolioPic8.setVisibility(View.VISIBLE);
-                                break;
-                            case 8:
-                                portfolioPic9.setImageURI(currentUri);
-                                portfolioPic9.setVisibility(View.VISIBLE);
-                                break;
-                            case 9:
-                                portfolioPic10.setImageURI(currentUri);
-                                portfolioPic10.setVisibility(View.VISIBLE);
-                                break;
+                        sendPortfolioToServer(currentUri,2);
 
-                        }
 
                     }
                     // selectedImage = intent.getData();
@@ -252,12 +269,14 @@ public class CreatePortfolioActivity extends SCABaseActivity {
             }
             else if (requestCode == GET_THUMBNAILS_IMAGES) {
                 Uri uri = intent.getData();
-                setThumbnailImage(uri);
+                sendPortfolioToServer(uri,0);
+               // setThumbnailImage(uri);
 
             }
             else if (requestCode == GET_MEDIUM_IMAGES) {
                 Uri uri = intent.getData();
-                setMediumImages(uri);
+                sendPortfolioToServer(uri,1);
+                //setMediumImages(uri);
 
             }
         }
@@ -292,7 +311,7 @@ public class CreatePortfolioActivity extends SCABaseActivity {
 
                         int readExternalStoragePermission = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
                         if (readExternalStoragePermission != PackageManager.PERMISSION_GRANTED) {
-                            String requirePermission[] = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                            String requirePermission[] = {Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE};
                             ActivityCompat.requestPermissions(CreatePortfolioActivity.this, requirePermission, REQUEST_PERMISSION_READ_EXTERNAL);
 
                         } else {
@@ -317,6 +336,55 @@ public class CreatePortfolioActivity extends SCABaseActivity {
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bmp, "Title", null);
         return Uri.parse(path);
     }
+    private String getRealPathFromURIPath(Uri contentURI, Activity activity) {
+//        Cursor cursor = activity.getContentResolver().query(contentURI, null, null, null, null);
+//        if (cursor == null) {
+//            return contentURI.getPath();
+//        } else {
+//            cursor.moveToFirst();
+//            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+//            return cursor.getString(idx);
+//        }
+
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+    private void sendPortfolioToServer(Uri imageuri,int pictureType)
+    {
+        //String filePath = //mageuri.getPath();// getRealPathFromURIPath(imageuri, CreatePortfolioActivity.this);
+        File file= FileUtils.getFile(this,imageuri);
+
+        //Log.d("msg", "Filename " + file.getName());
+        //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        //RequestBody mFile = RequestBody.create(MediaType.parse("image/*"), file);
+        RequestBody mFile = RequestBody.create(
+                MediaType.parse(getContentResolver().getType(imageuri)),
+               file
+        );
+
+        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", "saple", mFile);
+
+        Call<List<PortfolioPicture>> getPortfolioPictureDTOCall= new SCAClient().getClient().uploadPicture(SessionInfo.getInstance().getUser().getUserId(),pictureType,fileToUpload);
+        getPortfolioPictureDTOCall.enqueue(new Callback<List<PortfolioPicture>>() {
+            @Override
+            public void onResponse(Call<List<PortfolioPicture>> call, Response<List<PortfolioPicture>> response) {
+                setImagesInAdapter(response.body());
+
+            }
+
+
+
+
+            @Override
+            public void onFailure(Call<List<PortfolioPicture>> call, Throwable t) {
+
+
+            }
+        });
+
+    }
     public void setThumbnailImage(Uri currentURI)
     {
         thumbnailImages.setImageURI(currentURI);
@@ -334,7 +402,7 @@ public class CreatePortfolioActivity extends SCABaseActivity {
         switch (imageSize) {
             case 1:
 
-                startActivityForResult(intent, Take_PORTFOLIO_IMAGES);
+                startActivityForResult(intent, TAKE_PORTFOLIO_IMAGES);
                 break;
             case 2:
 
@@ -365,6 +433,40 @@ public class CreatePortfolioActivity extends SCABaseActivity {
                 startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_MEDIUM_IMAGES);
                 break;
         }
+
+    }
+
+
+
+    public void setImagesInAdapter(List<PortfolioPicture> response){
+
+        List<PortfolioPicture> thumbnailImages=new ArrayList<PortfolioPicture>();
+        List<PortfolioPicture> mediumImages=new ArrayList<PortfolioPicture>();
+        List<PortfolioPicture> portfolioImages=new ArrayList<PortfolioPicture>();
+        for(PortfolioPicture portfolioPicture:response)
+        {
+            if(portfolioPicture.getType()==0){
+                thumbnailImages.add(portfolioPicture);
+            }
+            else if(portfolioPicture.getType()==1){
+                mediumImages.add(portfolioPicture);
+            }
+            else{
+                portfolioImages.add(portfolioPicture);
+            }
+        }
+        ImageHolderAdapter adapter;
+        adapter= new ImageHolderAdapter(CreatePortfolioActivity.this, thumbnailImages,true);
+        thumbnailListView.setVisibility(View.VISIBLE);
+        thumbnailListView.setAdapter(adapter);
+
+        adapter = new ImageHolderAdapter(CreatePortfolioActivity.this, mediumImages,true);
+        mediumListView.setVisibility(View.VISIBLE);
+        mediumListView.setAdapter(adapter);
+
+        adapter = new ImageHolderAdapter(CreatePortfolioActivity.this, portfolioImages,true);
+        portfolioListView.setVisibility(View.VISIBLE);
+        portfolioListView.setAdapter(adapter);
 
     }
 

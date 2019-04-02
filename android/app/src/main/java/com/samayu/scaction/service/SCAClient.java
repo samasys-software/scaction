@@ -4,6 +4,7 @@ package com.samayu.scaction.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.samayu.scaction.BuildConfig;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;
@@ -50,7 +51,7 @@ public class SCAClient {
             }
         });
 
-        String baseUrl = "http://192.168.1.2:8082/";
+        String baseUrl = BuildConfig.SERVER_URL;
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
 //                .excludeFieldsWithoutExposeAnnotation()

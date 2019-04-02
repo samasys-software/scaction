@@ -21,7 +21,7 @@
                 android:layout_weight="9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Do You Want to Register in Start Camera, Action! ?"
+                android:text=""
                 android:textAlignment="center"
 
                 android:id="@+id/sortTextHint"
