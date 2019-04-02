@@ -82,7 +82,9 @@ public class UserRest {
     public ResponseEntity<Boolean> applyForCastingCall(@RequestParam("castingCallId") long castingCallId , @RequestParam("userId") long userId , @RequestParam("roleId") int roleId )
     {
         CastingCallApplication application = new CastingCallApplication();
-        application.setCastingCallId( castingCallId );
+        CastingCall call = new CastingCall();
+        call.setId( castingCallId );
+        application.setCastingCall( call );
         application.setUser( dataAccessService.findUser( userId ));
         application.setRoleId( roleId );
         return ResponseEntity.ok(dataAccessService.createCastingCallApplication( application ));
@@ -153,6 +155,12 @@ public class UserRest {
     @GetMapping(path="/getPortfolio/{userId}")
     public ResponseEntity<Portfolio> getPortfolio(@PathVariable("userId") long userId ){
         return ResponseEntity.ok( dataAccessService.getPortfolio( userId ) );
+    }
+
+    @GetMapping(path="/getMyCastingCalls/{userId}")
+    public ResponseEntity<List<CastingCall>> getMyCastingCalls(@PathVariable("userId") long userId ){
+
+            return ResponseEntity.ok(dataAccessService.getMyCastingCalls( userId ));
     }
 
 
