@@ -95,7 +95,7 @@ public class UserRolesAdapter extends BaseAdapter {
                     int roleId=userRoles.get(position).getRoleType().getId();
                     if(roleId==11){
                         Intent intent=new Intent(context,UserCastingCallsActivity.class);
-                        intent.putExtra("UserCastingCall",true);
+                        intent.putExtra("UserCastingCall",0);
                         context.startActivity(intent);
                     }
 

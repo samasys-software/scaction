@@ -2,6 +2,7 @@ package com.samayu.scaction.ui;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -85,6 +86,8 @@ public class ProfileActivity extends SCABaseActivity {
     //ArrayAdapter<ProfileType> profileAdapter;
     User user;
 
+    ProgressDialog progressDialog;
+
 
 
     private ImageButton dateOfBirthPicker;
@@ -104,6 +107,7 @@ public class ProfileActivity extends SCABaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         context = this;
+        progressDialog=getProgressDialog(context);
 
         LinearLayoutManager roleListLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
@@ -199,6 +203,7 @@ public class ProfileActivity extends SCABaseActivity {
                     }
 
                 }
+                searchable.setChecked(user.isSearchable());
 
                 int gender1 = user.getGender();
                 if (gender1 == 0)
@@ -643,7 +648,7 @@ public class ProfileActivity extends SCABaseActivity {
        else {
 
             try {
-
+                progressDialog.show();
                 City selectedCity = (City) city.getSelectedItem();
                 String selectedCityId = String.valueOf(selectedCity.getId());
 
@@ -666,6 +671,7 @@ public class ProfileActivity extends SCABaseActivity {
                             Intent intent=new Intent(ProfileActivity.this,HomeActivity.class);
                             //intent.putExtra("Registered",true);
                             startActivity(intent);
+                            progressDialog.dismiss();;
 
 
                         }
@@ -674,6 +680,7 @@ public class ProfileActivity extends SCABaseActivity {
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
                         t.printStackTrace();
+                        progressDialog.dismiss();
 
                     }
                 });
