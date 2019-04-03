@@ -1,5 +1,7 @@
 package com.samayu.sca.businessobjects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 import java.sql.Timestamp;
@@ -23,10 +25,12 @@ public class CastingCallApplication {
 
     @ManyToOne
     @JoinColumn(name="casting_call_id" , referencedColumnName = "casting_call_id")
+    @JsonIgnore
     private CastingCall castingCall;
 
     @ManyToOne
     @JoinColumn(name="user_id" )
+    @JsonIgnore
     private User user;
 
     @Column(name="create_dt")
