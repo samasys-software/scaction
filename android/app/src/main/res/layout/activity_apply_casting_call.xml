@@ -2,10 +2,13 @@
 
 
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/rolesPage"
@@ -61,6 +64,17 @@
                     android:visibility="invisible">
 
                 </Button>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/loginAndRegister"
+
+
+                    android:layout_alignParentEnd="true"
+                    android:text="Login And Register"
+                    android:visibility="invisible">
+
+                </Button>
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -84,7 +98,7 @@
         android:id="@+id/castingCallsDetailsLayout"
         android:layout_below="@id/rolesPage">
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/love_red"
@@ -94,21 +108,21 @@
         android:gravity="start"
         android:layout_weight="7">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:id="@+id/castingCallRoleListLayout"
-                android:layout_height="100sp"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:id="@+id/castingCallRoleListLayout"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
 
-                <ListView
+                <android.support.v7.widget.RecyclerView
                     android:id="@+id/castingCallRoleList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:dividerHeight="1dp"
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="true"
 
                     />
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
 
 
@@ -132,19 +146,6 @@
                     <!--android:textSize="20dp"-->
                     <!--android:textAllCaps="true"-->
                     <!--/>-->
-                <TextView
-                    android:id="@+id/displayProductionCompany"
-                    android:text="ABC"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:textColor="@color/bee_yellow"
-                    android:padding="2dp"
-                    android:textSize="18dp"
-                    android:textAllCaps="true"
-
-                    />
 
             </LinearLayout>
 
@@ -326,6 +327,20 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/displayProductionCompany"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:padding="2dp"
+                android:text="ABC"
+                android:textAllCaps="true"
+                android:textColor="@color/bee_yellow"
+                android:textSize="18dp"
+
+                />
+
             <!--<LinearLayout-->
                 <!--android:layout_width="wrap_content"-->
                 <!--android:layout_height="wrap_content"-->
@@ -367,23 +382,24 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/castingCallsDetailsLayout"
         android:id="@+id/castingcallApplicationsListLayout"
-        android:layout_marginTop="17sp"
-        android:layout_marginStart="100sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginStart="5sp"
+
         android:gravity="center"
         android:orientation="horizontal">
 
         <TextView
 
-            android:id="@+id/text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/castingCallCount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="3"
             android:gravity="center"
-            android:padding="2dp"
+
             android:visibility="invisible"
             android:text="Casting Call Applications"
             android:textColor="@color/pumpkin_orange"
@@ -391,18 +407,34 @@
 
             />
 
+
+
     </LinearLayout>
 
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listOfCastingCallsApplications"
+            android:layout_below="@id/castingcallApplicationsListLayout"
+            android:layout_weight="0.2"
+            android:visibility="visible"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="1dp"
+            android:divider="@android:color/darker_gray"
+            android:headerDividersEnabled="true"
 
-    <ListView
-        android:id="@+id/listOfCastingCallsApplications"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:dividerHeight="1dp"
-        android:layout_below="@id/castingcallApplicationsListLayout"
-        android:divider="@android:color/darker_gray"
-        android:headerDividersEnabled="true"/>
+            />
+    <!--<ListView-->
+        <!--android:id="@+id/"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:dividerHeight="1dp"-->
+       <!---->
+        <!--android:divider="@android:color/darker_gray"-->
+        <!--android:headerDividersEnabled="true"/>-->
+    </RelativeLayout>
 
-</RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

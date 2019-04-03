@@ -4,7 +4,9 @@ import com.samayu.scaction.domain.FBUserDetails;
 import com.samayu.scaction.dto.CastingCall;
 import com.samayu.scaction.dto.City;
 import com.samayu.scaction.dto.Country;
+import com.samayu.scaction.dto.PortfolioPicture;
 import com.samayu.scaction.dto.ProfileType;
+import com.samayu.scaction.dto.SelectedCastingCallRoles;
 import com.samayu.scaction.dto.User;
 import com.samayu.scaction.dto.UserNotification;
 
@@ -95,6 +97,37 @@ public class SessionInfo {
         this.userNotifications = userNotifications;
     }
 
+
+    private List<SelectedCastingCallRoles> selectedCastingCallRoles;
+
+    public List<SelectedCastingCallRoles> getSelectedCastingCallRoles() {
+        return selectedCastingCallRoles;
+    }
+
+    public void setSelectedCastingCallRoles(List<SelectedCastingCallRoles> selectedCastingCallRoles) {
+        this.selectedCastingCallRoles = selectedCastingCallRoles;
+    }
+
+
+    private List<SelectedCastingCallRoles> rolesList;
+
+    public List<SelectedCastingCallRoles> getRolesList() {
+        return rolesList;
+    }
+
+    public void setRolesList(List<SelectedCastingCallRoles> rolesList) {
+        this.rolesList = rolesList;
+    }
+
+    private List<PortfolioPicture> portfolioPictureList;
+
+    public List<PortfolioPicture> getPortfolioPictureList() {
+        return portfolioPictureList;
+    }
+
+    public void setPortfolioPictureList(List<PortfolioPicture> portfolioPictureList) {
+        this.portfolioPictureList = portfolioPictureList;
+    }
 
     public static SessionInfo getInstance() {
         return ourInstance;

@@ -1,5 +1,6 @@
 package com.samayu.scaction.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -38,6 +40,7 @@ public class UseFacebookLoginActivity extends SCABaseActivity {
     Button loginButton;
     TextView textView;
     CallbackManager callbackManager;
+    Context context;
     public static final String FILE_NAME = "SCALogin.txt";
 
     @Override
@@ -45,6 +48,7 @@ public class UseFacebookLoginActivity extends SCABaseActivity {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_use_facebook_login);
+        context=this;
 
         //loginButton = (LoginButton) findViewById(R.id.fb_login_id);
         loginButton = (Button) findViewById(R.id.fb_login_id);
@@ -89,7 +93,7 @@ public class UseFacebookLoginActivity extends SCABaseActivity {
 
             @Override
             public void onCancel() {
-                textView.setText("Login Cancelled");
+             Toast.makeText(context,"Login Cancelled",Toast.LENGTH_LONG).show();
 
             }
 

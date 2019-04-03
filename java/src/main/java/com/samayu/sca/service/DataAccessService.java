@@ -340,7 +340,6 @@ public class DataAccessService {
     public Portfolio getPortfolio(long userId ){
         return portfolioDetailsRepository.findByUserId( userId );
     }
-
     public List<CastingCall> getMyCastingCalls(long  userId )
     {
         User user = new User();
@@ -348,5 +347,5 @@ public class DataAccessService {
         List<CastingCallApplication> apps = applicationRepository.findByUser( user );
         return apps.stream().map(x-> x.getCastingCall()).collect(Collectors.toList());
     }
-
 }
+

@@ -9,6 +9,8 @@ import java.util.List;
 public interface UserRepository extends CrudRepository<User, Long> {
      User findByFbUser(String  fbUser);
      List<User> findByCityId(int cityId);
+
      @Query("select u from User u where portfolio is not null and searchable =1")
      List<User> findActors();
+
 }
