@@ -1,5 +1,6 @@
 package com.samayu.scaction.ui;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,6 +36,7 @@ public class MainActivity extends SCABaseActivity {
 
     List<PortfolioPicture> portfolioPictures=null;
     List<User> userList;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -42,6 +44,7 @@ public class MainActivity extends SCABaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context=this;
+        progressDialog=getProgressDialog(context);
         talents=(RecyclerView) findViewById(R.id.talents);
         GridLayoutManager layoutManager=new GridLayoutManager(MainActivity.this,2);
         talents.setHasFixedSize(true);
@@ -49,11 +52,13 @@ public class MainActivity extends SCABaseActivity {
 
 
 
+        progressDialog.show();
+        final Call<ProfileDefaults> profileDefaultsCall = new SCAClient().getClient().getProfileDefaults();
 
-        Call<ProfileDefaults> profileDefaultsCall = new SCAClient().getClient().getProfileDefaults();
         profileDefaultsCall.enqueue(new Callback<ProfileDefaults>() {
             @Override
             public void onResponse(Call<ProfileDefaults> call, Response<ProfileDefaults> response) {
+
 
                 ProfileDefaults profileDefaults = response.body();
 
@@ -70,6 +75,7 @@ public class MainActivity extends SCABaseActivity {
 
                 List<ProfileType> profileTypes=profileDefaults.getProfileTypes();
                 SessionInfo.getInstance().setProfileTypes(profileTypes);
+
 
 //                Boolean registered = getIntent().getExtras().getBoolean("Registered");
 //                if(registered ) {
@@ -115,6 +121,7 @@ public class MainActivity extends SCABaseActivity {
 
             @Override
             public void onFailure(Call<ProfileDefaults> call, Throwable t) {
+                progressDialog.dismiss();
 
             }
 
@@ -128,11 +135,13 @@ public class MainActivity extends SCABaseActivity {
 
                  userList = response.body();
                 talents.setAdapter(new TalentListAdapter(MainActivity.this,userList));
+                progressDialog.dismiss();
 
             }
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
+                progressDialog.dismiss();
 
             }
 

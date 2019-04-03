@@ -1,6 +1,7 @@
 package com.samayu.scaction.ui;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -78,12 +79,14 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
     long castingCallId;
 
     String message;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_user_casting_calls);
         context=this;
+        progressDialog=getProgressDialog(context);
 
         LinearLayoutManager addRoleListLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
@@ -443,7 +446,7 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
                 Country selectedCountry = (Country) country.getSelectedItem();
                 int selectedCountryId = selectedCountry.getId();
 
-
+                progressDialog.show();
                 Call<CastingCall> createCastingCallDTOCall = new SCAClient().getClient().createCastingCall(castingCallId,projectName1,projectDetails1,productionCompany1,role1,sAge,eAge,gender1,selectedCityId,selectedCountryId,address1,startDate1,endDate1, hours1,SessionInfo.getInstance().getUser().getUserId(),rolesList);
                 createCastingCallDTOCall.enqueue(new Callback<CastingCall>() {
                     @Override
@@ -453,8 +456,9 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
                             Toast.makeText(context,message,Toast.LENGTH_LONG).show();
                             //resetCastingCall();
                             Intent intent=new Intent(CreateUserCastingCallsActivity.this,UserCastingCallsActivity.class);
-                            intent.putExtra("UserCastingCall",true);
+                            intent.putExtra("UserCastingCall",0);
                             startActivity(intent);
+                            progressDialog.dismiss();
 
 
                         }
@@ -463,6 +467,7 @@ public class CreateUserCastingCallsActivity extends SCABaseActivity {
                     @Override
                     public void onFailure(Call<CastingCall> call, Throwable t) {
                         t.printStackTrace();
+                        progressDialog.dismiss();
 
                     }
                 });

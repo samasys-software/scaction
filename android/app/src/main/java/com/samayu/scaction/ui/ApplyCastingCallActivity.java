@@ -1,5 +1,6 @@
 package com.samayu.scaction.ui;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -52,12 +53,14 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
     RolesAdapter profileAdapter;
     int currentUser;
     List<CastingCallApplication> castingCallApplicationList;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply_casting_call);
         context=this;
+        progressDialog=getProgressDialog(context);
         LinearLayoutManager castingcallsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         LinearLayoutManager castingcallsApplicationsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
@@ -230,7 +233,7 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
                 if (currentCastingCall.getUserId() == user.getUserId()) {
                     edit.setVisibility(View.VISIBLE);
                     currentUser=1;
-
+                    progressDialog.show();
                     Call<List<CastingCallApplication>> getUserCastingCallApplicationsDTOCall = new SCAClient().getClient().getCastingCallApplications(currentCastingCall.getId());
                     getUserCastingCallApplicationsDTOCall.enqueue(new Callback<List<CastingCallApplication>>() {
                         @Override
@@ -242,6 +245,7 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
                                 castingCallCount.setText(getResources().getString(R.string.casting_call_applications)+"("+castingCallApplicationList.size()+")");
                                 CastingCallApplicationsAdapter adapter = new CastingCallApplicationsAdapter(ApplyCastingCallActivity.this, castingCallApplicationList);
                                 castingCallApplicationsView.setAdapter(adapter);
+                                progressDialog.dismiss();
 
                             }
                         }
@@ -249,14 +253,15 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
                         @Override
                         public void onFailure(Call<List<CastingCallApplication>> call, Throwable t) {
 
-
+                            progressDialog.dismiss();
                         }
                     });
 
                 } else {
                     currentUser=2;
+                    progressDialog.show();
                     Call<CastingCall> getCastingCallDTOCall = new SCAClient().getClient().getCastingCall(currentCastingCall.getId(), user.getUserId());
-                    System.out.println(user.getUserId());
+                   // System.out.println(user.getUserId());
                     getCastingCallDTOCall.enqueue(new Callback<CastingCall>() {
                         @Override
                         public void onResponse(Call<CastingCall> call, Response<CastingCall> response) {
@@ -276,10 +281,12 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
                                     }
                                 }
                             }
+                            progressDialog.dismiss();
                         }
 
                         @Override
                         public void onFailure(Call<CastingCall> call, Throwable t) {
+                            progressDialog.dismiss();
                         }
                     });
                      // apply.setVisibility(View.VISIBLE);
@@ -374,6 +381,7 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
     }
 
     private void applyCastingCall(final CastingCall currentCastingCall, long userId, final ProfileType profileType){
+        progressDialog.show();
         Call<Boolean> applyCastingCallDTOCall = new SCAClient().getClient().applyCastingCall(currentCastingCall.getId(),userId,profileType.getId());
         applyCastingCallDTOCall.enqueue(new Callback<Boolean>() {
             @Override
@@ -381,11 +389,12 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
                 Log.i("Success","kkHai");
                 Toast.makeText(context,"You Have Succesfully Applied For "+ profileType.getName()+" with "+currentCastingCall.getProjectName(),Toast.LENGTH_LONG).show();
 
-
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<Boolean> call, Throwable t) {
+                progressDialog.dismiss();;
 
             }
         });

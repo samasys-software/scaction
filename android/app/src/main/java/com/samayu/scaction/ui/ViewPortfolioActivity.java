@@ -51,14 +51,14 @@ import retrofit2.Response;
         portfolioListView= (RecyclerView) findViewById(R.id.viewPortfolioImage);
         portfolioListView.setLayoutManager(portfolioLayoutManager);
 
-        long userId=getIntent().getExtras().getLong("userId");
+        final long userId=getIntent().getExtras().getLong("userId");
 
         Call<List<PortfolioPicture>> getAllPortfolioPictureDTOCall= new SCAClient().getClient().findAllPortfolio(userId);
         getAllPortfolioPictureDTOCall.enqueue(new Callback<List<PortfolioPicture>>() {
             @Override
             public void onResponse(Call<List<PortfolioPicture>> call, Response<List<PortfolioPicture>> response) {
                 List<PortfolioPicture> portfolioPictures=response.body();
-                setImagesInAdapter(portfolioPictures);
+                setImagesInAdapter(portfolioPictures,userId);
             }
 
             @Override
@@ -77,7 +77,7 @@ import retrofit2.Response;
        //  getAllPortfolioImages();
     }
 
-     public void setImagesInAdapter(List<PortfolioPicture> response){
+     public void setImagesInAdapter(List<PortfolioPicture> response,long userId){
 
          List<PortfolioPicture> thumbnailImages=new ArrayList<PortfolioPicture>();
          List<PortfolioPicture> mediumImages=new ArrayList<PortfolioPicture>();
@@ -95,15 +95,15 @@ import retrofit2.Response;
              }
          }
          ImageHolderAdapter adapter;
-         adapter= new ImageHolderAdapter(ViewPortfolioActivity.this, thumbnailImages,false);
+         adapter= new ImageHolderAdapter(ViewPortfolioActivity.this, userId, thumbnailImages,false);
          thumbnailListView.setVisibility(View.VISIBLE);
          thumbnailListView.setAdapter(adapter);
 
-         adapter = new ImageHolderAdapter(ViewPortfolioActivity.this, mediumImages,false);
+         adapter = new ImageHolderAdapter(ViewPortfolioActivity.this, userId, mediumImages,false);
          mediumListView.setVisibility(View.VISIBLE);
          mediumListView.setAdapter(adapter);
 
-         adapter = new ImageHolderAdapter(ViewPortfolioActivity.this, portfolioImages,false);
+         adapter = new ImageHolderAdapter(ViewPortfolioActivity.this, userId,portfolioImages,false);
          portfolioListView.setVisibility(View.VISIBLE);
          portfolioListView.setAdapter(adapter);
 

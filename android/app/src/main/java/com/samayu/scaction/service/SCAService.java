@@ -43,6 +43,8 @@ public interface SCAService {
 
 //User Rest Calls
 
+    //New User Can Register in SCA using this call
+
     @POST("user/register")
     @FormUrlEncoded
 
@@ -65,12 +67,16 @@ public interface SCAService {
 //
 //    public Call<String> sample(@Field("id") int id);
 
+    //Check That Is the user ia already exist or not
     @GET("user/checkUser/{fbUser}")
     public Call<User> checkUser(@Path("fbUser") String fbUser);
 
+    //Get notifications for the registered user
     @GET("user/notifications/{userId}")
     public Call<List<UserNotification>> getUserNotifications(@Path("userId") long userId);
 
+
+    //Usr can apply for casting call
     @POST("user/applyForCastingCall")
     @FormUrlEncoded
     public Call<Boolean> applyCastingCall(
@@ -79,6 +85,7 @@ public interface SCAService {
             @Field("roleId") int roleId
     );
 
+    //user can upload portfolio picture
     @POST("user/uploadPicture")
     @Multipart
     public Call<List<PortfolioPicture>> uploadPicture(
@@ -86,19 +93,24 @@ public interface SCAService {
             @Part("pictureType") int pictureType ,
             @Part MultipartBody.Part file );
 
+
+    //user can delete portfolio picture
     @POST("user/deletePicture")
     @FormUrlEncoded
     public Call<List<PortfolioPicture>> deletePicture(
             @Field("userId") long userId ,
             @Field("portfolioId") long portfolioId );
 
+    //download the porfoilio picture
     @GET("user/downloadFile/{userId}/{filename}")
     public Call<ResponseBody> downloadFile(@Path("filename") String filename , @Path("userId") long userId);
 
-    @GET("user/getAllPortfolio/{userId}" )
+   //all portfolio for prticular user
+   @GET("user/getAllPortfolio/{userId}" )
     public Call<List<PortfolioPicture>> findAllPortfolio(@Path("userId") long userId );
 
-    @POST("global/updatePortfolio/{userId}")
+    @POST("user/updatePortfolio/{userId}")
+    @FormUrlEncoded
     public Call<Portfolio> updatePortfolio(
             @Path("userId") long userId,
             @Field("shortDesc") String shortDesc,
@@ -106,14 +118,17 @@ public interface SCAService {
             @Field("projectWorked") String projectWorked,
             @Field("message") String message );
 
-    @GET("global/getPortfolio/{userId}")
+    @GET("user/getPortfolio/{userId}")
     public Call<Portfolio> getPortfolio(@Path("userId") long userId );
+
+    @GET("user/getMyCastingCalls/{userId}")
+    public Call<List<CastingCall>> getMyCastingCalls(@Path("userId") long userId );
 
 
 //Coordinator Rest calls
 
     @GET( "coordinator/castingcalls/{userId}")
-    public Call<List<CastingCall>> getMyCastingCalls(@Path("userId" ) long userId);
+    public Call<List<CastingCall>> getMyCastingCallsForCoordinator(@Path("userId" ) long userId);
 
     @GET("coordinator/castingCallApplications/{castingCallId}")
     public Call<List<CastingCallApplication >> getCastingCallApplications(@Path("castingCallId") long castingCallId );

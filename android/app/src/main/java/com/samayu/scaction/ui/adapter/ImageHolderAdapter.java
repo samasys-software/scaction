@@ -44,6 +44,7 @@ public class ImageHolderAdapter extends RecyclerView.Adapter <ImageHolderAdapter
     LayoutInflater inflater;
     String imageUrl=null;
     boolean edit;
+    long userId;
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
         public ImageView portfolioImages,remove;
@@ -54,12 +55,13 @@ public class ImageHolderAdapter extends RecyclerView.Adapter <ImageHolderAdapter
         }
     }
 
-    public ImageHolderAdapter(Activity mainActivity, List<PortfolioPicture> portfolioPicturesList,boolean edit1) {
+    public ImageHolderAdapter(Activity mainActivity,long userId1, List<PortfolioPicture> portfolioPicturesList,boolean edit1) {
 
         // TODO Auto-generated constructor stub
         portfolioPictures = portfolioPicturesList;
 
         edit=edit1;
+        userId=userId1;
 
 
         context = mainActivity;
@@ -90,7 +92,7 @@ public class ImageHolderAdapter extends RecyclerView.Adapter <ImageHolderAdapter
         //String imageUrl=BuildConfig.SERVER_URL+"Users/NandhiniGovindasamy/Documents/scactionimages/14/sample.jpg";
 
         Picasso.with(context)
-                .load(BuildConfig.SERVER_URL+"user/downloadFile/"+SessionInfo.getInstance().getUser().getUserId()+"/"+portfolioPicture.getFileName())
+                .load(BuildConfig.SERVER_URL+"user/downloadFile/"+userId+"/"+portfolioPicture.getFileName())
                 .into(holder.portfolioImages);
 
         holder.portfolioImages.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +154,7 @@ public class ImageHolderAdapter extends RecyclerView.Adapter <ImageHolderAdapter
         deletePortfolioDTOCall.enqueue(new Callback<List<PortfolioPicture>>() {
             @Override
             public void onResponse(Call<List<PortfolioPicture>> call, Response<List<PortfolioPicture>> response) {
-                ((CreatePortfolioActivity)context). setImagesInAdapter(response.body());
+                ((CreatePortfolioActivity)context). setImagesInAdapter(response.body(),SessionInfo.getInstance().getUser().getUserId());
 
             }
 

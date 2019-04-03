@@ -2,6 +2,7 @@ package com.samayu.scaction.ui;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,14 +19,25 @@ import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.samayu.scaction.R;
+import com.samayu.scaction.dto.City;
+import com.samayu.scaction.dto.Country;
+import com.samayu.scaction.dto.Portfolio;
 import com.samayu.scaction.dto.PortfolioPicture;
+import com.samayu.scaction.dto.ProfileType;
+import com.samayu.scaction.dto.SelectedCastingCallRoles;
+import com.samayu.scaction.dto.User;
+import com.samayu.scaction.service.DateFormatter;
 import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
 
@@ -81,18 +93,33 @@ public class CreatePortfolioActivity extends SCABaseActivity {
     int currentImageSize;
     RecyclerView thumbnailListView,mediumListView,portfolioListView;
     TextView preview;
+    EditText shortDescription,areaOfExpertise,projectWorked,longDescription;
+    Button create;
 
+    View focusView=null;
+    boolean valid=false;
+    ProgressDialog progressDialog;
+    List<PortfolioPicture> thumbnailList=new ArrayList<PortfolioPicture>();
+    List<PortfolioPicture> mediumList=new ArrayList<PortfolioPicture>();
+    List<PortfolioPicture> portfolioList=new ArrayList<PortfolioPicture>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_portfolio);
         context = this;
+        progressDialog=getProgressDialog(context);
         LinearLayoutManager thumbnailLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager mediumLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager portfolioLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
         preview = (TextView) findViewById(R.id.preview);
+        shortDescription=(EditText) findViewById(R.id.addShortDescription);
+        areaOfExpertise=(EditText) findViewById(R.id.addAreaOfExpertise);
+        projectWorked=(EditText) findViewById(R.id.addProjectWorked);
+        longDescription=(EditText) findViewById(R.id.addLongDescription);
+        create=(Button) findViewById(R.id.portfolioCreate);
+
         choosePortfolioPicture = (LinearLayout) findViewById(R.id.choose_portfolio);
         chooseMediumPicture = (LinearLayout) findViewById(R.id.choose_medium);
         chooseThumbnailPicture = (LinearLayout) findViewById(R.id.choose_thumbnail);
@@ -107,17 +134,21 @@ public class CreatePortfolioActivity extends SCABaseActivity {
 
         portfolioListView= (RecyclerView) findViewById(R.id.addPortfolio);
         portfolioListView.setLayoutManager(portfolioLayoutManager);
+        final long userId=SessionInfo.getInstance().getUser().getUserId();
 
-        Call<List<PortfolioPicture>> getAllPortfolioPictureDTOCall= new SCAClient().getClient().findAllPortfolio(SessionInfo.getInstance().getUser().getUserId());
+        progressDialog.show();;
+        Call<List<PortfolioPicture>> getAllPortfolioPictureDTOCall= new SCAClient().getClient().findAllPortfolio(userId);
         getAllPortfolioPictureDTOCall.enqueue(new Callback<List<PortfolioPicture>>() {
             @Override
             public void onResponse(Call<List<PortfolioPicture>> call, Response<List<PortfolioPicture>> response) {
                 List<PortfolioPicture> portfolioPictures=response.body();
-                setImagesInAdapter(portfolioPictures);
+                setImagesInAdapter(portfolioPictures,userId);
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<List<PortfolioPicture>> call, Throwable t) {
+                progressDialog.dismiss();
 
 
             }
@@ -158,6 +189,13 @@ public class CreatePortfolioActivity extends SCABaseActivity {
             public void onClick(View v) {
                 show(3);
 
+            }
+        });
+
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createPortfolio();
             }
         });
 
@@ -231,29 +269,61 @@ public class CreatePortfolioActivity extends SCABaseActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == GET_PORTFOLIO_IMAGES) {
                 System.out.println("mydata" + intent.getClipData().getItemCount());
+
                 for (int i = 0; i < intent.getClipData().getItemCount(); i++) {
-                    Uri uri = intent.getClipData().getItemAt(i).getUri();
-                    userSelectedImageUriList.add(i, uri);
-                }
-
-                if (userSelectedImageUriList != null) {
-                    int size = userSelectedImageUriList.size();
-//                    adapter = new ImageHolderAdapter(CreatePortfolioActivity.this, userSelectedImageUriList);
-//                    listView.setAdapter(adapter);
-                    for (int i = 0; i < size; i++) {
-                        Uri currentUri = userSelectedImageUriList.get(i);
-                        sendPortfolioToServer(currentUri,2);
-
-
+                    if(portfolioList.size()<=0 || portfolioList.size()<=10) {
+                        Uri uri = intent.getClipData().getItemAt(i).getUri();
+                        sendPortfolioToServer(uri, 2);
                     }
-                    // selectedImage = intent.getData();
-                    //imageView.setImageURI(selectedImage);
+                    else {
+                        Toast.makeText(context,"You Have to delete to upload portfoio photo",Toast.LENGTH_LONG).show();
+                    }
+
                 }
+
+//                if (userSelectedImageUriList != null) {
+//                    int size = userSelectedImageUriList.size();
+////                    adapter = new ImageHolderAdapter(CreatePortfolioActivity.this, userSelectedImageUriList);
+////                    listView.setAdapter(adapter);
+//                    for (int i = 0; i < size; i++) {
+//                        Uri currentUri = userSelectedImageUriList.get(i);
+//
+//
+//
+//                    }
+//                    // selectedImage = intent.getData();
+//                    //imageView.setImageURI(selectedImage);
+//                }
+            }
+            else if (requestCode == GET_THUMBNAILS_IMAGES) {
+                Uri uri = intent.getData();
+                if(thumbnailList.size()<=0)
+                    sendPortfolioToServer(uri,0);
+                else if(thumbnailList.size()==1)
+                    Toast.makeText(context,"You Have to delete to upload thumbnail photo",Toast.LENGTH_LONG).show();
+
+
+                // setThumbnailImage(uri);
+
+            }
+            else if (requestCode == GET_MEDIUM_IMAGES) {
+                Uri uri = intent.getData();
+                if(mediumList.size()<=0)
+                    sendPortfolioToServer(uri,1);
+                else  if(mediumList.size()==1)
+                    Toast.makeText(context,"You Have to delete to upload medium photo",Toast.LENGTH_LONG).show();
+                //setMediumImages(uri);
+
             }
             else if (requestCode == TAKE_MEDIUM_IMAGES) {
                 Bitmap photo = (Bitmap) intent.getExtras().get("data");
-                mediumImages.setImageBitmap(photo);
-                mediumImages.setVisibility(View.VISIBLE);
+                Uri uri=getImageUri(context,photo);
+                if(thumbnailList.size()<=0)
+                    sendPortfolioToServer(uri,0);
+                else if(thumbnailList.size()==1)
+                    Toast.makeText(context,"You Have to delete to upload thumbnail photo",Toast.LENGTH_LONG).show();
+//                mediumImages.setImageBitmap(photo);
+//                mediumImages.setVisibility(View.VISIBLE);
                 //setMediumImages(getImageUri(context,photo));
                 //textView.setImageBitmap(photo);
 
@@ -262,23 +332,18 @@ public class CreatePortfolioActivity extends SCABaseActivity {
             {
                 //Uri bmp=intent.getData();
                 Bitmap photo = (Bitmap) intent.getExtras().get("data");
-                thumbnailImages.setImageBitmap(photo);
-                thumbnailImages.setVisibility(View.VISIBLE);
+                Uri uri=getImageUri(context,photo);
+                if(mediumList.size()<=0)
+                    sendPortfolioToServer(uri,1);
+                else if(mediumList.size()==1)
+                    Toast.makeText(context,"You Have to delete to upload thumbnail photo",Toast.LENGTH_LONG).show();
+
+//                thumbnailImages.setImageBitmap(photo);
+//                thumbnailImages.setVisibility(View.VISIBLE);
                 //setThumbnailImage(getImageUri(context,photo));
 
             }
-            else if (requestCode == GET_THUMBNAILS_IMAGES) {
-                Uri uri = intent.getData();
-                sendPortfolioToServer(uri,0);
-               // setThumbnailImage(uri);
 
-            }
-            else if (requestCode == GET_MEDIUM_IMAGES) {
-                Uri uri = intent.getData();
-                sendPortfolioToServer(uri,1);
-                //setMediumImages(uri);
-
-            }
         }
 
     }
@@ -370,7 +435,7 @@ public class CreatePortfolioActivity extends SCABaseActivity {
         getPortfolioPictureDTOCall.enqueue(new Callback<List<PortfolioPicture>>() {
             @Override
             public void onResponse(Call<List<PortfolioPicture>> call, Response<List<PortfolioPicture>> response) {
-                setImagesInAdapter(response.body());
+                setImagesInAdapter(response.body(),SessionInfo.getInstance().getUser().getUserId());
 
             }
 
@@ -438,7 +503,7 @@ public class CreatePortfolioActivity extends SCABaseActivity {
 
 
 
-    public void setImagesInAdapter(List<PortfolioPicture> response){
+    public void setImagesInAdapter(List<PortfolioPicture> response,long userId){
 
         List<PortfolioPicture> thumbnailImages=new ArrayList<PortfolioPicture>();
         List<PortfolioPicture> mediumImages=new ArrayList<PortfolioPicture>();
@@ -447,28 +512,121 @@ public class CreatePortfolioActivity extends SCABaseActivity {
         {
             if(portfolioPicture.getType()==0){
                 thumbnailImages.add(portfolioPicture);
+                thumbnailList.add(portfolioPicture);
             }
             else if(portfolioPicture.getType()==1){
                 mediumImages.add(portfolioPicture);
+                mediumList.add(portfolioPicture);
             }
             else{
                 portfolioImages.add(portfolioPicture);
+                portfolioList.add(portfolioPicture);
+
             }
         }
+
+
+
         ImageHolderAdapter adapter;
-        adapter= new ImageHolderAdapter(CreatePortfolioActivity.this, thumbnailImages,true);
+        adapter= new ImageHolderAdapter(CreatePortfolioActivity.this, userId,thumbnailImages,true);
         thumbnailListView.setVisibility(View.VISIBLE);
         thumbnailListView.setAdapter(adapter);
 
-        adapter = new ImageHolderAdapter(CreatePortfolioActivity.this, mediumImages,true);
+        adapter = new ImageHolderAdapter(CreatePortfolioActivity.this, userId,mediumImages,true);
         mediumListView.setVisibility(View.VISIBLE);
         mediumListView.setAdapter(adapter);
 
-        adapter = new ImageHolderAdapter(CreatePortfolioActivity.this, portfolioImages,true);
+        adapter = new ImageHolderAdapter(CreatePortfolioActivity.this, userId, portfolioImages,true);
         portfolioListView.setVisibility(View.VISIBLE);
         portfolioListView.setAdapter(adapter);
 
     }
+
+    public void createPortfolio(){
+
+
+        String shortDesc=shortDescription.getText().toString();
+        String areaOfExpert=areaOfExpertise.getText().toString();
+        String projectWork=projectWorked.getText().toString();
+        String longDesc=longDescription.getText().toString();
+
+
+
+        boolean validation=  validation(shortDesc,areaOfExpert,projectWork,longDesc);
+        if (validation) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+            return;
+        }
+        else {
+            try{
+                progressDialog.show();;
+                Call<Portfolio> createPortfolioDTOcall = new SCAClient().getClient().updatePortfolio(SessionInfo.getInstance().getUser().getUserId(),shortDesc,areaOfExpert,projectWork,longDesc);
+                createPortfolioDTOcall.enqueue(new Callback<Portfolio>() {
+                    @Override
+                    public void onResponse(Call<Portfolio> call, Response<Portfolio> response) {
+                        if (response.isSuccessful()) {
+                            Portfolio user=response.body();
+                            Toast.makeText(context,getString(R.string.portfolio_create_message),Toast.LENGTH_LONG).show();
+                            Intent intent=new Intent(CreatePortfolioActivity.this,MainActivity.class);
+                            startActivity(intent);
+                            progressDialog.dismiss();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Portfolio> call, Throwable t) {
+                        t.printStackTrace();
+                        progressDialog.dismiss();
+
+                    }
+                });
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+    public boolean validation(String shortDesc,String areaOfExpert,String projectWork,String longDesc){
+        //  public boolean validation(){
+
+        // Reset errors.
+        valid = false;
+
+        if(TextUtils.isEmpty(shortDesc)){
+            shortDescription.setError("This Field is Required");
+            focusView = shortDescription;
+            valid = true;
+            return  valid;
+        }
+        if(TextUtils.isEmpty(areaOfExpert)){
+            areaOfExpertise.setError("This Field is Required");
+            focusView = areaOfExpertise;
+            valid = true;
+            return  valid;
+        }
+        if(TextUtils.isEmpty(projectWork)){
+            projectWorked.setError("This Field is Required");
+            focusView = projectWorked;
+            valid = true;
+            return  valid;
+        }
+
+
+
+        if(TextUtils.isEmpty(longDesc)){
+            longDescription.setError("This Field is Required");
+            focusView = longDescription;
+            valid = true;
+            return  valid;
+        }
+
+
+        return valid;
+    }
+
 
 }
 

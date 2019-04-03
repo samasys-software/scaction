@@ -1,5 +1,7 @@
 package com.samayu.scaction.ui;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -148,8 +150,8 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
                                 startActivity(intent);
                                 break;
                             case R.id.myJobs:
-                                intent=new Intent(SCABaseActivity.this,HomeActivity.class);
-
+                                intent=new Intent(SCABaseActivity.this,UserCastingCallsActivity.class);
+                                intent.putExtra("UserCastingCall",2);
                                 startActivity(intent);
                                 break;
                             case R.id.myPortfolio:
@@ -288,7 +290,7 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
         }
         else if (id == R.id.castingCalls) {
             intent=new Intent(SCABaseActivity.this,UserCastingCallsActivity.class);
-            intent.putExtra("UserCastingCall",false);
+            intent.putExtra("UserCastingCall",1);
             startActivity(intent);
 
         }
@@ -428,6 +430,15 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
 
 
     }
+
+    public ProgressDialog getProgressDialog(Context context) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("One Moment Please");
+        //p.show();
+        return progressDialog;
+    }
+
 }
 
 
