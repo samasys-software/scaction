@@ -64,17 +64,19 @@
                     android:visibility="invisible">
 
                 </Button>
-                <Button
+
+                <TextView
+                    android:id="@+id/loginAndRegister"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/loginAndRegister"
 
-
-                    android:layout_alignParentEnd="true"
-                    android:text="Login And Register"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="16dp"
+                    android:layout_toStartOf="@+id/apply"
+                    android:text="Login/Register To Apply"
                     android:visibility="invisible">
 
-                </Button>
+                </TextView>
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

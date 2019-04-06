@@ -77,10 +77,20 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
         popupMenuView = (NavigationView) fullView.findViewById(R.id.popup_menu_view);
 
         final ImageView userImage = (ImageView) fullView.findViewById(R.id.userImage);
+        final ImageView logo = (ImageView) fullView.findViewById(R.id.logo);
         notificationAlert= (ImageView) fullView.findViewById(R.id.notificationAlert);
         Button loginFB=(Button) fullView.findViewById(R.id.fb_login_id);
         TextView userName = (TextView)fullView.findViewById(R.id.userName);
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+        logo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(SCABaseActivity.this,MainActivity.class);
+                startActivity(intent);
+
+            }
+        });
 
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
         if(isLoggedIn){
@@ -220,7 +230,7 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
         Toolbar toolbar = (Toolbar)layout.findViewById(R.id.proToolBar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setLogo(R.drawable.logo);
+        //getSupportActionBar().setLogo(R.drawable.logo);
         DrawerLayout drawer = layout;
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

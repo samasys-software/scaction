@@ -40,7 +40,8 @@ import retrofit2.Response;
 
 public class ApplyCastingCallActivity extends SCABaseActivity {
 
-    Button registerToApply,apply,unapply,loginAndRegister;
+    Button registerToApply,apply,unapply;
+    TextView loginAndRegister;
     ImageButton edit;
     Context context;
     User user;
@@ -66,7 +67,7 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
 
         registerToApply=(Button) findViewById(R.id.registerToApply);
         apply=(Button) findViewById(R.id.apply);
-        loginAndRegister=(Button) findViewById(R.id.loginAndRegister);
+        loginAndRegister=(TextView) findViewById(R.id.loginAndRegister);
         unapply=(Button) findViewById(R.id.unApply);
         edit=(ImageButton) findViewById(R.id.edit);
 
@@ -312,13 +313,13 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
             }
         });
 
-        loginAndRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(ApplyCastingCallActivity.this,UseFacebookLoginActivity.class);
-                startActivity(intent);
-            }
-        });
+//        loginAndRegister.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent=new Intent(ApplyCastingCallActivity.this,UseFacebookLoginActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         castingCallApplicationsView.addOnItemTouchListener(new RecyclerListener(context,
                 castingCallApplicationsView, new RecyclerListener.OnItemClickListener() {
