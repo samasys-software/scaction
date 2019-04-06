@@ -23,8 +23,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
  public class ViewPortfolioActivity extends SCABaseActivity {
-     LinearLayout viewThumbnailPicture,viewPortfolioPicture,viewMediumPicture;
+     LinearLayout userDetails;
      RecyclerView thumbnailListView,mediumListView,portfolioListView;
+     TextView portfolioUserName,portfolioMailId,portfolioContactNumber,portfolioWhatsAppNumber;
      Context context;
 
     @Override
@@ -50,9 +51,17 @@ import retrofit2.Response;
 
         portfolioListView= (RecyclerView) findViewById(R.id.viewPortfolioImage);
         portfolioListView.setLayoutManager(portfolioLayoutManager);
+        userDetails=(LinearLayout)findViewById(R.id.userDetailsLayout);
+        portfolioUserName=(TextView)findViewById(R.id.portfolioUserName);
+        portfolioMailId=(TextView)findViewById(R.id.portfolioMailId);
+        portfolioContactNumber=(TextView)findViewById(R.id.portfolioContactNumber);
+        portfolioWhatsAppNumber=(TextView)findViewById(R.id.portfolioWhatsappNumber);
 
         final long userId=getIntent().getExtras().getLong("userId");
+        if(SessionInfo.getInstance().getFbUserDetails()!=null && SessionInfo.getInstance().getUser()!=null){
+            if(SessionInfo.getInstance().getUser().getUserId()==userId || SessionInfo.getInstance().getUser().getUserRoles()==)
 
+        }
         Call<List<PortfolioPicture>> getAllPortfolioPictureDTOCall= new SCAClient().getClient().findAllPortfolio(userId);
         getAllPortfolioPictureDTOCall.enqueue(new Callback<List<PortfolioPicture>>() {
             @Override
