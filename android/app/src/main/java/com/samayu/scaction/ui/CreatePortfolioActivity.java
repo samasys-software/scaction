@@ -303,7 +303,7 @@ public class CreatePortfolioActivity extends SCABaseActivity {
                 for (int i = 0; i < intent.getClipData().getItemCount(); i++) {
                     if(portfolioList.size()<=0 || portfolioList.size()<10) {
                         Uri uri = intent.getClipData().getItemAt(i).getUri();
-                        boolean done=sendPortfolioToServer(uri, 2);
+                        sendPortfolioToServer(uri, 2);
                     }
                     else {
                         Toast.makeText(context,"You Have to delete to upload portfoio photo",Toast.LENGTH_LONG).show();

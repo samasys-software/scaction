@@ -22,6 +22,7 @@ import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
 import com.samayu.scaction.ui.CreatePortfolioActivity;
 import com.samayu.scaction.ui.SCABaseActivity;
+import com.samayu.scaction.ui.ViewPortfolioActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -68,7 +69,8 @@ public class ImageHolderAdapter extends RecyclerView.Adapter <ImageHolderAdapter
 
 
         context = mainActivity;
-        progressDialog= ((CreatePortfolioActivity)context). getProgressDialog(context);
+       progressDialog=new ProgressDialog(context);
+       progressDialog.setIndeterminate(true);
 
         //  System.out.println(context);
 

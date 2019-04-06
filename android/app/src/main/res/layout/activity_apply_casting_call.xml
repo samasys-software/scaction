@@ -69,7 +69,8 @@
                     android:id="@+id/loginAndRegister"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:layout_alignBaseline="@+id/registerToApply"
+                    android:layout_alignBottom="@+id/registerToApply"
                     android:layout_gravity="center"
                     android:layout_marginEnd="16dp"
                     android:layout_toStartOf="@+id/apply"
@@ -116,71 +117,28 @@
                 <!--android:layout_height="wrap_content"-->
                 <!--android:orientation="horizontal">-->
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/castingCallRoleList"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:dividerHeight="1dp"
 
-
-                    />
             <!--</LinearLayout>-->
 
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5sp"
-                android:orientation="horizontal">
-            <!--android:layout_below="@id/castingCallRoleListLayout"-->
 
 
-                <!--<TextView-->
-                    <!--android:id="@+id/projectNameText"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="3"-->
-                    <!--android:gravity="center"-->
-                    <!--android:textColor="@color/colorPrimaryDark"-->
-                    <!--android:padding="2dp"-->
-                    <!--android:text="Project Name : "-->
-                    <!--android:textSize="20dp"-->
-                    <!--android:textAllCaps="true"-->
-                    <!--/>-->
+        <TextView
+            android:id="@+id/displayProductionCompany"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="ABC"
+            android:textAllCaps="true"
+            android:textColor="@color/bee_yellow"
+            android:textSize="18dp"
 
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5sp"
-                android:orientation="horizontal">
+            />
 
 
-                <!--<TextView-->
-                    <!--android:id="@+id/projectDetailsText"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="3"-->
-                    <!--android:textColor="@color/colorPrimaryDark"-->
-                    <!--android:padding="2dp"-->
-                    <!--android:text="Project Details : "-->
-                    <!--/>-->
-                <TextView
-
-                    android:text="presents"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:textColor="@color/bee_yellow"
-                    android:padding="2dp"
-                    android:gravity="center"
-
-                    />
-
-            </LinearLayout>
 
 
             <LinearLayout
@@ -329,19 +287,6 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/displayProductionCompany"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:gravity="center"
-                android:padding="2dp"
-                android:text="ABC"
-                android:textAllCaps="true"
-                android:textColor="@color/bee_yellow"
-                android:textSize="18dp"
-
-                />
 
             <!--<LinearLayout-->
                 <!--android:layout_width="wrap_content"-->
@@ -364,6 +309,14 @@
 
             <!--</LinearLayout>-->
         </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/castingCallRoleList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="1dp"
+
+
+            />
 
 
 

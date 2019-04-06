@@ -72,6 +72,17 @@ public class UserRest {
             }
     }
 
+    @GetMapping(path="/findUser/{userId}" )
+    public ResponseEntity<User> findUser(@PathVariable("userId") long userId ){
+        User user = dataAccessService.findUser( userId );
+        if( user != null ) {
+            return ResponseEntity.ok(user);
+        }
+        else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     @GetMapping(path="/notifications/{userId}")
     public ResponseEntity<Iterable<UserNotification>> getNotificationsForUser(@PathVariable("userId") long userId ){
