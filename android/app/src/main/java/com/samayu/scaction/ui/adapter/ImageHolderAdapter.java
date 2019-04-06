@@ -1,6 +1,7 @@
 package com.samayu.scaction.ui.adapter;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Environment;
@@ -20,6 +21,7 @@ import com.samayu.scaction.dto.PortfolioPicture;
 import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
 import com.samayu.scaction.ui.CreatePortfolioActivity;
+import com.samayu.scaction.ui.SCABaseActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -45,6 +47,7 @@ public class ImageHolderAdapter extends RecyclerView.Adapter <ImageHolderAdapter
     String imageUrl=null;
     boolean edit;
     long userId;
+    ProgressDialog progressDialog;
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
         public ImageView portfolioImages,remove;
@@ -65,6 +68,8 @@ public class ImageHolderAdapter extends RecyclerView.Adapter <ImageHolderAdapter
 
 
         context = mainActivity;
+        progressDialog= ((CreatePortfolioActivity)context). getProgressDialog(context);
+
         //  System.out.println(context);
 
         inflater = LayoutInflater.from(context);
@@ -150,16 +155,19 @@ public class ImageHolderAdapter extends RecyclerView.Adapter <ImageHolderAdapter
         return portfolioPictures.size();
     }
     public void deleteImage(long portfolioId){
+        progressDialog.show();
         Call<List<PortfolioPicture>> deletePortfolioDTOCall= new SCAClient().getClient().deletePicture(SessionInfo.getInstance().getUser().getUserId(),portfolioId);
         deletePortfolioDTOCall.enqueue(new Callback<List<PortfolioPicture>>() {
             @Override
             public void onResponse(Call<List<PortfolioPicture>> call, Response<List<PortfolioPicture>> response) {
                 ((CreatePortfolioActivity)context). setImagesInAdapter(response.body(),SessionInfo.getInstance().getUser().getUserId());
+                progressDialog.dismiss();
 
             }
 
             @Override
             public void onFailure(Call<List<PortfolioPicture>> call, Throwable t) {
+                progressDialog.dismiss();
 
 
             }
