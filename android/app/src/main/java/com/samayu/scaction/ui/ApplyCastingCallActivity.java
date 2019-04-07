@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -62,7 +63,8 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
         setContentView(R.layout.activity_apply_casting_call);
         context=this;
         progressDialog=getProgressDialog(context);
-        LinearLayoutManager castingcallsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager castingcallsLayoutManager=new GridLayoutManager(this,2);
+        //LinearLayoutManager castingcallsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         LinearLayoutManager castingcallsApplicationsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         registerToApply=(Button) findViewById(R.id.registerToApply);
@@ -269,19 +271,24 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
 
                             CastingCall castingCall = response.body();
                             List<CastingCallApplication> castingCallApplicationList = castingCall.getUserApplications();
-                            if (castingCallApplicationList == null) {
+
                                 apply.setVisibility(View.VISIBLE);
-                            } else {
+                            if(castingCallApplicationList!=null) {
+                                unapply.setVisibility(View.VISIBLE);
                                 for (CastingCallApplication currentCastingCallApplication : castingCallApplicationList) {
-                                    if (currentCastingCallApplication.getUser().getUserId() == user.getUserId()) {
-                                        unapply.setVisibility(View.VISIBLE);
-                                        break;
-                                    } else {
-                                        apply.setVisibility(View.VISIBLE);
-                                        break;
+                                    List<SelectedCastingCallRoles> selectedCastingCallRolesList1=SessionInfo.getInstance().getSelectedCastingCallRoles();
+                                    for(int i=0;i<selectedCastingCallRolesList1.size();i++) {
+                                        if (currentCastingCallApplication.getRoleId() == selectedCastingCallRolesList1.get(i).getProfileType().getId()) {
+                                            SessionInfo.getInstance().getSelectedCastingCallRoles().get(i).setChecked(true);
+
+                                            profileAdapter= new RolesAdapter(ApplyCastingCallActivity.this,1,currentUser,user);
+                                            // listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+                                            castingcallsRoles.setAdapter(profileAdapter);
+                                        }
                                     }
                                 }
                             }
+
                             progressDialog.dismiss();
                         }
 

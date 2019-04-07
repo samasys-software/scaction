@@ -71,6 +71,9 @@ public interface SCAService {
     @GET("user/checkUser/{fbUser}")
     public Call<User> checkUser(@Path("fbUser") String fbUser);
 
+    @GET("user/findUser/{userId}")
+    public Call<User> findUser(@Path("userId") long userId);
+
     //Get notifications for the registered user
     @GET("user/notifications/{userId}")
     public Call<List<UserNotification>> getUserNotifications(@Path("userId") long userId);
