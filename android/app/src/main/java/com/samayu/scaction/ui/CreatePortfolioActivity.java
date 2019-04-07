@@ -299,16 +299,24 @@ public class CreatePortfolioActivity extends SCABaseActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == GET_PORTFOLIO_IMAGES) {
                 System.out.println("mydata" + intent.getClipData().getItemCount());
+                if(portfolioList.size()<=0 || portfolioList.size()<10) {
+                    if(portfolioList.size()+intent.getClipData().getItemCount()>10){
+                        Toast.makeText(context,"You Have to delete to upload portfoio photo",Toast.LENGTH_LONG).show();
 
-                for (int i = 0; i < intent.getClipData().getItemCount(); i++) {
-                    if(portfolioList.size()<=0 || portfolioList.size()<10) {
-                        Uri uri = intent.getClipData().getItemAt(i).getUri();
-                        sendPortfolioToServer(uri, 2);
                     }
                     else {
-                        Toast.makeText(context,"You Have to delete to upload portfoio photo",Toast.LENGTH_LONG).show();
-                    }
 
+                        for (int i = 0; i < intent.getClipData().getItemCount(); i++) {
+
+                            Uri uri = intent.getClipData().getItemAt(i).getUri();
+                            sendPortfolioToServer(uri, 2);
+
+
+                        }
+                    }
+                }
+                else {
+                    Toast.makeText(context,"You Have to delete to upload portfoio photo",Toast.LENGTH_LONG).show();
                 }
 
 
