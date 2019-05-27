@@ -49,6 +49,17 @@ public class User {
     @Column(name="city_id")
     private int cityId;
 
+    public int getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(int loginType) {
+        this.loginType = loginType;
+    }
+
+    @Column(name="login_type")
+    private int loginType=0;
+
     @OneToOne
     @JoinColumn(name="portfolio_id" , referencedColumnName = "scaction_portfolio_details_id")
     private Portfolio portfolio;
