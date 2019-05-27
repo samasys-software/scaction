@@ -1,5 +1,6 @@
 package com.samayu.scaction.service;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.samayu.scaction.domain.FBUserDetails;
 import com.samayu.scaction.dto.CastingCall;
 import com.samayu.scaction.dto.City;
@@ -33,6 +34,15 @@ public class SessionInfo {
         this.fbUserDetails = fbUserDetails;
     }
 
+    private GoogleSignInAccount GoogleUserDetails;
+
+    public GoogleSignInAccount getGoogleUserDetails() {
+        return GoogleUserDetails;
+    }
+
+    public void setGoogleUserDetails(GoogleSignInAccount googleUserDetails) {
+        GoogleUserDetails = googleUserDetails;
+    }
 
     private List<Country> countries;
 

@@ -2,6 +2,7 @@ package com.samayu.scaction.ui;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -13,6 +14,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +33,12 @@ import android.widget.TextView;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
+import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.samayu.scaction.R;
 import com.samayu.scaction.domain.FBUserDetails;
 import com.samayu.scaction.dto.City;
@@ -50,6 +58,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Url;
 
 public abstract class SCABaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -57,6 +66,8 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
     ImageView notificationAlert;
     public static final String FILE_NAME = "SCALogin.txt";
     List<City> cityList;
+
+    public int loginType=0;
 
 
     @Override
@@ -81,7 +92,17 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
         notificationAlert= (ImageView) fullView.findViewById(R.id.notificationAlert);
         Button loginFB=(Button) fullView.findViewById(R.id.fb_login_id);
         TextView userName = (TextView)fullView.findViewById(R.id.userName);
+        boolean isLoggedIn=false;
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        if(accessToken!=null){
+            loginType=0;
+
+        }
+        GoogleSignInAccount accessToken1=  GoogleSignIn.getLastSignedInAccount(this);
+        if(accessToken1!=null){
+            loginType=1;
+            isLoggedIn=  accessToken1 != null && !accessToken1.isExpired() ;
+        }
 
         logo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,13 +113,36 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
             }
         });
 
-        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+       // boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+
         if(isLoggedIn){
-            FBUserDetails fbUserDetails=loginRetrive(FILE_NAME);
-            SessionInfo.getInstance().setFbUserDetails(fbUserDetails);
-            loginFB.setVisibility(View.GONE);
+            String url=null;
+            String displayName=null;
+          if(loginType==0) {
+              FBUserDetails fbUserDetails = loginRetrive(FILE_NAME);
+              SessionInfo.getInstance().setFbUserDetails(fbUserDetails);
+              url=fbUserDetails.getUrl();
+              displayName=fbUserDetails.getName();
+
+          }
+          else{
+              SessionInfo.getInstance().setGoogleUserDetails(accessToken1);
+              url=String.valueOf(accessToken1.getPhotoUrl());
+              displayName=accessToken1.getDisplayName();
+          }
 
 
+
+               loginFB.setVisibility(View.GONE);
+            try{
+                Picasso.with(this).load(url)
+                        .into(userImage);
+                userName.setText(displayName);
+            }
+            catch (Exception e)
+            {
+
+            }
 
         }
         else{
@@ -109,8 +153,60 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
         loginFB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(SCABaseActivity.this,UseFacebookLoginActivity.class);
-                startActivity(intent);
+                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(SCABaseActivity.this, R.style.AlertTheme);
+                //alertDialog.setTitle();
+                alertDialog.setCancelable(true);
+                LayoutInflater inflater = SCABaseActivity.this.getLayoutInflater();
+                View diaView = inflater.inflate(R.layout.login_base, null);
+                SignInButton googleSignIn=(SignInButton) diaView.findViewById(R.id.googleSignIn);
+                Button fbSignIn=(Button) diaView.findViewById(R.id.fbSignIn);
+
+
+                alertDialog.setView(diaView);
+
+                googleSignIn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent intent=new Intent(SCABaseActivity.this,UseGoogleLoginActivity.class);
+                        startActivity(intent);
+
+                    }
+                });
+
+                fbSignIn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                         Intent intent=new Intent(SCABaseActivity.this,UseFacebookLoginActivity.class);
+                         startActivity(intent);
+                    }
+                });
+
+//                alertDialog.setNegativeButton("CANCEL",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                // Write your code here to execute after dialog
+//                                dialog.cancel();
+//
+//                            }
+//                        });
+//
+//                alertDialog.setPositiveButton("Ok",
+//                        new DialogInterface.OnClickListener() {
+//
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                Intent intent=new Intent(MainActivity.this,ProfileActivity.class);
+//                                intent.putExtra("isNew",true);
+//                                startActivity(intent);
+//                            }
+//
+//                        });
+////alertDialog.show();
+                final AlertDialog registerUser = alertDialog.create();
+                registerUser.show();
+
+
+
             }
         });
         //setOrderTotal();
@@ -134,6 +230,8 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
 
             }
         }
+
+
 
         notificationAlert.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,7 +274,14 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
                                 break;
 
                             case R.id.signout:
-                                LoginManager.getInstance().logOut();
+                               // LoginManager.getInstance().logOut();
+                                GoogleSignInClient googleSignInClient;
+                                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                        .requestEmail()
+                                        .build();
+                                googleSignInClient = GoogleSignIn.getClient(SCABaseActivity.this, gso);
+                                googleSignInClient.signOut();
+
                                 SessionInfo.getInstance().destroy();
 
                                 File dir =getFilesDir();
