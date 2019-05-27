@@ -85,8 +85,8 @@ public class MainActivity extends SCABaseActivity {
 //                    }
 //                } else {
 
-                    if(SessionInfo.getInstance().getFbUserDetails()!=null) {
-                        Call<User> checkUserDTOCall = new SCAClient().getClient().checkUser(SessionInfo.getInstance().getFbUserDetails().getId());
+                  //  if(SessionInfo.getInstance().getFbUserDetails()!=null) {
+                        Call<User> checkUserDTOCall = new SCAClient().getClient().checkUser(SessionInfo.getInstance().getFbUserDetails().getId(),loginType);
                         checkUserDTOCall.enqueue(new Callback<User>() {
                             @Override
                             public void onResponse(Call<User> call, Response<User> response) {
@@ -111,7 +111,7 @@ public class MainActivity extends SCABaseActivity {
 
                             }
                         });
-                    }
+                   // }
 
 
               //  }

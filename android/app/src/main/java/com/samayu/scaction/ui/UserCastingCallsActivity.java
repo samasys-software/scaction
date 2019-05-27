@@ -39,6 +39,7 @@ public class UserCastingCallsActivity extends SCABaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_casting_calls);
         context=this;
+
         progressDialog=getProgressDialog(context);
         castingCalls=(ListView) findViewById(R.id.listOfCastingCalls);
         addNew=(ImageButton) findViewById(R.id.addNewCastingCall);
