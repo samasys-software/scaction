@@ -51,11 +51,11 @@ public class DataAccessService {
     public User register( String fbUser, String screenName, String name, String email ,
                           String countryCode,  String city, String phoneNumber,
                           String whatsappNumber, int gender, LocalDate dateOfBirth,
-                          boolean searchable, String profilePic, int[] roles ){
+                          boolean searchable, String profilePic, int[] roles,int loginType ){
 
         User user = null;
 
-        user = userRepository.findByFbUser( fbUser );
+        user = userRepository.findByFbUserAndLoginType( fbUser , loginType );
         if( user == null ) {
             user = new User();
         }
@@ -74,11 +74,12 @@ public class DataAccessService {
         user.setSearchable( searchable );
         user.setCreateDt( new Timestamp( System.currentTimeMillis() ));
         user.setUpdateDt( new Timestamp( System.currentTimeMillis() ));
+        user.setLoginType( loginType );
         userRepository.save(user);
         updateRoles( user , roles , true );
 
 
-        return findUser(fbUser);
+        return findUser(fbUser, loginType );
     }
 
     private void updateRoles(User user, int[] roles, boolean newRegistration ){
@@ -170,8 +171,8 @@ public class DataAccessService {
                 }
     }
 
-    public User findUser(String fbUser ){
-        User user = userRepository.findByFbUser( fbUser );
+    public User findUser(String fbUser, int loginType ){
+        User user = userRepository.findByFbUserAndLoginType( fbUser , loginType );
         if( user != null ) {
             try {
                 user.setUserRoles(userRoleRepository.findByUserId(user.getUserId()));

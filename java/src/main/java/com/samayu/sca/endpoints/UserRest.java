@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.Request;
 
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
@@ -52,18 +53,19 @@ public class UserRest {
             @RequestParam("dateOfBirth") String dateOfBirth,
             @RequestParam("searchable") String searchable,
             @RequestParam("profilePic") String profilePic,
-            @RequestParam("roles") int[] roles
+            @RequestParam("roles") int[] roles,
+            @RequestParam(name = "loginType" , defaultValue = "0") int loginType
                                        ){
 
          User user = dataAccessService.register( fbUser, screenName , name , fbEmail ,
                  countryCode , city , phoneNumber , whatsappNumber, Integer.parseInt(gender) ,
-                 LocalDate.parse(dateOfBirth) , Boolean.parseBoolean(searchable) , profilePic,roles );
+                 LocalDate.parse(dateOfBirth) , Boolean.parseBoolean(searchable) , profilePic,roles , loginType );
         return ResponseEntity.ok(user);
     }
 
     @GetMapping(path="/checkUser/{fbUser}" )
-    public ResponseEntity<User> checkUser(@PathVariable("fbUser") String fbUser ){
-            User user = dataAccessService.findUser(fbUser);
+    public ResponseEntity<User> checkUser(@PathVariable("fbUser") String fbUser , @PathVariable(name="loginType" ) Integer loginType ){
+        User user = dataAccessService.findUser(fbUser , loginType );
             if( user != null ) {
                 return ResponseEntity.ok(user);
             }
