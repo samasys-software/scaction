@@ -228,79 +228,11 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
         }
 
         user=SessionInfo.getInstance().getUser();
+
         if(SessionInfo.getInstance().getFbUserDetails()!=null) {
-            if (user == null) {
-                registerToApply.setVisibility(View.VISIBLE);
-                currentUser=0;
-            } else {
-                if (currentCastingCall.getUserId() == user.getUserId()) {
-                    edit.setVisibility(View.VISIBLE);
-                    currentUser=1;
-                    progressDialog.show();
-                    Call<List<CastingCallApplication>> getUserCastingCallApplicationsDTOCall = new SCAClient().getClient().getCastingCallApplications(currentCastingCall.getId());
-                    getUserCastingCallApplicationsDTOCall.enqueue(new Callback<List<CastingCallApplication>>() {
-                        @Override
-                        public void onResponse(Call<List<CastingCallApplication>> call, Response<List<CastingCallApplication>> response) {
-
-                             castingCallApplicationList = response.body();
-                            if (castingCallApplicationList.size()>0) {
-                                castingCallCount.setVisibility(View.VISIBLE);
-                                castingCallCount.setText(getResources().getString(R.string.casting_call_applications)+"("+castingCallApplicationList.size()+")");
-                                CastingCallApplicationsAdapter adapter = new CastingCallApplicationsAdapter(ApplyCastingCallActivity.this, castingCallApplicationList);
-                                castingCallApplicationsView.setAdapter(adapter);
-                                progressDialog.dismiss();
-
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<CastingCallApplication>> call, Throwable t) {
-
-                            progressDialog.dismiss();
-                        }
-                    });
-
-                } else {
-                    currentUser=2;
-                    progressDialog.show();
-                    Call<CastingCall> getCastingCallDTOCall = new SCAClient().getClient().getCastingCall(currentCastingCall.getId(), user.getUserId());
-                   // System.out.println(user.getUserId());
-                    getCastingCallDTOCall.enqueue(new Callback<CastingCall>() {
-                        @Override
-                        public void onResponse(Call<CastingCall> call, Response<CastingCall> response) {
-
-                            CastingCall castingCall = response.body();
-                            List<CastingCallApplication> castingCallApplicationList = castingCall.getUserApplications();
-
-                                apply.setVisibility(View.VISIBLE);
-                            if(castingCallApplicationList!=null) {
-                                unapply.setVisibility(View.VISIBLE);
-                                for (CastingCallApplication currentCastingCallApplication : castingCallApplicationList) {
-                                    List<SelectedCastingCallRoles> selectedCastingCallRolesList1=SessionInfo.getInstance().getSelectedCastingCallRoles();
-                                    for(int i=0;i<selectedCastingCallRolesList1.size();i++) {
-                                        if (currentCastingCallApplication.getRoleId() == selectedCastingCallRolesList1.get(i).getProfileType().getId()) {
-                                            SessionInfo.getInstance().getSelectedCastingCallRoles().get(i).setChecked(true);
-
-                                            profileAdapter= new RolesAdapter(ApplyCastingCallActivity.this,1,currentUser,user);
-                                            // listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-                                            castingcallsRoles.setAdapter(profileAdapter);
-                                        }
-                                    }
-                                }
-                            }
-
-                            progressDialog.dismiss();
-                        }
-
-                        @Override
-                        public void onFailure(Call<CastingCall> call, Throwable t) {
-                            progressDialog.dismiss();
-                        }
-                    });
-                     // apply.setVisibility(View.VISIBLE);
-                }
-            }
+            addApply(currentCastingCall);
         }
+
         else
         {
             loginAndRegister.setVisibility(View.VISIBLE);
@@ -407,5 +339,79 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
             }
         });
 
+    }
+
+    private void addApply(CastingCall currentCastingCall){
+        if (user == null) {
+            registerToApply.setVisibility(View.VISIBLE);
+            currentUser=0;
+        } else {
+            if (currentCastingCall.getUserId() == user.getUserId()) {
+                edit.setVisibility(View.VISIBLE);
+                currentUser=1;
+                progressDialog.show();
+                Call<List<CastingCallApplication>> getUserCastingCallApplicationsDTOCall = new SCAClient().getClient().getCastingCallApplications(currentCastingCall.getId());
+                getUserCastingCallApplicationsDTOCall.enqueue(new Callback<List<CastingCallApplication>>() {
+                    @Override
+                    public void onResponse(Call<List<CastingCallApplication>> call, Response<List<CastingCallApplication>> response) {
+
+                        castingCallApplicationList = response.body();
+                        if (castingCallApplicationList.size()>0) {
+                            castingCallCount.setVisibility(View.VISIBLE);
+                            castingCallCount.setText(getResources().getString(R.string.casting_call_applications)+"("+castingCallApplicationList.size()+")");
+                            CastingCallApplicationsAdapter adapter = new CastingCallApplicationsAdapter(ApplyCastingCallActivity.this, castingCallApplicationList);
+                            castingCallApplicationsView.setAdapter(adapter);
+                            progressDialog.dismiss();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<CastingCallApplication>> call, Throwable t) {
+
+                        progressDialog.dismiss();
+                    }
+                });
+
+            } else {
+                currentUser=2;
+                progressDialog.show();
+                Call<CastingCall> getCastingCallDTOCall = new SCAClient().getClient().getCastingCall(currentCastingCall.getId(), user.getUserId());
+                // System.out.println(user.getUserId());
+                getCastingCallDTOCall.enqueue(new Callback<CastingCall>() {
+                    @Override
+                    public void onResponse(Call<CastingCall> call, Response<CastingCall> response) {
+
+                        CastingCall castingCall = response.body();
+                        List<CastingCallApplication> castingCallApplicationList = castingCall.getUserApplications();
+
+                        apply.setVisibility(View.VISIBLE);
+                        if(castingCallApplicationList!=null) {
+                            unapply.setVisibility(View.VISIBLE);
+                            for (CastingCallApplication currentCastingCallApplication : castingCallApplicationList) {
+                                List<SelectedCastingCallRoles> selectedCastingCallRolesList1=SessionInfo.getInstance().getSelectedCastingCallRoles();
+                                for(int i=0;i<selectedCastingCallRolesList1.size();i++) {
+                                    if (currentCastingCallApplication.getRoleId() == selectedCastingCallRolesList1.get(i).getProfileType().getId()) {
+                                        SessionInfo.getInstance().getSelectedCastingCallRoles().get(i).setChecked(true);
+
+                                        profileAdapter= new RolesAdapter(ApplyCastingCallActivity.this,1,currentUser,user);
+                                        // listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+                                        castingcallsRoles.setAdapter(profileAdapter);
+                                    }
+                                }
+                            }
+                        }
+
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(Call<CastingCall> call, Throwable t) {
+                        progressDialog.dismiss();
+                    }
+                });
+                // apply.setVisibility(View.VISIBLE);
+            }
+        }
     }
 }

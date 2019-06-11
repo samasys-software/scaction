@@ -1,5 +1,6 @@
 package com.samayu.scaction.ui;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,6 +40,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.samayu.scaction.R;
 import com.samayu.scaction.domain.FBUserDetails;
 import com.samayu.scaction.dto.City;
@@ -51,7 +53,9 @@ import com.samayu.scaction.service.SessionInfo;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +71,7 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
     public static final String FILE_NAME = "SCALogin.txt";
     List<City> cityList;
 
-    public int loginType=0;
+
 
 
     @Override
@@ -95,13 +99,13 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
         boolean isLoggedIn=false;
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if(accessToken!=null){
-            loginType=0;
+
+            isLoggedIn=  accessToken != null && !accessToken.isExpired() ;
 
         }
         GoogleSignInAccount accessToken1=  GoogleSignIn.getLastSignedInAccount(this);
         if(accessToken1!=null){
-            loginType=1;
-            isLoggedIn=  accessToken1 != null && !accessToken1.isExpired() ;
+            isLoggedIn=  accessToken1 != null  ;
         }
 
         logo.setOnClickListener(new View.OnClickListener() {
@@ -113,37 +117,29 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
             }
         });
 
-       // boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+     //   boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
 
         if(isLoggedIn){
-            String url=null;
-            String displayName=null;
-          if(loginType==0) {
+//            String url=null;
+//            String displayName=null;
+//          if(loginType==0) {
               FBUserDetails fbUserDetails = loginRetrive(FILE_NAME);
-              SessionInfo.getInstance().setFbUserDetails(fbUserDetails);
-              url=fbUserDetails.getUrl();
-              displayName=fbUserDetails.getName();
+              if(fbUserDetails!=null) {
+                  SessionInfo.getInstance().setFbUserDetails(fbUserDetails);
+                  //url="http://graph.facebook.com/" + fbUserDetails.getId() + "/picture?width=200&height=200";
+                  String url = fbUserDetails.getUrl();
+                  String displayName = fbUserDetails.getName();
+                  loginFB.setVisibility(View.GONE);
+                  try{
+                      Picasso.with(this).load(url)
+                              .into(userImage);
+                      userName.setText(displayName);
+                  }
+                  catch (Exception e)
+                  {
 
-          }
-          else{
-              SessionInfo.getInstance().setGoogleUserDetails(accessToken1);
-              url=String.valueOf(accessToken1.getPhotoUrl());
-              displayName=accessToken1.getDisplayName();
-          }
-
-
-
-               loginFB.setVisibility(View.GONE);
-            try{
-                Picasso.with(this).load(url)
-                        .into(userImage);
-                userName.setText(displayName);
-            }
-            catch (Exception e)
-            {
-
-            }
-
+                  }
+              }
         }
         else{
             userName.setVisibility(View.GONE);
@@ -217,20 +213,20 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
         }
         //image.setImageDrawable(buildCounterDrawable(2));
 
-        FBUserDetails fbUserDetails=SessionInfo.getInstance().getFbUserDetails();
-        if(fbUserDetails!=null)
-        {
-            try{
-                Picasso.with(this).load(fbUserDetails.getUrl())
-                        .into(userImage);
-                userName.setText(fbUserDetails.getName());
-            }
-            catch (Exception e)
-            {
-
-            }
-        }
-
+//        FBUserDetails fbUserDetails=SessionInfo.getInstance().getFbUserDetails();
+//        if(fbUserDetails!=null)
+//        {
+//            try{
+//                Picasso.with(this).load(fbUserDetails.getUrl())
+//                        .into(userImage);
+//                userName.setText(fbUserDetails.getName());
+//            }
+//            catch (Exception e)
+//            {
+//
+//            }
+//        }
+//
 
 
         notificationAlert.setOnClickListener(new View.OnClickListener() {
@@ -274,20 +270,29 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
                                 break;
 
                             case R.id.signout:
-                               // LoginManager.getInstance().logOut();
-                                GoogleSignInClient googleSignInClient;
-                                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                                        .requestEmail()
-                                        .build();
-                                googleSignInClient = GoogleSignIn.getClient(SCABaseActivity.this, gso);
-                                googleSignInClient.signOut();
-
-                                SessionInfo.getInstance().destroy();
-
                                 File dir =getFilesDir();
                                 File file = new File(dir, FILE_NAME);
 
                                 boolean deleted = file.delete();
+                               if(SessionInfo.getInstance().getFbUserDetails().getLoginType()==0){
+                                   LoginManager.getInstance().logOut();
+
+                               }
+                               else {
+                                   GoogleSignInClient googleSignInClient;
+                                   GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                           .requestEmail()
+                                           .build();
+                                   googleSignInClient = GoogleSignIn.getClient(SCABaseActivity.this, gso);
+                                   googleSignInClient.signOut();
+
+                                   googleSignInClient.revokeAccess();
+
+                               }
+
+                                SessionInfo.getInstance().destroy();
+
+
 
                                 intent=new Intent(SCABaseActivity.this,MainActivity.class);
                                 startActivity(intent);
@@ -553,7 +558,22 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
         //p.show();
         return progressDialog;
     }
+    public void loginToFile(FBUserDetails details, String fileName, Activity activity) {
+        File file = new File(getFilesDir(), fileName);
+        file.delete();
 
+        FileOutputStream outputStream;
+
+        try {
+            outputStream = openFileOutput(fileName, activity.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(outputStream);
+            oos.writeObject(details);
+            outputStream.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 

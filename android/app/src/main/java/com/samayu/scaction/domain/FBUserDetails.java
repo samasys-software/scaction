@@ -12,6 +12,8 @@ public class FBUserDetails implements Serializable
 {
     private String name,emailAddress,id,gender,url;
 
+    private int loginType;
+
     public String getName() {
         return name;
     }
@@ -50,5 +52,13 @@ public class FBUserDetails implements Serializable
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public int getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(int loginType) {
+        this.loginType = loginType;
     }
 }

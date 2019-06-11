@@ -34,15 +34,15 @@ public class SessionInfo {
         this.fbUserDetails = fbUserDetails;
     }
 
-    private GoogleSignInAccount GoogleUserDetails;
-
-    public GoogleSignInAccount getGoogleUserDetails() {
-        return GoogleUserDetails;
-    }
-
-    public void setGoogleUserDetails(GoogleSignInAccount googleUserDetails) {
-        GoogleUserDetails = googleUserDetails;
-    }
+//    private GoogleSignInAccount GoogleUserDetails;
+//
+//    public GoogleSignInAccount getGoogleUserDetails() {
+//        return GoogleUserDetails;
+//    }
+//
+//    public void setGoogleUserDetails(GoogleSignInAccount googleUserDetails) {
+//        GoogleUserDetails = googleUserDetails;
+//    }
 
     private List<Country> countries;
 
@@ -138,6 +138,16 @@ public class SessionInfo {
     public void setPortfolioPictureList(List<PortfolioPicture> portfolioPictureList) {
         this.portfolioPictureList = portfolioPictureList;
     }
+
+//    public int loginType;
+//
+//    public int getLoginType() {
+//        return loginType;
+//    }
+//
+//    public void setLoginType(int loginType) {
+//        this.loginType = loginType;
+//    }
 
     public static SessionInfo getInstance() {
         return ourInstance;

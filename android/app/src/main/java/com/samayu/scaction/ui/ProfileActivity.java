@@ -41,6 +41,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.samayu.scaction.R;
 import com.samayu.scaction.domain.CreateUser;
 import com.samayu.scaction.domain.FBUserDetails;
@@ -248,13 +249,15 @@ public class ProfileActivity extends SCABaseActivity {
 
 
 
+        FBUserDetails fbUserDetails = SessionInfo.getInstance().getFbUserDetails();
+        if(fbUserDetails!=null) {
 
-
-        FBUserDetails fbUserDetails= SessionInfo.getInstance().getFbUserDetails();
-        if(fbUserDetails !=null){
-            name.setText(fbUserDetails.getName());
-            emailAddress.setText(fbUserDetails.getEmailAddress());
+            if (fbUserDetails != null) {
+                name.setText(fbUserDetails.getName());
+                emailAddress.setText(fbUserDetails.getEmailAddress());
+            }
         }
+
 
 
 /*
@@ -655,12 +658,14 @@ public class ProfileActivity extends SCABaseActivity {
                 Country selectedCountry = (Country) country.getSelectedItem();
                 String selectedCountryCode = selectedCountry.getCode();
 
-                String fbUser=SessionInfo.getInstance().getFbUserDetails().getId();
+                String user= SessionInfo.getInstance().getFbUserDetails().getId();
                 String url=SessionInfo.getInstance().getFbUserDetails().getUrl();
+                int loginType=SessionInfo.getInstance().getFbUserDetails().getLoginType();
+
 
                 //System.out.println();
 
-                Call<User> registerDTOCall = new SCAClient().getClient().registerNewUser(fbUser, screenName1, name1, email, selectedCountryCode, selectedCityId, phone, whatsapp, gender1,DateFormatter.getYearMonthDateFormat(dob.getText().toString()) , isSearchable,url, rolesList);
+                Call<User> registerDTOCall = new SCAClient().getClient().registerNewUser(user, screenName1, name1, email, selectedCountryCode, selectedCityId, phone, whatsapp, gender1,DateFormatter.getYearMonthDateFormat(dob.getText().toString()) , isSearchable,url, rolesList,loginType);
                 registerDTOCall.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {

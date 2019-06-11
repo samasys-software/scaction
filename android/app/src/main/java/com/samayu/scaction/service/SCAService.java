@@ -60,7 +60,8 @@ public interface SCAService {
                                       @Field("dateOfBirth") String dateOfBirth,
                                       @Field("searchable") String searchable,
                                       @Field("profilePic") String profilePic,
-                                      @Field("roles") int[] roles);
+                                      @Field("roles") int[] roles,
+                                      @Field("loginType") int loginType);
 //
 //    @POST("user/method5")
 //    @FormUrlEncoded
@@ -68,8 +69,8 @@ public interface SCAService {
 //    public Call<String> sample(@Field("id") int id);
 
     //Check That Is the user ia already exist or not
-    @GET("user/checkUser/{fbUser}")
-    public Call<User> checkUser(@Path("fbUser") String fbUser);
+    @GET("user/checkUser/{fbUser}/{loginType}")
+    public Call<User> checkUser(@Path("fbUser") String fbUser,@Path("loginType") int loginType);
 
     @GET("user/findUser/{userId}")
     public Call<User> findUser(@Path("userId") long userId);
