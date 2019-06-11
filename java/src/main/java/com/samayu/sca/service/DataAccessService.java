@@ -2,6 +2,7 @@ package com.samayu.sca.service;
 
 import com.samayu.sca.businessobjects.*;
 import com.samayu.sca.dao.*;
+import javassist.expr.Cast;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -279,7 +280,7 @@ public class DataAccessService {
 
     public List<CastingCallApplication> getCastingCallApplications(long castingCallId )
     {
-        return applicationRepository.findByCastingCallId( castingCallId );
+        return applicationRepository.findByCastingCallId( castingCallId ) ;
     }
 
     public List<PortfolioPicture> getPortfolioPicsForUser(long userId ){
