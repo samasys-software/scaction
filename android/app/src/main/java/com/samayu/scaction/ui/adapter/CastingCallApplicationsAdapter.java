@@ -76,10 +76,16 @@ public class CastingCallApplicationsAdapter extends RecyclerView.Adapter <Castin
 
     @Override
     public void onBindViewHolder(final CastingCallsApplicationsViewHolder holder, final int position) {
-        final CastingCallApplication castingCallApplication = castingCallApplications.get(position);
-
+            final CastingCallApplication castingCallApplication = castingCallApplications.get(position);
+            String url=null;
+//        if(SessionInfo.getInstance().getLoginType()==0){
+//           url= "https://graph.facebook.com/"+castingCallApplication.getUser().getFbUser()+"/picture?height=40&weight=40";
+//        }
+//        else if(SessionInfo.getInstance().getLoginType()==1){
+            url=castingCallApplication.getUser().getProfilePic();
+//        }
         try{
-            Picasso.with(context).load("https://graph.facebook.com/"+castingCallApplication.getUser().getFbUser()+"/picture?height=40&weight=40")
+            Picasso.with(context).load(url)
                     .into(holder.profilePic);
 
         }

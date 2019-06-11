@@ -63,7 +63,7 @@ public class UserRest {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping(path="/checkUser/{fbUser}" )
+    @GetMapping(path="/checkUser/{fbUser}/{loginType}" )
     public ResponseEntity<User> checkUser(@PathVariable("fbUser") String fbUser , @PathVariable(name="loginType" ) Integer loginType ){
         User user = dataAccessService.findUser(fbUser , loginType );
             if( user != null ) {

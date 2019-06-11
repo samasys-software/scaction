@@ -14,9 +14,12 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.samayu.scaction.R;
+import com.samayu.scaction.domain.FBUserDetails;
 import com.samayu.scaction.service.SessionInfo;
 
-public class UseGoogleLoginActivity extends AppCompatActivity {
+import org.json.JSONObject;
+
+public class UseGoogleLoginActivity extends SCABaseActivity {
     GoogleSignInClient googleSignInClient;
     SignInButton signInButton;
     GoogleSignInAccount account;
@@ -30,8 +33,9 @@ public class UseGoogleLoginActivity extends AppCompatActivity {
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
        account = GoogleSignIn.getLastSignedInAccount(this);
-       if(account!=null){
-           SessionInfo.getInstance().setGoogleUserDetails(account);
+      //  FBUserDetails fbUserDetails = loginRetrive(FILE_NAME);
+        if(account!=null) {
+ 
            Intent intent=new Intent(UseGoogleLoginActivity.this,MainActivity.class);
            startActivity(intent);
        }
@@ -49,7 +53,16 @@ public class UseGoogleLoginActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                  account = task.getResult(ApiException.class);
-                 SessionInfo.getInstance().setGoogleUserDetails(account);
+
+                FBUserDetails fbUserDetails=new FBUserDetails();
+                fbUserDetails.setId(account.getId());
+                fbUserDetails.setName(account.getDisplayName());
+                fbUserDetails.setEmailAddress(account.getEmail());
+                fbUserDetails.setUrl(String.valueOf(account.getPhotoUrl()));
+                fbUserDetails.setLoginType(1);
+                SessionInfo.getInstance().setFbUserDetails(fbUserDetails);
+                loginToFile(fbUserDetails,FILE_NAME,UseGoogleLoginActivity.this);
+                // SessionInfo.getInstance().setGoogleUserDetails(account);
                 Intent intent=new Intent(UseGoogleLoginActivity.this,MainActivity.class);
                 startActivity(intent);
 

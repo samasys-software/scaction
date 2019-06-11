@@ -133,8 +133,9 @@ public class UseFacebookLoginActivity extends SCABaseActivity {
                            JSONObject pic_url=new JSONObject(profile_pic_data.getString("data"));
                            String url=pic_url.getString("url");
                            fbUserDetails.setUrl(url);
+                           fbUserDetails.setLoginType(0);
                             SessionInfo.getInstance().setFbUserDetails(fbUserDetails);
-                            loginToFile(fbUserDetails,FILE_NAME);
+                            loginToFile(fbUserDetails,FILE_NAME,UseFacebookLoginActivity.this);
 
 
 //                            String firstName = response.getJSONObject().getString("first_name");
@@ -179,22 +180,7 @@ public class UseFacebookLoginActivity extends SCABaseActivity {
 
     }
 
-    public void loginToFile(FBUserDetails details,String fileName) {
-        File file = new File(getFilesDir(), fileName);
-        file.delete();
 
-        FileOutputStream outputStream;
-
-        try {
-            outputStream = openFileOutput(fileName, UseFacebookLoginActivity.this.MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(outputStream);
-            oos.writeObject(details);
-            outputStream.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 
 }
