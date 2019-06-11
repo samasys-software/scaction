@@ -30,7 +30,6 @@ public class CastingCallApplication {
 
     @ManyToOne
     @JoinColumn(name="user_id" )
-    @JsonIgnore
     private User user;
 
     @Column(name="create_dt")
