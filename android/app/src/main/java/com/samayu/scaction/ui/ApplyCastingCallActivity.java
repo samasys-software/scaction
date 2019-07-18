@@ -56,6 +56,7 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
     int currentUser;
     List<CastingCallApplication> castingCallApplicationList;
     ProgressDialog progressDialog;
+    ImageButton shareDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,7 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
         loginAndRegister=(TextView) findViewById(R.id.loginAndRegister);
         unapply=(Button) findViewById(R.id.unApply);
         edit=(ImageButton) findViewById(R.id.edit);
+        shareDetails=(ImageButton) findViewById(R.id.shareDetails);
 
         projectName=(TextView) findViewById(R.id.displayProjectName);
        // projectDetails=(TextView) findViewById(R.id.displayProjectDetails);
@@ -296,6 +298,17 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
             }
         });
 
+        shareDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+            }
+        });
+
         apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -387,7 +400,7 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
 
                         apply.setVisibility(View.VISIBLE);
                         if(castingCallApplicationList!=null) {
-                            unapply.setVisibility(View.VISIBLE);
+
                             for (CastingCallApplication currentCastingCallApplication : castingCallApplicationList) {
                                 List<SelectedCastingCallRoles> selectedCastingCallRolesList1=SessionInfo.getInstance().getSelectedCastingCallRoles();
                                 for(int i=0;i<selectedCastingCallRolesList1.size();i++) {
