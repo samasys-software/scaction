@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.samayu.scaction.R;
@@ -35,10 +36,12 @@ public class RolesAdapter extends RecyclerView.Adapter <RolesAdapter.RolesViewHo
         public class RolesViewHolder extends RecyclerView.ViewHolder {
             public TextView role;
             public CheckBox checkBox;
+            public ImageView imageView;
             public RolesViewHolder(View view) {
                 super(view);
                 role = (TextView) view.findViewById(R.id.castingRoleName);
                 checkBox = (CheckBox) view.findViewById(R.id.castingRolesChecked);
+                imageView = (ImageView) view.findViewById(R.id.castingRolesSelected);
             }
         }
 
@@ -78,7 +81,7 @@ public class RolesAdapter extends RecyclerView.Adapter <RolesAdapter.RolesViewHo
             final SelectedCastingCallRoles selectedCastingCallRoles=selectedCastingCallRolesList.get(position);
 
             holder.role.setText(selectedCastingCallRoles.getProfileType().getName());
-            holder.checkBox.setChecked(selectedCastingCallRoles.isChecked());
+         //   holder.checkBox.setChecked(selectedCastingCallRoles.isChecked());
 
             if(currentActivity==1){
                 if(currentUser==0){
@@ -103,6 +106,11 @@ public class RolesAdapter extends RecyclerView.Adapter <RolesAdapter.RolesViewHo
                     }
                 }
 
+            }
+            if(selectedCastingCallRoles.isChecked())
+            {
+                holder.checkBox.setVisibility(View.GONE);
+                holder.imageView.setVisibility(View.VISIBLE);
             }
 
 
