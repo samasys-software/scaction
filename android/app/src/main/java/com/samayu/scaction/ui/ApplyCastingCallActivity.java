@@ -74,7 +74,6 @@ public class ApplyCastingCallActivity extends SCABaseActivity {
         unapply=(Button) findViewById(R.id.unApply);
         edit=(ImageButton) findViewById(R.id.edit);
         shareDetails=(ImageButton) findViewById(R.id.shareDetails);
-
         projectName=(TextView) findViewById(R.id.displayProjectName);
        // projectDetails=(TextView) findViewById(R.id.displayProjectDetails);
         productionCompany=(TextView) findViewById(R.id.displayProductionCompany);
