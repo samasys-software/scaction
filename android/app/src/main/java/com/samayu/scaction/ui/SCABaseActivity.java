@@ -51,6 +51,7 @@ import com.samayu.scaction.dto.UserNotification;
 import com.samayu.scaction.service.SCAClient;
 import com.samayu.scaction.service.SessionInfo;
 import com.squareup.picasso.Picasso;
+import io.github.pixee.security.ObjectInputFilters;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -502,6 +503,7 @@ public abstract class SCABaseActivity extends AppCompatActivity implements Navig
     public  FBUserDetails loginRetrive(String fileName) {
         try {
             ObjectInputStream ois = new ObjectInputStream(openFileInput(fileName));
+            ObjectInputFilters.enableObjectFilterIfUnprotected(ois);
             FBUserDetails r = (FBUserDetails) ois.readObject();
             return r;
         }
